@@ -12,6 +12,8 @@ import logging
 import os
 from typing import Callable, Iterable, Union
 
+import dirhash
+
 import heuristics
 
 # ===== typing =====
@@ -30,7 +32,7 @@ def read_gzipped_file(fp: AnyPath) -> Iterable[Event]:
             for line in f:
                 yield json.loads(line)
     except gzip.BadGzipFile as e:
-        log.warning(f"Could not read file {os.path.basename(fp)}: {e}")
+        log.warning(f"Could not read file {os.path.relpath(fp)}: {e}")
 
 
 def combat_dir_iterator(dirpath: AnyPath) -> Iterable[Event]:
@@ -60,19 +62,38 @@ def run_cli():
 
     # config
     # todo make this read from CLI
-    heuristic = get_heuristic("message_to_command_ratio")
+    heuristic_name = "message_to_command_ratio"
+    heuristic = get_heuristic(heuristic_name)
     data_dir_path = os.path.join(os.path.dirname(__file__), "data")
-    result_file_path = os.path.join(os.path.dirname(__file__), "heuristic_results", f"{heuristic.__name__}.csv")
+    result_file_path = os.path.join(os.path.dirname(__file__), "heuristic_results", f"{heuristic_name}.csv")
+
+    # setup
+    print("Hashing dataset (to make sure it hasn't changed)...")
     entrypoint = functools.partial(worker_entrypoint, heuristic)
+    dataset_checksum = dirhash.dirhash(data_dir_path, "md5", match=("*.gz",), jobs=os.cpu_count() or 1)
+
+    # if the results already exist for this dataset and heuristic, we can skip everything
+    print(f"Applying {heuristic_name} to dataset with checksum {dataset_checksum}...")
+    try:
+        with open(result_file_path, newline="") as f:
+            reader = csv.reader(f)
+            _, existing_checksum = next(reader)
+        if existing_checksum == dataset_checksum:
+            print(f"A result for this dataset already exists at {os.path.relpath(result_file_path)}!")
+            return
+    except FileNotFoundError:
+        pass
 
     # execution
     results = tqdm.contrib.concurrent.process_map(entrypoint, get_combat_dirs(data_dir_path), chunksize=10)
     results.sort(key=lambda pair: pair[1])
+    print(f"Application of {heuristic_name} complete, saving results...")
 
     # save results
     os.makedirs(os.path.dirname(result_file_path), exist_ok=True)
     with open(result_file_path, "w", newline="") as f:
         writer = csv.writer(f)
+        writer.writerow(("checksum", dataset_checksum))
         writer.writerows(results)
     print("Done!")
 
