@@ -1,103 +1,147 @@
-"""
-Usage: python heuristic_worker.py
-Given a heuristic that maps a list of events to a float [0.0..1.0], outputs a metadata file indexing the heuristic
-score of each combat in data/.
-"""
+import argparse
 import csv
 import functools
-import glob
-import gzip
-import json
 import logging
 import os
-from typing import Callable, Iterable, Union
+import pathlib
 
 import dirhash
+import tqdm
+import tqdm.contrib.concurrent
+import tqdm.contrib.logging
 
 import heuristics
+from utils import combat_dir_iterator, get_combat_dirs
 
-# ===== typing =====
-AnyPath = Union[str, bytes, os.PathLike]
-Event = dict  # todo
-Heuristic = Callable[[Iterable[Event]], float]
+# ===== argparsing =====
+parser = argparse.ArgumentParser(description="Applies defined heuristics to the Avrae NLP dataset.", add_help=False)
+parser.add_argument(
+    "-d",
+    "--data-dir",
+    help="the directory containing the raw data (default: data/)",
+    default="data/",
+    type=pathlib.Path,
+)
+parser.add_argument(
+    "-o",
+    "--output-dir",
+    help="the directory to save the heuristic results to (default: heuristic_results/)",
+    default="heuristic_results/",
+    type=pathlib.Path,
+)
+parser.add_argument(
+    "-h",
+    "--heuristic",
+    help="the heuristic(s) to run (defaults to all)",
+    action="append",
+)
+parser.add_argument(
+    "--force-recompute",
+    help="forces the worker to recompute regardless of prior computation",
+    action="store_true",
+)
+parser.add_argument("--help", help="displays CLI help", action="help")
 
+# ===== main =====
 log = logging.getLogger(__name__)
 
 
-# ===== impl =====
-def read_gzipped_file(fp: AnyPath) -> Iterable[Event]:
-    """Given a path to a gzipped data file, return an iterator of events in the file."""
-    try:
-        with gzip.open(fp, mode="r") as f:
-            for line in f:
-                yield json.loads(line)
-    except gzip.BadGzipFile as e:
-        log.warning(f"Could not read file {os.path.relpath(fp)}: {e}")
-
-
-def combat_dir_iterator(dirpath: AnyPath) -> Iterable[Event]:
-    """Given a path to a directory of gzipped combat event files, return an iterator of events in the dir."""
-    for fp in sorted(glob.glob("*.gz", root_dir=dirpath)):
-        yield from read_gzipped_file(os.path.join(dirpath, fp))
-
-
-def get_combat_dirs(datapath: AnyPath) -> list[str]:
-    """Given the path to the raw data root, return a list of combat dir paths."""
-    return [d.path for d in os.scandir(datapath) if d.is_dir()]
-
-
-def get_heuristic(name: str) -> Heuristic:
+def get_heuristic(name: str) -> heuristics.Heuristic:
     """Returns the heuristic with the given name (utility method for CLI)"""
     return getattr(heuristics, name)
 
 
-def worker_entrypoint(heuristic: Heuristic, combat_dir: str) -> tuple[str, float]:
+def worker_entrypoint(heuristic: heuristics.Heuristic, combat_dir: str) -> tuple[str, int | float]:
     """Multiprocessing worker entrypoint, applies the given heuristic to one dir"""
     return os.path.basename(combat_dir), heuristic(combat_dir_iterator(combat_dir))
 
 
-# ===== CLI =====
-def run_cli():
-    import tqdm.contrib.concurrent
+class Runner:
+    def __init__(
+        self,
+        data_dir_path: pathlib.Path,
+        result_dir_path: pathlib.Path,
+        compute_heuristics: list[str] | None = None,
+        force_recompute: bool = False,
+    ):
+        self.data_dir_path = data_dir_path
+        self.result_dir_path = result_dir_path
+        self.heuristics = compute_heuristics
+        self.force_recompute = force_recompute
+        self.dataset_checksum = None
 
-    # config
-    # todo make this read from CLI
-    heuristic_name = "message_to_command_ratio"
-    heuristic = get_heuristic(heuristic_name)
-    data_dir_path = os.path.join(os.path.dirname(__file__), "data")
-    result_file_path = os.path.join(os.path.dirname(__file__), "heuristic_results", f"{heuristic_name}.csv")
+    @classmethod
+    def from_args(cls, args: argparse.Namespace):
+        return cls(
+            data_dir_path=args.data_dir,
+            result_dir_path=args.output_dir,
+            compute_heuristics=args.heuristic,
+            force_recompute=args.force_recompute,
+        )
 
-    # setup
-    print("Hashing dataset (to make sure it hasn't changed)...")
-    entrypoint = functools.partial(worker_entrypoint, heuristic)
-    dataset_checksum = dirhash.dirhash(data_dir_path, "md5", match=("*.gz",), jobs=os.cpu_count() or 1)
+    def init(self):
+        num_cores = os.cpu_count() or 1
+        log.info(f"Hashing dataset (with parallelization={num_cores})...")
+        self.dataset_checksum = dirhash.dirhash(self.data_dir_path, "md5", match=("*.gz",), jobs=num_cores)
+        log.info(f"checksum={self.dataset_checksum}")
+        os.makedirs(self.result_dir_path, exist_ok=True)
 
-    # if the results already exist for this dataset and heuristic, we can skip everything
-    print(f"Applying {heuristic_name} to dataset with checksum {dataset_checksum}...")
-    try:
-        with open(result_file_path, newline="") as f:
-            reader = csv.reader(f)
-            _, existing_checksum = next(reader)
-        if existing_checksum == dataset_checksum:
-            print(f"A result for this dataset already exists at {os.path.relpath(result_file_path)}!")
-            return
-    except FileNotFoundError:
-        pass
+    def run_one(self, heuristic_name: str):
+        log.info(f"Applying heuristic {heuristic_name!r}...")
+        result_file_path = self.result_dir_path / f"{heuristic_name}.csv"
+        heuristic = get_heuristic(heuristic_name)
+        entrypoint = functools.partial(worker_entrypoint, heuristic)
 
-    # execution
-    results = tqdm.contrib.concurrent.process_map(entrypoint, get_combat_dirs(data_dir_path), chunksize=10)
-    results.sort(key=lambda pair: pair[1])
-    print(f"Application of {heuristic_name} complete, saving results...")
+        # if the results already exist for this dataset and heuristic, we can skip everything
+        try:
+            with open(result_file_path, newline="") as f:
+                reader = csv.reader(f)
+                _, existing_checksum = next(reader)
+            if existing_checksum == self.dataset_checksum:
+                log.info(f"A result for this dataset already exists at {os.path.relpath(result_file_path)}!")
+                return
+            log.info("An existing result was found but the checksum does not match, overwriting...")
+        except FileNotFoundError:
+            pass
 
-    # save results
-    os.makedirs(os.path.dirname(result_file_path), exist_ok=True)
-    with open(result_file_path, "w", newline="") as f:
-        writer = csv.writer(f)
-        writer.writerow(("checksum", dataset_checksum))
-        writer.writerows(results)
-    print("Done!")
+        # execution
+        results = tqdm.contrib.concurrent.process_map(entrypoint, get_combat_dirs(self.data_dir_path), chunksize=10)
+        results.sort(key=lambda pair: pair[1])
+        log.info(f"Application of {heuristic_name} complete, saving results...")
+
+        # save results
+        with open(result_file_path, "w", newline="") as f:
+            writer = csv.writer(f)
+            writer.writerow(("checksum", self.dataset_checksum))
+            writer.writerows(results)
+
+    def run_heuristics(self, heuristic_names: list[str]):
+        if not all(hasattr(heuristics, name) for name in heuristic_names):
+            raise RuntimeError(
+                f"Heuristic(s) were passed but not defined: {set(heuristic_names).difference(heuristics.__all__)}"
+            )
+
+        with tqdm.contrib.logging.logging_redirect_tqdm():
+            for heuristic_name in tqdm.tqdm(heuristic_names):
+                self.run_one(heuristic_name)
+
+    def run_all(self):
+        self.run_heuristics(heuristics.__all__)
+
+    def run_cli(self):
+        self.init()
+
+        if self.heuristics is None:
+            self.run_all()
+        elif not self.heuristics:
+            raise RuntimeError(
+                "At least one heuristic should be passed, or the argument should be omitted to run all heuristics."
+            )
+        else:
+            self.run_heuristics(self.heuristics)
+        log.info("Done!")
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
-    run_cli()
+    logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
+    Runner.from_args(parser.parse_args()).run_cli()
