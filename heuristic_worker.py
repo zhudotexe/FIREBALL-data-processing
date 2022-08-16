@@ -97,10 +97,16 @@ class Runner:
             with open(result_file_path, newline="") as f:
                 reader = csv.reader(f)
                 _, existing_checksum = next(reader)
-            if existing_checksum == self.dataset_checksum:
+            if self.force_recompute:
+                log.info(
+                    f"A result for this dataset already exists at {os.path.relpath(result_file_path)} but recompute is"
+                    " forced, overwriting..."
+                )
+            elif existing_checksum == self.dataset_checksum:
                 log.info(f"A result for this dataset already exists at {os.path.relpath(result_file_path)}!")
                 return
-            log.info("An existing result was found but the checksum does not match, overwriting...")
+            else:
+                log.info("An existing result was found but the checksum does not match, overwriting...")
         except FileNotFoundError:
             pass
 
