@@ -39,7 +39,8 @@ This will compute each defined heuristic for each combat instance in parallel an
 to `heuristic_results/`.
 
 If a heuristic has been computed for the dataset previously (based on heuristic name and dataset checksum), it will not
-be recomputed. **Make sure to delete any prior result from `heuristic_results/` after modifying heuristic code.**
+be recomputed. **Make sure to delete any prior result from your output directory or run with `--force-recompute` after
+modifying heuristic code.**
 
 The heuristic worker includes some additional arguments for more fine-grained control. You can view these arguments
 with `python heuristic_worker.py --help`:
@@ -59,3 +60,11 @@ options:
   --force-recompute     forces the worker to recompute regardless of prior computation
   --help                displays CLI help
 ```
+
+## Step 2: Exploration
+
+After defining and computing some heuristics, the next step is to open up the dataset in the *dataset explorer* and
+view each recording instance empirically alongside the computed heuristics.
+
+This project provides a simple local web app to accomplish this. Run `python explorer_server.py` and the explorer will
+be served at `http://127.0.0.1:31415/explorer`.

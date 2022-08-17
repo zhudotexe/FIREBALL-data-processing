@@ -1,2 +1,7 @@
+# heuristic worker
 dirhash~=0.2.1
 tqdm~=4.64.0
+
+# exploration server
+fastapi~=0.79.0
+uvicorn[standard]~=0.18.2

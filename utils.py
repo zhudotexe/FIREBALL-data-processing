@@ -3,7 +3,10 @@ import gzip
 import json
 import logging
 import os
+import pathlib
 from typing import Iterable, Union
+
+import dirhash
 
 AnyPath = Union[str, bytes, os.PathLike]
 
@@ -26,6 +29,12 @@ def combat_dir_iterator(dirpath: AnyPath) -> Iterable[dict]:
         yield from read_gzipped_file(os.path.join(dirpath, fp))
 
 
-def get_combat_dirs(datapath: AnyPath) -> list[str]:
+def get_combat_dirs(datapath: AnyPath) -> list[pathlib.Path]:
     """Given the path to the raw data root, return a list of combat dir paths."""
-    return [d.path for d in os.scandir(datapath) if d.is_dir()]
+    return [pathlib.Path(d.path) for d in os.scandir(datapath) if d.is_dir()]
+
+
+def dataset_checksum(datapath: AnyPath) -> str:
+    """Returns the checksum of the dataset at the given path."""
+    num_cores = os.cpu_count() or 1
+    return dirhash.dirhash(datapath, "md5", match=("*.gz",), jobs=num_cores)

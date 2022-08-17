@@ -5,13 +5,12 @@ import logging
 import os
 import pathlib
 
-import dirhash
 import tqdm
 import tqdm.contrib.concurrent
 import tqdm.contrib.logging
 
 import heuristics
-from utils import combat_dir_iterator, get_combat_dirs
+from utils import combat_dir_iterator, dataset_checksum, get_combat_dirs
 
 # ===== argparsing =====
 parser = argparse.ArgumentParser(description="Applies defined heuristics to the Avrae NLP dataset.", add_help=False)
@@ -82,7 +81,7 @@ class Runner:
     def init(self):
         num_cores = os.cpu_count() or 1
         log.info(f"Hashing dataset (with parallelization={num_cores})...")
-        self.dataset_checksum = dirhash.dirhash(self.data_dir_path, "md5", match=("*.gz",), jobs=num_cores)
+        self.dataset_checksum = dataset_checksum(self.data_dir_path)
         log.info(f"checksum={self.dataset_checksum}")
         os.makedirs(self.result_dir_path, exist_ok=True)
 
