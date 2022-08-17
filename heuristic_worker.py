@@ -13,7 +13,7 @@ import heuristics
 from utils import combat_dir_iterator, dataset_checksum, get_combat_dirs
 
 # ===== argparsing =====
-parser = argparse.ArgumentParser(description="Applies defined heuristics to the Avrae NLP dataset.", add_help=False)
+parser = argparse.ArgumentParser(description="Applies defined heuristics to a dataset.", add_help=False)
 parser.add_argument(
     "-d",
     "--data-dir",

@@ -1,11 +1,23 @@
-# avrae-dataset
+# AWS Kinesis Dataset Exploration Tool
 
-Dataset exploration utilities for the Avrae NLP dataset
+This repo contains a set of tools in order to explore datasets collected via AWS Kinesis Firehose quickly and
+intuitively, while providing the framework to quickly iterate on heuristics and visualize raw data.
 
-## Downloading the raw data
+- Operates directly on gzipped JSONL files output by AWS Kinesis Firehose, no extraction needed
+- Memory efficient (streaming heuristic applicator)
+- Fast and horizontally scalable (multiprocessing out of the box)
 
-I recommend downloading the raw dataset into a directory at `data/` (relative to this repo's root). See the
-avrae/penn-nlp-resources repo for instructions on downloading the dataset.
+I built this tool for the Avrae NLP project (https://www.cis.upenn.edu/~ccb/language-to-avrae.html) and most of the code
+and docs will reference it, but the tool is designed with some degree of dataset-agnosticism in mind.
+
+TODO docs on customizing the tool for other datasets
+
+## Downloading raw data
+
+I recommend downloading the raw dataset into a directory at `data/` (relative to this repo's root). Usually this is done
+with `aws s3 sync`.
+
+For the Avrae NLP project, see the avrae/penn-nlp-resources repo for instructions on downloading the dataset.
 
 ## Step 1: Heuristics
 
@@ -49,7 +61,7 @@ with `python heuristic_worker.py --help`:
 ```text
 usage: heuristic_worker.py [-d DATA_DIR] [-o OUTPUT_DIR] [-h HEURISTIC] [--force-recompute] [--help]
 
-Applies defined heuristics to the Avrae NLP dataset.
+Applies defined heuristics to a dataset.
 
 options:
   -d DATA_DIR, --data-dir DATA_DIR
