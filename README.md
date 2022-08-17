@@ -2,22 +2,7 @@
 
 Dataset exploration utilities for the Avrae NLP dataset
 
-## Setup
-
-### Python & Requirements
-
-These utilities require Python 3.10+. I recommend creating a virtual environment to install the explorer's requirements:
-
-```bash
-$ python --version
-Python 3.10.2
-$ python -m venv venv
-$ source venv/bin/activate
-# If the venv is already set up, you can skip to this step
-(venv) $ pip install -r requirements.txt
-```
-
-### Download the raw data
+## Downloading the raw data
 
 I recommend downloading the raw dataset into a directory at `data/` (relative to this repo's root). See the
 avrae/penn-nlp-resources repo for instructions on downloading the dataset.
@@ -25,6 +10,22 @@ avrae/penn-nlp-resources repo for instructions on downloading the dataset.
 ## Step 1: Heuristics
 
 The first step of exploring the dataset is to define and apply heuristics to the dataset.
+
+### Requirements
+
+The heuristic worker requires Python 3.10+.
+
+I recommend creating a virtual environment to install the Python requirements:
+
+```bash
+# installing Python requirements
+$ python --version
+Python 3.10.2
+$ python -m venv venv
+$ source venv/bin/activate
+# If the venv is already set up, you can skip to this step
+(venv) $ pip install -r requirements.txt
+```
 
 ### Defining Heuristics
 
@@ -66,5 +67,32 @@ options:
 After defining and computing some heuristics, the next step is to open up the dataset in the *dataset explorer* and
 view each recording instance empirically alongside the computed heuristics.
 
+### Requirements
+
+Building the explorer app locally is optional - the prebuilt files can be downloaded from TODO.
+
+To build the explorer web app locally, Node.js 16+ is required.
+
+```bash
+# installing Node requirements (optional)
+$ node --version
+v16.17.0
+$ npm --version
+8.17.0
+$ cd explorer
+$ npm install
+```
+
+### Build Explorer App
+
+The explorer app is a Vue site that lives in `explorer/`. To build it, TODO npm build instructions
+
+TODO prebuilt instructions
+
+### Run Explorer App
+
 This project provides a simple local web app to accomplish this. Run `python explorer_server.py` and the explorer will
 be served at `http://127.0.0.1:31415/explorer`.
+
+Similarly to the heuristic worker, you can point the explorer to an alternate dataset directory and heuristic results
+directory by setting the `DATA_DIR` and `HEURISTIC_DIR` environment variables, respectively.

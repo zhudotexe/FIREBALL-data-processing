@@ -1,5 +1,6 @@
 import csv
 import logging
+import os
 import pathlib
 
 from fastapi import FastAPI, HTTPException
@@ -11,8 +12,8 @@ import utils
 log = logging.getLogger("explorer_server")
 
 # ===== config =====
-DATA_DIR = pathlib.Path("data/")
-HEURISTIC_DIR = pathlib.Path("heuristic_results/")
+DATA_DIR = pathlib.Path(os.getenv("DATA_DIR", "data/"))
+HEURISTIC_DIR = pathlib.Path(os.getenv("HEURISTIC_DIR", "heuristic_results/"))
 
 
 class State:
@@ -51,7 +52,7 @@ class State:
 app = FastAPI()
 state = State(DATA_DIR, HEURISTIC_DIR)
 
-app.mount("/explorer", StaticFiles(directory="explorer"), name="explorer")
+app.mount("/explorer", StaticFiles(directory="explorer/dist", html=True), name="explorer")
 
 
 @app.on_event("startup")
