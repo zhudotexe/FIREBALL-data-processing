@@ -6,6 +6,7 @@ import pathlib
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
 
 import utils
 
@@ -21,19 +22,21 @@ class State:
         self.data_dir_path = data_dir_path
         self.result_dir_path = result_dir_path
         self.dataset_checksum = None
-        self.dataset_index = []
+        self.instance_ids = []
+        self.heuristic_ids = []
         self.heuristics_by_instance = {}
 
     def init(self):
         log.info("Computing dataset checksum...")
         self.dataset_checksum = utils.dataset_checksum(self.data_dir_path)
-        self.dataset_index = [instance_path.stem for instance_path in utils.get_combat_dirs(self.data_dir_path)]
+        self.instance_ids = [instance_path.stem for instance_path in utils.get_combat_dirs(self.data_dir_path)]
 
         # load the computed heuristic results into memory, validating the checksum
         log.info("Loading heuristic results...")
-        self.heuristics_by_instance = {instance_id: {} for instance_id in self.dataset_index}
+        self.heuristics_by_instance = {instance_id: {} for instance_id in self.instance_ids}
         for heuristic_result in self.result_dir_path.glob("*.csv"):
             heuristic_name = heuristic_result.stem
+            self.heuristic_ids.append(heuristic_name)
             log.debug(f"loading {heuristic_name=}")
             with open(heuristic_result, newline="") as f:
                 reader = csv.reader(f)
@@ -52,6 +55,14 @@ class State:
 app = FastAPI()
 state = State(DATA_DIR, HEURISTIC_DIR)
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 app.mount("/explorer", StaticFiles(directory="explorer/dist", html=True), name="explorer")
 
 
@@ -68,8 +79,8 @@ async def root():
 
 @app.get("/index")
 async def index():
-    """Returns the dataset index (checksum + list of dir names)"""
-    return {"checksum": state.dataset_checksum, "index": state.dataset_index}
+    """Returns the dataset index (checksum, list of instance ids, list of heuristic ids)"""
+    return {"checksum": state.dataset_checksum, "instances": state.instance_ids, "heuristics": state.heuristic_ids}
 
 
 @app.get("/heuristics")
@@ -80,7 +91,7 @@ async def heuristics() -> dict[str, dict[str, float]]:
 
 @app.get("/events/{instance_id}")
 def get_instance_events(instance_id: str):
-    if instance_id not in state.dataset_index:
+    if instance_id not in state.instance_ids:
         raise HTTPException(status_code=404, detail="instance does not exist")
     # todo maybe we can do some caching here, this can take a bit of time
     # or like stream the response in event batches
