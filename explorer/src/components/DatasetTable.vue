@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {DatasetClient} from "@/client";
+import type {DatasetClient} from "@/client";
 import SortIcon from "@/components/SortIcon.vue";
 import {SortOrder} from "@/utils";
 import {computed, reactive} from "vue";
