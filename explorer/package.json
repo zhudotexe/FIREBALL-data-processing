@@ -5,7 +5,7 @@
     "dev": "vite",
     "build": "run-p type-check build-only",
     "preview": "vite preview --port 4173",
-    "build-only": "vite build",
+    "build-only": "vite build && cp dist/index.html dist/404.html",
     "type-check": "vue-tsc --noEmit"
   },
   "dependencies": {
