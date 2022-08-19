@@ -97,9 +97,20 @@ $ npm install
 
 ### Build Explorer App
 
-The explorer app is a Vue site that lives in `explorer/`. To build it, TODO npm build instructions
+The explorer app is a Vue app that lives in `explorer/`. To build it, run `npm run build` from the explorer directory.
 
-TODO prebuilt instructions
+Alternatively, you can download a prebuilt distribution from TODO. To use the prebuilt distribution, create
+the `explorer/dist` directory and extract it to that directory. The project file structure should look like this:
+
+```text
+aws-kinesis-dataset-exploration-tool/
+    explorer/
+        dist/
+            assets/
+                index.***.css
+                index.***.js
+            index.html
+```
 
 ### Run Explorer App
 
