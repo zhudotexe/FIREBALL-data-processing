@@ -35,9 +35,18 @@ def combat_dir_iterator(dirpath: AnyPath) -> Iterable[dict]:
 
 
 def combat_dir_iterator_raw(dirpath: AnyPath) -> Iterable[bytes]:
-    """Given a path to a directory of gzipped combat event files, return an iterator of events (as bytes) in the dir."""
+    """
+    Given a path to a directory of gzipped combat event files, return an iterator of events (as JSON bytes, each ending
+    with a newline) in the dir.
+    """
     for fp in sorted(glob.glob("*.gz", root_dir=dirpath)):
-        yield from read_gzipped_file_raw(os.path.join(dirpath, fp))
+        for event_bytes in read_gzipped_file_raw(os.path.join(dirpath, fp)):
+            # files do not necessarily have ending newlines - we have to provide them for stream consumers
+            # who expect one on each line, otherwise the file sep puts 2 events on the same line
+            if event_bytes.endswith(b"\n"):
+                yield event_bytes
+            else:
+                yield event_bytes + b"\n"
 
 
 def get_combat_dirs(datapath: AnyPath) -> list[pathlib.Path]:
