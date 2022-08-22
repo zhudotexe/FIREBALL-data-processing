@@ -5,7 +5,7 @@ import pathlib
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import RedirectResponse
+from fastapi.responses import RedirectResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 
 import utils
@@ -107,11 +107,13 @@ async def heuristics() -> dict[str, dict[str, float]]:
 
 @app.get("/events/{instance_id}")
 def get_instance_events(instance_id: str):
+    """Returns a streaming response of events, with each chunk being a list of events."""
     if instance_id not in state.instance_ids:
         raise HTTPException(status_code=404, detail="instance does not exist")
-    # todo maybe we can do some caching here, this can take a bit of time
-    # or like stream the response in event batches
-    return list(utils.combat_dir_iterator(state.data_dir_path / instance_id))
+    # stream the response in order to reduce memory usage (big instances can be 250MB+, don't consume entire iterator)
+    return StreamingResponse(
+        utils.combat_dir_iterator_raw(state.data_dir_path / instance_id), media_type="application/jsonl+json"
+    )
 
 
 # todo endpoints to save notes and -2 to +2 scores for each instance

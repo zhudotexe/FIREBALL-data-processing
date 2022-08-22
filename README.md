@@ -5,7 +5,8 @@ intuitively, while providing the framework to quickly iterate on heuristics and 
 
 - Operates directly on gzipped JSONL files output by AWS Kinesis Firehose, no extraction needed
 - Memory efficient (streaming heuristic applicator)
-- Fast and horizontally scalable (multiprocessing out of the box)
+- High-throughput and horizontally scalable (multiprocessing out of the box)
+- Low-latency (streaming API & client)
 
 I built this tool for the Avrae NLP project (https://www.cis.upenn.edu/~ccb/language-to-avrae.html) and most of the code
 and docs will reference it, but the tool is designed with some degree of dataset-agnosticism in mind.
@@ -84,6 +85,10 @@ view each recording instance empirically alongside the computed heuristics.
 Building the explorer app locally is optional - the prebuilt files can be downloaded from TODO.
 
 To build the explorer web app locally, Node.js 16+ is required.
+
+The explorer app uses some [modern web technologies](https://caniuse.com/mdn-api_textdecoderstream) that are not yet
+supported by all browsers; Chrome 71+, Edge 79+, Safari 14.1+, or Opera 58+ is required (Firefox and IE are not
+supported).
 
 ```bash
 # installing Node requirements (optional)

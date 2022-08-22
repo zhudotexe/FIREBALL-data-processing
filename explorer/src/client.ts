@@ -1,3 +1,4 @@
+import {parseJSONStream, splitStreamOn} from "@/utils";
 
 type HeuristicScoreMap = { [heuristicId: string]: number };
 type InstanceHeuristicMap = { [instanceId: string]: HeuristicScoreMap };
@@ -48,6 +49,28 @@ export class DatasetClient {
             console.debug(`Loaded heuristics: checksum=${this.checksum}`)
         } else {
             console.error(`Failed to load heuristics: ${response.status} ${response.statusText}`);
+        }
+    }
+
+    async* loadEventsForInstance(instanceId: string): AsyncGenerator<any> {
+        const response = await fetch(`${API_BASE}/events/${instanceId}`);
+        if (response.ok && response.body) {
+            // stream transform code adapted from https://streams.spec.whatwg.org/demos/append-child.html
+            // see "WHATWG Streams Standard" in licenses.txt
+            const stream = response.body
+                .pipeThrough(new TextDecoderStream())
+                .pipeThrough(splitStreamOn('\n'))
+                .pipeThrough(parseJSONStream<any>())
+                .getReader();
+
+            // consume the readable stream and yield events
+            while (true) {
+                const {done, value} = await stream.read();
+                if (done) break;
+                yield value;
+            }
+        } else {
+            console.error(`Failed to load instance events: ${response.status} ${response.statusText}`);
         }
     }
 }
