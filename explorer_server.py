@@ -4,9 +4,9 @@ import os
 import pathlib
 
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
-from fastapi.middleware.cors import CORSMiddleware
 
 import utils
 
@@ -33,10 +33,11 @@ class State:
 
         # load the computed heuristic results into memory, validating the checksum
         log.info("Loading heuristic results...")
+        num_heuristics_attempted_loaded = 0
         self.heuristics_by_instance = {instance_id: {} for instance_id in self.instance_ids}
         for heuristic_result in self.result_dir_path.glob("*.csv"):
+            num_heuristics_attempted_loaded += 1
             heuristic_name = heuristic_result.stem
-            self.heuristic_ids.append(heuristic_name)
             log.debug(f"loading {heuristic_name=}")
             with open(heuristic_result, newline="") as f:
                 reader = csv.reader(f)
@@ -47,8 +48,23 @@ class State:
                 # consume the rest of the iterator of (instance id, score) pairs and construct a mapping
                 for instance_id, score in reader:
                     self.heuristics_by_instance[instance_id][heuristic_name] = float(score)
+            self.heuristic_ids.append(heuristic_name)
             log.debug(f"finished {heuristic_name=}")
-        log.info("State init complete! Ready to serve explorer.")
+
+        # log warnings if user needs to recompute heuristics
+        if len(self.heuristic_ids) < num_heuristics_attempted_loaded:
+            log.warning(
+                f"{num_heuristics_attempted_loaded} heuristics found in results but only"
+                f" {len(self.heuristic_ids)} loaded successfully!\n"
+                "You may need to run `python heuristic_worker.py` to recompute heuristics after a dataset update."
+            )
+        elif num_heuristics_attempted_loaded == 0:
+            log.warning(
+                "No heuristics loaded! Make sure you have defined heuristics in `heuristics/__init__.py` and computed"
+                " them by running `python heuristic_worker.py`."
+            )
+
+        log.info(f"State init complete ({len(self.heuristic_ids)} heuristics over {len(self.instance_ids)} instances)!")
 
 
 # ===== app =====
@@ -106,4 +122,5 @@ def get_instance_events(instance_id: str):
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run(app, host="127.0.0.1", port=31415)
+    logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
+    uvicorn.run(app, host="127.0.0.1", port=31415, log_config=None)

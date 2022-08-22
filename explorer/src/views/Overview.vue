@@ -1,26 +1,23 @@
 <script setup lang="ts">
 import {DatasetClient} from "@/client";
 import DatasetTable from "@/components/DatasetTable.vue";
-import {onMounted, reactive, ref} from "vue";
+import {ref} from "vue";
+
+const props = defineProps<{ client: DatasetClient }>();
 
 // data
-const client = reactive(new DatasetClient());
 const viewInstanceId = ref("");
 const viewInstanceIdError = ref("");
 
+
 // methods
 function onViewInstanceId() {
-  if (client.instanceIds.includes(viewInstanceId.value)) {
+  if (props.client.instanceIds.includes(viewInstanceId.value)) {
     viewInstanceIdError.value = "This instance is not in the dataset.";
     return;
   }
   // todo route to instance view
 }
-
-// hooks
-onMounted(() => {
-  client.init();
-});
 </script>
 
 <template>
