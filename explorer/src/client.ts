@@ -1,4 +1,3 @@
-import axios from "axios";
 
 type HeuristicScoreMap = { [heuristicId: string]: number };
 type InstanceHeuristicMap = { [instanceId: string]: HeuristicScoreMap };
@@ -28,26 +27,27 @@ export class DatasetClient {
     }
 
     async loadIndex() {
-        try {
-            const response = await axios.get<IndexModel>(`${API_BASE}/index`);
-            this.checksum = response.data.checksum;
-            this.instanceIds = response.data.instances;
-            this.heuristicIds = response.data.heuristics;
+        const response = await fetch(`${API_BASE}/index`);
+        if (response.ok) {
+            const data = await response.json();
+            this.checksum = data.checksum;
+            this.instanceIds = data.instances;
+            this.heuristicIds = data.heuristics;
             this.indexLoaded = true;
             console.debug(`Loaded dataset index: checksum=${this.checksum}`)
-        } catch (error) {
-            console.error("Failed to load the dataset index:", error);
+        } else {
+            console.error(`Failed to load the dataset index: ${response.status} ${response.statusText}`);
         }
     }
 
     async loadHeuristicsByInstance() {
-        try {
-            const response = await axios.get<InstanceHeuristicMap>(`${API_BASE}/heuristics`);
-            this.heuristicsByInstance = response.data;
+        const response = await fetch(`${API_BASE}/heuristics`);
+        if (response.ok) {
+            this.heuristicsByInstance = await response.json();
             this.heuristicsLoaded = true;
             console.debug(`Loaded heuristics: checksum=${this.checksum}`)
-        } catch (error) {
-            console.error("Failed to load heuristics:", error);
+        } else {
+            console.error(`Failed to load heuristics: ${response.status} ${response.statusText}`);
         }
     }
 }
