@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import EventComponent from "@/avrae/EventComponent.vue";
 import {DatasetClient} from "@/client";
 import {onMounted, reactive} from "vue";
 
@@ -20,11 +21,16 @@ onMounted(async () => {
 </script>
 
 <template>
-  you are viewing {{ instanceId }}<br>
-  {{ events.length }}<br>
-  <!--<div v-for="event in events">-->
-  <!--  <pre>{{ event }}</pre>-->
-  <!--</div>-->
+  <div class="container">
+    <section class="section">
+      <p>
+        you are viewing {{ instanceId }}
+      </p>
+      <p>
+        {{ events.length }}
+      </p>
+    </section>
+  </div>
 </template>
 
 <style scoped>

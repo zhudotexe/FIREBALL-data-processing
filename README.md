@@ -8,10 +8,11 @@ intuitively, while providing the framework to quickly iterate on heuristics and 
 - High-throughput and horizontally scalable (multiprocessing out of the box)
 - Low-latency (streaming API & client)
 
-I built this tool for the Avrae NLP project (https://www.cis.upenn.edu/~ccb/language-to-avrae.html) and most of the code
-and docs will reference it, but the tool is designed with some degree of dataset-agnosticism in mind.
+I built this tool for the Avrae NLP project (https://www.cis.upenn.edu/~ccb/language-to-avrae.html) and this is the
+dataset this repo is implemented for, but the tool is designed with some degree of dataset-agnosticism in mind.
 
-TODO docs on customizing the tool for other datasets
+For help using this tool in your own data science project, contact me at andrz@seas.upenn.edu or view "Customizing the
+Explorer" below.
 
 ## Downloading raw data
 
@@ -124,3 +125,65 @@ be served at `http://127.0.0.1:31415/explorer`.
 
 Similarly to the heuristic worker, you can point the explorer to an alternate dataset directory and heuristic results
 directory by setting the `DATA_DIR` and `HEURISTIC_DIR` environment variables, respectively.
+
+### Customizing the Explorer
+
+The implementation of the explorer in this repo is built for the Avrae NLP project. To use this tool for your own
+project, you will need to change your event visualizer and models.
+
+#### Define Custom Event Models (Optional)
+
+This step provides typed interfaces in order to make building the custom event visualizer easier. You can skip this step
+by setting `type AnyEvent = any` in `explorer/src/events.ts` if you do not need static typing.
+
+Otherwise, create a directory in `explorer/src` for your own dataset, and define your event type(s) as a TypeScript
+interface. Once you've done that, set the `AnyType` type to your newly defined type(s) in `explorer/src/events.ts`.
+
+#### Define Event Key
+
+In order to use this tool's event annotation features, each event should have a unique ID. To define how to extract this
+ID from an event, implement `getEventId(event: AnyEvent): string | null` in `explorer/src/events.ts`.
+
+If the function returns `null`, the event for which it did will not support annotations.
+
+#### Custom Event Visualizer
+
+To visualize an event, define a Vue component in your dataset-specific directory that takes your event as a prop. Use
+this template:
+
+```vue
+<!-- explorer/src/(dataset)/EventComponent.vue -->
+<script setup lang="ts">
+// don't change this!
+import type {AnyEvent} from "@/events";
+defineProps<{event: AnyEvent}>();
+// any custom JS logic goes here
+</script>
+
+<template>
+<!-- by default, this displays the event as JSON - update the template to your liking -->
+<pre>
+    {{ event }}
+</pre>
+</template>
+
+<style scoped>
+/* css goes here */
+</style>
+```
+
+Then, update the import in `explorer/src/views/InstanceViewer.vue` to use your dataset-specific component:
+
+```vue
+<!-- explorer/src/views/InstanceViewer.vue -->
+<script setup lang="ts">
+[...]
+import EventComponent from "@/(dataset)/EventComponent.vue";  // change this line!
+[...]
+</script>
+```
+
+### Gotchas
+
+As JavaScript's `number` type loses precision for integers greater than 2^53, the explorer will automatically parse
+any integer that would otherwise cause rounding as a `BigInt`.
