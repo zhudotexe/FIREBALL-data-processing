@@ -1,3 +1,4 @@
+import type {AnyEvent} from "@/events";
 import {parseJSONStream, splitStreamOn} from "@/utils";
 
 type HeuristicScoreMap = { [heuristicId: string]: number };
@@ -52,7 +53,7 @@ export class DatasetClient {
         }
     }
 
-    async* loadEventsForInstance(instanceId: string): AsyncGenerator<any> {
+    async* loadEventsForInstance(instanceId: string): AsyncGenerator<AnyEvent> {
         const response = await fetch(`${API_BASE}/events/${instanceId}`);
         if (response.ok && response.body) {
             // stream transform code adapted from https://streams.spec.whatwg.org/demos/append-child.html
@@ -60,7 +61,7 @@ export class DatasetClient {
             const stream = response.body
                 .pipeThrough(new TextDecoderStream())
                 .pipeThrough(splitStreamOn('\n'))
-                .pipeThrough(parseJSONStream<any>())
+                .pipeThrough(parseJSONStream<AnyEvent>())
                 .getReader();
 
             // consume the readable stream and yield events
