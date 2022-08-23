@@ -86,7 +86,7 @@ function onSortDirectionChange(sorterKey: string, direction: SortOrder) {
       <tbody>
       <tr v-for="[instanceId, instanceHeuristics] in currentPageInstances">
         <td>
-          {{ instanceId }}
+          <RouterLink :to="`/instances/${instanceId}`">{{ instanceId }}</RouterLink>
         </td>
         <td v-for="heuristicId in client.heuristicIds">
           {{ instanceHeuristics[heuristicId] }}

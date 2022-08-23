@@ -10,7 +10,7 @@ export const enum SortOrder {
 export function splitStreamOn(splitOn: string): TransformStream<string, string> {
     let buffer = '';
 
-    return new TransformStream({
+    return new TransformStream<string, string>({
         transform(chunk, controller) {
             buffer += chunk;
             const parts = buffer.split(splitOn);
@@ -24,7 +24,7 @@ export function splitStreamOn(splitOn: string): TransformStream<string, string> 
 }
 
 export function parseJSONStream<T>(): TransformStream<string, T> {
-    return new TransformStream({
+    return new TransformStream<string, T>({
         transform(chunk, controller) {
             controller.enqueue(JSON.parse(chunk));
         }

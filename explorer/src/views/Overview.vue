@@ -2,13 +2,14 @@
 import {DatasetClient} from "@/client";
 import DatasetTable from "@/components/DatasetTable.vue";
 import {ref} from "vue";
+import {useRouter} from "vue-router";
 
 const props = defineProps<{ client: DatasetClient }>();
+const router = useRouter();
 
 // data
 const viewInstanceId = ref("");
 const viewInstanceIdError = ref("");
-
 
 // methods
 function onViewInstanceId() {
@@ -16,7 +17,7 @@ function onViewInstanceId() {
     viewInstanceIdError.value = "This instance is not in the dataset.";
     return;
   }
-  // todo route to instance view
+  router.push(`/instances/${viewInstanceId.value}`);
 }
 </script>
 
