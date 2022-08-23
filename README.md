@@ -186,4 +186,4 @@ import EventComponent from "@/(dataset)/EventComponent.vue";  // change this lin
 ### Gotchas
 
 As JavaScript's `number` type loses precision for integers greater than 2^53, the explorer will automatically parse
-any integer that would otherwise cause rounding as a `BigInt`.
+any integer that would otherwise cause rounding as a [`BigNumber`](https://github.com/MikeMcl/bignumber.js).

@@ -1,3 +1,7 @@
+import JSONBig from 'json-bigint';
+
+const JSONBigParser = JSONBig({strict: true});
+
 export const enum SortOrder {
     NONE = 0,
     ASC = 1,
@@ -26,7 +30,7 @@ export function splitStreamOn(splitOn: string): TransformStream<string, string> 
 export function parseJSONStream<T>(): TransformStream<string, T> {
     return new TransformStream<string, T>({
         transform(chunk, controller) {
-            controller.enqueue(JSON.parse(chunk));
+            controller.enqueue(JSONBigParser.parse(chunk));
         }
     });
 }
