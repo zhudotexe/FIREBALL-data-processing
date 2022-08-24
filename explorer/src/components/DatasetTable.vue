@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type {DatasetClient} from "@/client";
+import Paginator from "@/components/Paginator.vue";
 import SortIcon from "@/components/SortIcon.vue";
 import {SortOrder} from "@/utils";
 import {computed, reactive} from "vue";
@@ -95,20 +96,9 @@ function onSortDirectionChange(sorterKey: string, direction: SortOrder) {
       </tbody>
     </table>
 
-    <div class="level" v-if="numPages > 1">
-      <p class="level-item">
-        <button class="button mr-2" v-if="pagination.currentPage > 0" @click="pagination.currentPage--">
-          <span class="icon is-small">
-            <font-awesome-icon :icon="['fas', 'angle-left']"/>
-          </span>
-        </button>
-        <span>Page {{ pagination.currentPage + 1 }} / {{ numPages }}</span>
-        <button class="button ml-2" v-if="pagination.currentPage < numPages - 1" @click="pagination.currentPage++">
-          <span class="icon is-small">
-            <font-awesome-icon :icon="['fas', 'angle-right']"/>
-          </span>
-        </button>
-      </p>
-    </div>
+    <Paginator :current-page="pagination.currentPage"
+               :num-pages="numPages"
+               @previous-page="pagination.currentPage--"
+               @next-page="pagination.currentPage++"/>
   </div>
 </template>
