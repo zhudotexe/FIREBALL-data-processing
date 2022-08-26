@@ -22,7 +22,7 @@ function onViewInstanceId() {
 </script>
 
 <template>
-  <div class="container">
+  <div>
     <section class="section">
       <h1 class="title">Dataset Overview</h1>
       <p v-if="!client.indexLoaded">
