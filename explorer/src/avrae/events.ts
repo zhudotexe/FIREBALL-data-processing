@@ -2,7 +2,8 @@
  * Models implemented from https://github.com/avrae/avrae/blob/master/cogs5e/initiative/upenn_nlp.py
  */
 
-import type {BigNumber} from 'bignumber.js';
+// import type {BigNumber} from 'bignumber.js';
+type BigNumber = any;  // HACK: sometimes TS refuses to build because CJS, yay
 
 export interface Event {
     combat_id: string;

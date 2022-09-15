@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {DatasetClient} from "@/client";
+import type {DatasetClient} from "@/client";
 import DatasetTable from "@/components/DatasetTable.vue";
 import {ref} from "vue";
 import {useRouter} from "vue-router";

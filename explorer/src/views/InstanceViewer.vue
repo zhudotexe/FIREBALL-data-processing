@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import EventComponent from "@/avrae/EventComponent.vue";
-import {DatasetClient} from "@/client";
+import type {DatasetClient} from "@/client";
 import Paginator from "@/components/Paginator.vue";
 import type {AnyEvent} from "@/events";
 import {computed, onMounted, reactive, ref} from "vue";
