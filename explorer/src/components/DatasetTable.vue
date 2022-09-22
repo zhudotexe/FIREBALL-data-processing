@@ -3,10 +3,13 @@ import type {DatasetClient} from "@/client";
 import Paginator from "@/components/Paginator.vue";
 import SortIcon from "@/components/SortIcon.vue";
 import {SortOrder} from "@/utils";
-import {computed, reactive} from "vue";
+import {computed, onMounted, reactive} from "vue";
+import {useRoute, useRouter} from "vue-router";
 
 // component setup
 const props = defineProps<{ client: DatasetClient }>();
+const router = useRouter();
+const route = useRoute();
 
 // state
 const pagination = reactive({
@@ -54,7 +57,52 @@ function onSortDirectionChange(sorterKey: string, direction: SortOrder) {
   } else {
     sortOrders.set(sorterKey, direction);
   }
+  updateQueryParams();
 }
+
+// query param helpers
+function updateQueryParams() {
+  const queryParams: { [key: string]: any } = {
+    ...route.query,
+    sort: buildSortQueryParam()
+  }
+  router.replace({query: queryParams});
+}
+
+function isValidSorter(sortId: string) {
+  return props.client.heuristicIds.includes(sortId) || sortId === '_id';
+}
+
+function loadSortQueryParams() {
+  // if the sorter is in the query param and valid, set it up
+  // ensure query params are array
+  let sortQuery = route.query.sort;
+  if (!sortQuery) return;
+  if (!Array.isArray(sortQuery)) {
+    sortQuery = [sortQuery];
+  }
+  for (const sortElem of sortQuery) {
+    // ensure key and direction are valid
+    if (!sortElem) continue;
+    const [sorterKey, direction] = sortElem.split(':', 2);
+    if (!(isValidSorter(sorterKey) && (+direction === 1 || +direction === 2))) continue;
+    // init the sorter
+    sortOrders.set(sorterKey, +direction);
+  }
+}
+
+function buildSortQueryParam(): string[] {
+  const result = [];
+  for (const [sorterKey, direction] of sortOrders) {
+    result.push(`${sorterKey}:${direction}`)
+  }
+  return result;
+}
+
+// hooks
+onMounted(() => {
+  loadSortQueryParams();
+})
 </script>
 
 <template>
