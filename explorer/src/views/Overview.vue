@@ -13,7 +13,7 @@ const viewInstanceIdError = ref("");
 
 // methods
 function onViewInstanceId() {
-  if (props.client.instanceIds.includes(viewInstanceId.value)) {
+  if (!props.client.instanceIds.includes(viewInstanceId.value)) {
     viewInstanceIdError.value = "This instance is not in the dataset.";
     return;
   }
