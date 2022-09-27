@@ -90,4 +90,8 @@ const allMessageButtons = computeMessageButtons(props.event.components);
 :deep(.discord-markdown-content > pre) {
   padding: 0;
 }
+
+:deep(.d-emoji) {
+  height: 1.5em;
+}
 </style>
