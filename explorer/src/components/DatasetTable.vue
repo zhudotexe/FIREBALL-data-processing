@@ -60,11 +60,22 @@ function onSortDirectionChange(sorterKey: string, direction: SortOrder) {
   updateQueryParams();
 }
 
+function onPreviousPage() {
+  pagination.currentPage--;
+  updateQueryParams();
+}
+
+function onNextPage() {
+  pagination.currentPage++;
+  updateQueryParams();
+}
+
 // query param helpers
 function updateQueryParams() {
   const queryParams: { [key: string]: any } = {
     ...route.query,
-    sort: buildSortQueryParam()
+    sort: buildSortQueryParam(),
+    page: pagination.currentPage
   }
   router.replace({query: queryParams});
 }
@@ -99,9 +110,18 @@ function buildSortQueryParam(): string[] {
   return result;
 }
 
+function loadPageQueryParam() {
+  let pageQuery = route.query.page?.toString();
+  if (!pageQuery) return;
+  let pageNum = parseInt(pageQuery);
+  if (!Number.isInteger(pageNum)) return;
+  pagination.currentPage = Math.max(0, pageNum);
+}
+
 // hooks
 onMounted(() => {
   loadSortQueryParams();
+  loadPageQueryParam();
 })
 </script>
 
@@ -146,7 +166,7 @@ onMounted(() => {
 
     <Paginator :current-page="pagination.currentPage"
                :num-pages="numPages"
-               @previous-page="pagination.currentPage--"
-               @next-page="pagination.currentPage++"/>
+               @previous-page="onPreviousPage()"
+               @next-page="onNextPage()"/>
   </div>
 </template>
