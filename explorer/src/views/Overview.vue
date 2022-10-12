@@ -20,9 +20,10 @@ function onViewInstanceId() {
   router.push(`/instances/${viewInstanceId.value}`);
 }
 
-function onViewRandom() {
+async function onViewRandom() {
   const randomInstanceId = props.client.instanceIds[Math.floor(Math.random() * props.client.instanceIds.length)];
   const routeData = router.resolve(`/instances/${randomInstanceId}`);
+  await navigator.clipboard.writeText(randomInstanceId);
   window.open(routeData.href, '_blank');
 }
 </script>
