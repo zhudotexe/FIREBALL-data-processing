@@ -8,6 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 
+import heuristics
 import utils
 
 log = logging.getLogger("explorer_server")
@@ -38,6 +39,11 @@ class State:
         for heuristic_result in self.result_dir_path.glob("*.csv"):
             num_heuristics_attempted_loaded += 1
             heuristic_name = heuristic_result.stem
+            if heuristic_name not in heuristics.__all__:
+                log.warning(
+                    f"Heuristic {heuristic_name!r} has a result but is not defined in heuristics.__all__, skipping..."
+                )
+                continue
             log.debug(f"loading {heuristic_name=}")
             with open(heuristic_result, newline="") as f:
                 reader = csv.reader(f)
@@ -100,7 +106,7 @@ async def index():
 
 
 @app.get("/heuristics")
-async def heuristics() -> dict[str, dict[str, float]]:
+async def instance_heuristics() -> dict[str, dict[str, float]]:
     """Returns all of the computed heuristics. (instance id -> (heuristic id -> score))"""
     return state.heuristics_by_instance
 
