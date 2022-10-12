@@ -1,4 +1,5 @@
 import csv
+import io
 import logging
 import os
 import pathlib
@@ -109,6 +110,25 @@ async def index():
 async def instance_heuristics() -> dict[str, dict[str, float]]:
     """Returns all of the computed heuristics. (instance id -> (heuristic id -> score))"""
     return state.heuristics_by_instance
+
+
+@app.get("/heuristics/csv")
+async def get_heuristics_table():
+    """Returns all of the computed heuristics in a CSV table."""
+    csvbuf = io.StringIO()
+
+    writer = csv.DictWriter(csvbuf, fieldnames=("instance_id", *state.heuristic_ids))
+    writer.writeheader()
+    for instance_id, row in state.heuristics_by_instance.items():
+        writer.writerow({"instance_id": instance_id, **row})
+
+    csvbuf.seek(0)
+    response = StreamingResponse(
+        csvbuf,
+        media_type="text/csv",
+        headers={"Content-Disposition": "attachment; filename=export.csv"},
+    )
+    return response
 
 
 @app.get("/events/{instance_id}")

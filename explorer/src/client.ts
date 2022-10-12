@@ -22,6 +22,7 @@ export class DatasetClient {
     public instanceIds: string[] = [];
     public heuristicIds: string[] = [];
     public heuristicsByInstance: InstanceHeuristicMap = {};
+    public apiBase = API_BASE;
 
     public async init() {
         await this.loadIndex();

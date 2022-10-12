@@ -58,6 +58,9 @@ async function onViewRandom() {
           <button class="button is-info" @click="onViewRandom()">
             Open Random in new tab
           </button>
+          <a class="button is-info" :href="client.apiBase + '/heuristics/csv'" target="_blank">
+            Export to CSV
+          </a>
         </div>
       </div>
     </section>
