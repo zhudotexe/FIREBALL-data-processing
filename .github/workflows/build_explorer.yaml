@@ -17,10 +17,13 @@ jobs:
           cache: 'npm'
           cache-dependency-path: explorer/package-lock.json
 
+      - name: Install Dependencies
+        run: npm ci
+        working-directory: explorer
+
       - name: Build Explorer
-        run: |
-          cd explorer
-          npm run build
+        run: npm run build
+        working-directory: explorer
 
       - name: Upload Dist
         uses: actions/upload-artifact@v3
