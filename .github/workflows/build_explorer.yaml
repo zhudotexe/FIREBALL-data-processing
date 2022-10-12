@@ -1,0 +1,29 @@
+name: Build Explorer Frontend
+
+on:
+  [ push ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: latest
+          cache: 'npm'
+          cache-dependency-path: explorer/package-lock.json
+
+      - name: Build Explorer
+        run: |
+          cd explorer
+          npm run build
+
+      - name: Upload Dist
+        uses: actions/upload-artifact@v3
+        with:
+          name: explorer-dist
+          path: explorer/dist/
