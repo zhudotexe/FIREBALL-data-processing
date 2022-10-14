@@ -19,6 +19,12 @@ function onViewInstanceId() {
   }
   router.push(`/instances/${viewInstanceId.value}`);
 }
+
+function onViewRandom() {
+  const randomInstanceId = props.client.instanceIds[Math.floor(Math.random() * props.client.instanceIds.length)];
+  const routeData = router.resolve(`/instances/${randomInstanceId}`);
+  window.open(routeData.href, '_blank');
+}
 </script>
 
 <template>
@@ -46,6 +52,11 @@ function onViewInstanceId() {
               Go
             </a>
           </div>
+        </div>
+        <div>
+          <button class="button is-info" @click="onViewRandom()">
+            Open Random in new tab
+          </button>
         </div>
       </div>
     </section>
