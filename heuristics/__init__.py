@@ -3,6 +3,7 @@ from typing import Callable, Iterable
 # import heuristic implementations here
 from .count import event_count, message_count
 from .ratio import average_message_length, message_to_command_ratio
+from .feng import average_time_between_message_and_command, ratio_of_commands_without_message
 from .zhu import (
     avg_num_words_between_commands,
     num_participants,
@@ -21,6 +22,8 @@ __all__ = (
     "num_participants",
     "num_turns",
     "num_words_per_turn",
+    "average_time_between_message_and_command",
+    "ratio_of_commands_without_message"
 )
 
 # typing helpers
