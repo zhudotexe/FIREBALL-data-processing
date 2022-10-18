@@ -40,7 +40,7 @@ class UserExtraction:
 
 
 def extract_rp(combat_dir: pathlib.Path):
-    previous_combat_state = None
+    previous_combat_state_update = {"data": None}
     out = []
 
     # user -> current buffer
@@ -54,13 +54,14 @@ def extract_rp(combat_dir: pathlib.Path):
     # *mario long jump sound*
     events = list(utils.combat_dir_iterator(combat_dir))
     message_ids_that_are_commands = set(event["message_id"] for event in events if event["event_type"] == "command")
+    messages_by_id = {event["message_id"]: event for event in events if event["event_type"] == "message"}
 
     # partition by round: start of player's turn to before next start of player's turn
     for event in events:
         # if the turn changed, start utterance recording whomever's turn it is
         if event["event_type"] == "combat_state_update":
-            turn_changed = heuristics.utils.did_turn_change(previous_combat_state, event["data"])
-            previous_combat_state = event["data"]
+            turn_changed = heuristics.utils.did_turn_change(previous_combat_state_update["data"], event["data"])
+            previous_combat_state_update = event
 
             # mark all of the combatants on current turn's controllers to record utterances
             if turn_changed and event["data"]["current"] is not None:
@@ -76,15 +77,28 @@ def extract_rp(combat_dir: pathlib.Path):
                     flush(whose_turn_is_it)
                     buffer[whose_turn_is_it].collecting_utterances = True
 
-        # collect all player's utterances before the first command
-        if event["event_type"] == "command":
-            entry = buffer[int(event["author_id"])]
+        # collect all the commands until the next player utterance (or start of their next turn)
+        if event["event_type"] in ("command", "automation_run", "combat_state_update"):
+            if event["event_type"] == "command":
+                author_id = int(event["author_id"])
+            elif event["event_type"] == "automation_run":
+                triggering_message = messages_by_id.get(event["interaction_id"])
+                if triggering_message is None:
+                    continue
+                author_id = int(triggering_message["author_id"])
+            else:
+                triggering_message = messages_by_id.get(event.get("probable_interaction_id"))
+                if triggering_message is None:
+                    continue
+                author_id = int(triggering_message["author_id"])
+            entry = buffer[author_id]
             if entry.collecting_utterances:
                 entry.collecting_utterances = False
                 entry.collecting_commands = True
+            entry.collect_command(previous_combat_state_update)
             entry.collect_command(event)
 
-        # collect all the commands until the next player utterance (or start of their next turn)
+        # collect all player's utterances before the first command
         if event["event_type"] == "message" and event["message_id"] not in message_ids_that_are_commands:
             entry = buffer[int(event["author_id"])]
             entry.collecting_commands = False
