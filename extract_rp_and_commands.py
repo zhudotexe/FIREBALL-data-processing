@@ -1,3 +1,9 @@
+"""
+For each combat instance in the supplied input data dir, extract event subsets of the form
+(rp utterances, commands + state changes) such that the extracted utterances are the most likely ones
+to have motivated the subsequent commands, which in turn caused the recorded state changes.
+"""
+
 import collections
 import gzip
 import json
@@ -79,6 +85,7 @@ def extract_rp(combat_dir: pathlib.Path):
 
         # collect all the commands until the next player utterance (or start of their next turn)
         if event["event_type"] in ("command", "automation_run", "combat_state_update"):
+            # if the event was triggered by a message, find the message
             if event["event_type"] == "command":
                 author_id = int(event["author_id"])
             elif event["event_type"] == "automation_run":
@@ -91,6 +98,8 @@ def extract_rp(combat_dir: pathlib.Path):
                 if triggering_message is None:
                     continue
                 author_id = int(triggering_message["author_id"])
+
+            # and record the event for the triggering message's author
             entry = buffer[author_id]
             if entry.collecting_utterances:
                 entry.collecting_utterances = False
