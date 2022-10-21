@@ -5,3 +5,7 @@ tqdm~=4.64.0
 # exploration server
 fastapi~=0.79.0
 uvicorn[standard]~=0.18.2
+
+# regression
+scikit-learn
+pandas
