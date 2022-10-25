@@ -14,15 +14,16 @@ import tqdm.contrib.logging
 
 import heuristics.utils
 import utils
+from heuristics.utils import Instance
 
 DATA_DIR = pathlib.Path("data/")
 OUT_DIR = pathlib.Path("extract/narration/")
 RUN_PARALLEL = True
 
 
-class State:
-    def __init__(self, message_groups):
-        self.message_groups = message_groups
+class Runner:
+    def __init__(self, event_stream):
+        self.instance = Instance(event_stream)
         self.last_seen_combat_state = None
         self.author_in_question = None
         self.current_combat_dm = None
@@ -38,7 +39,7 @@ class State:
     #   if group does not have (automation_run, combat_state_update, command) return False
     #   otherwise record the triple and return True
     def record_automation(self, run_event) -> bool:
-        message_group = self.message_groups.get(run_event["interaction_id"])
+        message_group = self.instance.message_groups_by_id.get(run_event["interaction_id"])
         if message_group is None:
             return False
         event_types_in_group = {e["event_type"] for e in message_group}
@@ -54,7 +55,7 @@ class State:
         Returns the user ID that ran the command that caused this automation run. Can be None if automation was from
         a button_press.
         """
-        message_group = self.message_groups.get(event["interaction_id"])
+        message_group = self.instance.message_groups_by_id.get(event["interaction_id"])
         if message_group is None:
             return None
         return message_group[0]["author_id"]
@@ -114,7 +115,7 @@ class State:
         # utterance from DM or user: record utterance, -> state 3
         elif (
             event["event_type"] == "message"
-            and len(self.message_groups[event["message_id"]]) == 1
+            and self.instance.message_groups_by_id[event["message_id"]].is_only_message()
             and (event["author_id"] == self.current_combat_dm or event["author_id"] == self.author_in_question)
         ):
             self.utterance_buffer.append(event)
@@ -137,44 +138,30 @@ class State:
         # utterance from DM or user: record utterance
         elif (
             event["event_type"] == "message"
-            and len(self.message_groups[event["message_id"]]) == 1
+            and self.instance.message_groups_by_id[event["message_id"]].is_only_message()
             and (event["author_id"] == self.current_combat_dm or event["author_id"] == self.author_in_question)
         ):
             self.utterance_buffer.append(event)
 
+    def run(self):
+        self.out.clear()
+        for event in self.instance.events:
+            self.on_event(event)
+        self.flush()
+        return self.out
+
 
 def extract_narration(combat_dir: pathlib.Path):
-    events = list(utils.combat_dir_iterator(combat_dir))
-
-    # pass 1: group (message, automation_run, combat_state_update, command)s by message_id
-    message_groups = {}
-    for event in events:
-        match event:
-            case {"event_type": "message", "message_id": message_id}:
-                message_groups[message_id] = [event]
-            case {"event_type": "command", "message_id": message_id} if message_id in message_groups:
-                message_groups[message_id].append(event)
-            case {"event_type": "automation_run", "interaction_id": message_id} if message_id in message_groups:
-                message_groups[message_id].append(event)
-            case {
-                "event_type": "combat_state_update",
-                "probable_interaction_id": message_id,
-            } if message_id in message_groups:
-                message_groups[message_id].append(event)
-
-    # do the thing
-    state = State(message_groups)
-    for event in events:
-        state.on_event(event)
-    state.flush()
+    runner = Runner(utils.combat_dir_iterator(combat_dir))
+    out = runner.run()
 
     # discard if we have nothing
-    if not state.out:
+    if not out:
         return
 
     # see what we get
     with gzip.open(OUT_DIR / f"{combat_dir.stem}.jsonl.gz", "wt") as f:
-        for line in state.out:
+        for line in out:
             f.write(json.dumps(line) + "\n")
 
 
