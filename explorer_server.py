@@ -10,7 +10,7 @@ from fastapi.responses import RedirectResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 
 import utils
-from state import State
+from dataset import Dataset
 
 log = logging.getLogger("explorer_server")
 
@@ -22,7 +22,7 @@ NARRATION_EXTRACT_DIR = pathlib.Path("extract/narration/")
 
 # ===== app =====
 app = FastAPI()
-state = State(DATA_DIR, HEURISTIC_DIR)
+state = Dataset(DATA_DIR, HEURISTIC_DIR)
 
 app.add_middleware(
     CORSMiddleware,

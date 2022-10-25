@@ -8,7 +8,7 @@ import pathlib
 
 import pandas as pd
 
-from state import State
+from dataset import Dataset
 
 DATA_DIR = pathlib.Path(os.getenv("DATA_DIR", "data/"))
 HEURISTIC_DIR = pathlib.Path(os.getenv("HEURISTIC_DIR", "heuristic_results/"))
@@ -16,7 +16,7 @@ HUMAN_LABEL_FILE = pathlib.Path(os.getenv("HUMAN_LABEL_FILE", "regression_data/b
 
 DEBUG = True
 
-state = State(DATA_DIR, HEURISTIC_DIR)
+state = Dataset(DATA_DIR, HEURISTIC_DIR)
 
 
 def load_labels() -> pd.DataFrame:
