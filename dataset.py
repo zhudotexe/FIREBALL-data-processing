@@ -11,7 +11,7 @@ import utils
 log = logging.getLogger(__name__)
 
 
-class State:
+class Dataset:
     def __init__(self, data_dir_path: pathlib.Path, result_dir_path: pathlib.Path):
         self.data_dir_path = data_dir_path
         self.result_dir_path = result_dir_path

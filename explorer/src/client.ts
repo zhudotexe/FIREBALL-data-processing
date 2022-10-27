@@ -1,3 +1,4 @@
+import type {RPToCommandDistill, StateToNarrationDistill} from "@/avrae/distill";
 import type {AnyEvent} from "@/events";
 import {parseJSONStream, splitStreamOn} from "@/utils";
 
@@ -54,25 +55,47 @@ export class DatasetClient {
         }
     }
 
+    private async* eventsFromStream<T>(stream: ReadableStream<Uint8Array>): AsyncGenerator<T> {
+        // stream transform code adapted from https://streams.spec.whatwg.org/demos/append-child.html
+        // see "WHATWG Streams Standard" in licenses.txt
+        const reader = stream
+            .pipeThrough(new TextDecoderStream())
+            .pipeThrough(splitStreamOn('\n'))
+            .pipeThrough(parseJSONStream<T>())
+            .getReader();
+
+        // consume the readable stream and yield events
+        while (true) {
+            const {done, value} = await reader.read();
+            if (done) break;
+            yield value;
+        }
+    }
+
     async* loadEventsForInstance(instanceId: string): AsyncGenerator<AnyEvent> {
         const response = await fetch(`${API_BASE}/events/${instanceId}`);
         if (response.ok && response.body) {
-            // stream transform code adapted from https://streams.spec.whatwg.org/demos/append-child.html
-            // see "WHATWG Streams Standard" in licenses.txt
-            const stream = response.body
-                .pipeThrough(new TextDecoderStream())
-                .pipeThrough(splitStreamOn('\n'))
-                .pipeThrough(parseJSONStream<AnyEvent>())
-                .getReader();
-
-            // consume the readable stream and yield events
-            while (true) {
-                const {done, value} = await stream.read();
-                if (done) break;
-                yield value;
-            }
+            yield* await this.eventsFromStream<AnyEvent>(response.body);
         } else {
             console.error(`Failed to load instance events: ${response.status} ${response.statusText}`);
+        }
+    }
+
+    async* loadRPCommandDistill(instanceId: string): AsyncGenerator<RPToCommandDistill> {
+        const response = await fetch(`${API_BASE}/distill/rp/${instanceId}`);
+        if (response.ok && response.body) {
+            yield* await this.eventsFromStream<RPToCommandDistill>(response.body);
+        } else {
+            console.error(`Failed to load RP distill: ${response.status} ${response.statusText}`);
+        }
+    }
+
+    async* loadStateNarrationDistill(instanceId: string): AsyncGenerator<StateToNarrationDistill> {
+        const response = await fetch(`${API_BASE}/distill/narration/${instanceId}`);
+        if (response.ok && response.body) {
+            yield* await this.eventsFromStream<StateToNarrationDistill>(response.body);
+        } else {
+            console.error(`Failed to load narration distill: ${response.status} ${response.statusText}`);
         }
     }
 }

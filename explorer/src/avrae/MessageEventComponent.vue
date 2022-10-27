@@ -75,7 +75,7 @@ const allMessageButtons = computeMessageButtons(props.event.components);
 
     <details>
       <summary>
-        message
+        {{ event.event_type }}
       </summary>
       <pre>{{ event }}</pre>
     </details>
