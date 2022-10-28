@@ -123,9 +123,7 @@ def extract_rp(combat_dir: pathlib.Path):
         return
 
     # see what we get
-    with gzip.open(OUT_DIR / f"{combat_dir.stem}.jsonl.gz", "wt") as f:
-        for line in out:
-            f.write(json.dumps(line) + "\n")
+    utils.write_jsonl(OUT_DIR / f"{combat_dir.stem}.jsonl.gz", out)
 
 
 if __name__ == "__main__":

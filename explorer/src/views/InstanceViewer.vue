@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import type {RPToCommandDistill, StateToNarrationDistill} from "@/avrae/distill";
+import type {RPToCommandDistill, StateToNarrationDistill, TimeBasedDistill} from "@/avrae/distill";
 import type {DatasetClient} from "@/client";
 import type {AnyEvent} from "@/events";
+import DistillExperiment1Tab from "@/views/DistillExperiment1Tab.vue";
 import DistillNarrationTab from "@/views/DistillNarrationTab.vue";
 import DistillRPTab from "@/views/DistillRPTab.vue";
 import EventsTab from "@/views/EventsTab.vue";
@@ -19,6 +20,7 @@ const activeTab = ref(0);
 const events = reactive<AnyEvent[]>([]);
 const rpDistill = reactive<RPToCommandDistill[]>([]);
 const narrationDistill = reactive<StateToNarrationDistill[]>([]);
+const experiment1Distill = reactive<TimeBasedDistill[]>([]);
 const isLoading = ref(true);
 
 // hooks
@@ -36,6 +38,11 @@ onMounted(async () => {
 onMounted(async () => {
   for await (const event of props.client.loadStateNarrationDistill(props.instanceId)) {
     narrationDistill.push(event);
+  }
+});
+onMounted(async () => {
+  for await (const event of props.client.loadTimeBasedDistill(props.instanceId)) {
+    experiment1Distill.push(event);
   }
 });
 </script>
@@ -70,6 +77,9 @@ onMounted(async () => {
         <li :class="{ 'is-active': activeTab === 2 }" v-if="narrationDistill.length > 0">
           <a @click="activeTab = 2">Distilled: State to Narration ({{ narrationDistill.length }})</a>
         </li>
+        <li :class="{ 'is-active': activeTab === 3 }" v-if="experiment1Distill.length > 0">
+          <a @click="activeTab = 3">Distilled: By Time ({{ experiment1Distill.length }})</a>
+        </li>
       </ul>
     </div>
 
@@ -86,6 +96,11 @@ onMounted(async () => {
     <!-- distill: narration -->
     <div v-if="activeTab === 2">
       <DistillNarrationTab :events="narrationDistill"/>
+    </div>
+
+    <!-- distill: group by time -->
+    <div v-if="activeTab === 3">
+      <DistillExperiment1Tab :events="experiment1Distill"/>
     </div>
 
   </div>

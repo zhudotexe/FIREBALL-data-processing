@@ -10,3 +10,9 @@ export interface StateToNarrationDistill {
     state: AnyEvent[];
     utterances: MessageEvent[];
 }
+
+export interface TimeBasedDistill {
+    before: MessageEvent[];
+    commands: AnyEvent[];
+    after: MessageEvent[];
+}

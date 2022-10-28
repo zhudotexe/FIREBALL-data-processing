@@ -1,4 +1,4 @@
-import type {RPToCommandDistill, StateToNarrationDistill} from "@/avrae/distill";
+import type {RPToCommandDistill, StateToNarrationDistill, TimeBasedDistill} from "@/avrae/distill";
 import type {AnyEvent} from "@/events";
 import {parseJSONStream, splitStreamOn} from "@/utils";
 
@@ -96,6 +96,15 @@ export class DatasetClient {
             yield* await this.eventsFromStream<StateToNarrationDistill>(response.body);
         } else {
             console.error(`Failed to load narration distill: ${response.status} ${response.statusText}`);
+        }
+    }
+
+    async* loadTimeBasedDistill(instanceId: string): AsyncGenerator<TimeBasedDistill> {
+        const response = await fetch(`${API_BASE}/distill/experiment1/${instanceId}`);
+        if (response.ok && response.body) {
+            yield* await this.eventsFromStream<TimeBasedDistill>(response.body);
+        } else {
+            console.error(`Failed to load time based distill: ${response.status} ${response.statusText}`);
         }
     }
 }

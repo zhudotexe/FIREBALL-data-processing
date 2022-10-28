@@ -50,6 +50,9 @@ class MessageGroup:
     def __getitem__(self, idx):
         return self.events[idx]
 
+    def __hash__(self):
+        return hash(self.message["message_id"])
+
     # helpers
     def is_only_message(self):
         """True if this message group is just a message (i.e. it did not trigger a command or anything)."""

@@ -109,6 +109,12 @@ def get_instance_narration_distill(instance_id: str):
     return get_distilled_instance(NARRATION_EXTRACT_DIR, instance_id)
 
 
+@app.get("/distill/experiment1/{instance_id}")
+def get_instance_experiment1_distill(instance_id: str):
+    """Returns a streaming response of {"before": [message...], "commands": [event...], "after": [message...]} dicts."""
+    return get_distilled_instance(pathlib.Path("extract/experiment1/"), instance_id)
+
+
 # todo endpoints to save notes and -2 to +2 scores for each instance
 # todo endpoints to retrieve those notes
 # todo sqlite db to save those
