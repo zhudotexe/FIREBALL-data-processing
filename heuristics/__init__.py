@@ -4,6 +4,7 @@ from typing import Callable, Iterable
 from .count import event_count, message_count
 from .feng import avg_time_between_message_and_command, ratio_of_commands_without_message
 from .ratio import average_message_length, message_to_command_ratio
+from .feng import avg_time_between_message_and_command, ratio_of_commands_without_message
 from .zhu import (
     avg_num_words_between_commands,
     num_actors,
