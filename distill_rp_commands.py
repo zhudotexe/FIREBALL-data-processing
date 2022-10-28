@@ -5,8 +5,6 @@ to have motivated the subsequent commands, which in turn caused the recorded sta
 """
 
 import collections
-import gzip
-import json
 import logging
 import pathlib
 
@@ -19,6 +17,10 @@ import utils
 DATA_DIR = pathlib.Path("data/")
 OUT_DIR = pathlib.Path("extract/rp/")
 RUN_PARALLEL = True
+USE_DEV_DIRS = True
+DEV_DIRS = [
+    pathlib.Path("data/1657225964-b1c9306d-4ec1-42ad-a1f0-d4a9fbace397"),
+]
 
 
 class UserExtraction:
@@ -64,6 +66,10 @@ def extract_rp(combat_dir: pathlib.Path):
 
     # partition by round: start of player's turn to before next start of player's turn
     for event in events:
+        # if the event is a 1-word utterance, skip it
+        if event["event_type"] == "message" and len(event["content"].split()) < 2:
+            continue
+
         # if the turn changed, start utterance recording whomever's turn it is
         if event["event_type"] == "combat_state_update":
             turn_changed = heuristics.utils.did_turn_change(previous_combat_state_update["data"], event["data"])
@@ -129,9 +135,10 @@ def extract_rp(combat_dir: pathlib.Path):
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
     OUT_DIR.mkdir(parents=True, exist_ok=True)
+    dirs_to_distill = utils.get_combat_dirs(DATA_DIR) if not USE_DEV_DIRS else DEV_DIRS
     with tqdm.contrib.logging.logging_redirect_tqdm():
         if RUN_PARALLEL:
-            tqdm.contrib.concurrent.process_map(extract_rp, utils.get_combat_dirs(DATA_DIR), chunksize=10)
+            tqdm.contrib.concurrent.process_map(extract_rp, dirs_to_distill, chunksize=10)
         else:
-            for d in tqdm.tqdm(utils.get_combat_dirs(DATA_DIR)):
+            for d in tqdm.tqdm(dirs_to_distill):
                 extract_rp(d)

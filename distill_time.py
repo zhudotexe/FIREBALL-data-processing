@@ -14,6 +14,10 @@ from utils import combat_dir_iterator, get_combat_dirs, write_jsonl
 DATA_DIR = pathlib.Path("data/")
 OUT_DIR = pathlib.Path("extract/experiment1/")
 RUN_PARALLEL = True
+USE_DEV_DIRS = True
+DEV_DIRS = [
+    pathlib.Path("data/1657225964-b1c9306d-4ec1-42ad-a1f0-d4a9fbace397"),
+]
 
 
 def group_utterances_for_user(messages: list[MessageGroup]) -> list[dict[str, list[Event]]]:
@@ -68,9 +72,10 @@ def group_utterances(combat_dir: pathlib.Path):
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
     OUT_DIR.mkdir(parents=True, exist_ok=True)
+    dirs_to_distill = get_combat_dirs(DATA_DIR) if not USE_DEV_DIRS else DEV_DIRS
     with tqdm.contrib.logging.logging_redirect_tqdm():
         if RUN_PARALLEL:
-            tqdm.contrib.concurrent.process_map(group_utterances, get_combat_dirs(DATA_DIR), chunksize=10)
+            tqdm.contrib.concurrent.process_map(group_utterances, dirs_to_distill, chunksize=10)
         else:
-            for d in tqdm.tqdm(get_combat_dirs(DATA_DIR)):
+            for d in tqdm.tqdm(dirs_to_distill):
                 group_utterances(d)

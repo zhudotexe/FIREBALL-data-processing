@@ -4,8 +4,6 @@ For each combat instance in the supplied input data dir, extract event subsets o
 ones to be narrations of the recorded state changes
 """
 
-import gzip
-import json
 import logging
 import pathlib
 
@@ -19,6 +17,10 @@ from heuristics.utils import Instance
 DATA_DIR = pathlib.Path("data/")
 OUT_DIR = pathlib.Path("extract/narration/")
 RUN_PARALLEL = True
+USE_DEV_DIRS = True
+DEV_DIRS = [
+    pathlib.Path("data/1657225964-b1c9306d-4ec1-42ad-a1f0-d4a9fbace397"),
+]
 
 
 class Runner:
@@ -72,6 +74,10 @@ class Runner:
 
     # ==== event handlers ====
     def on_event(self, event):
+        # if the event is a 1-word utterance, skip it
+        if event["event_type"] == "message" and len(event["content"].split()) < 2:
+            return
+
         if self.search_state == 1:
             self.on_event_searching(event)
         elif self.search_state == 2:
@@ -166,9 +172,10 @@ def extract_narration(combat_dir: pathlib.Path):
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
     OUT_DIR.mkdir(parents=True, exist_ok=True)
+    dirs_to_distill = utils.get_combat_dirs(DATA_DIR) if not USE_DEV_DIRS else DEV_DIRS
     with tqdm.contrib.logging.logging_redirect_tqdm():
         if RUN_PARALLEL:
-            tqdm.contrib.concurrent.process_map(extract_narration, utils.get_combat_dirs(DATA_DIR), chunksize=10)
+            tqdm.contrib.concurrent.process_map(extract_narration, dirs_to_distill, chunksize=10)
         else:
-            for d in tqdm.tqdm(utils.get_combat_dirs(DATA_DIR)):
+            for d in tqdm.tqdm(dirs_to_distill):
                 extract_narration(d)
