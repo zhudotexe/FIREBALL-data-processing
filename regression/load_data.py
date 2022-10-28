@@ -3,7 +3,7 @@
 a csv file with labels and one with heuristic features"""
 import argparse
 import pandas as pd
-import sklearn
+# import sklearn
 parser = argparse.ArgumentParser(description="create a dataset of instances for regression from \
     a csv file with labels and one with heuristic features")
 parser.add_argument("labels", help="csv file with labels")
@@ -13,9 +13,10 @@ args = parser.parse_args()
 
 def main(args):
     """main function"""
-    labels = pd.read_csv(args.labels, header=True, index_col=0)
-    features = pd.read_csv(args.features, header=True, index_col=0)
-    dataset = pd.join(features, labels, how="inner", on="Instance ID")
+    labels = pd.read_csv(args.labels, header=0, index_col=0)
+    features = pd.read_csv(args.features, header=0, index_col=0)
+    print(labels.head(10), features.head(10))
+    dataset = features.join(labels, how="inner", on="instance_id")
     dataset.to_csv(args.output)
 if __name__ == "__main__":
     main(args)
