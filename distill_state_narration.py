@@ -12,15 +12,13 @@ import tqdm.contrib.logging
 
 import heuristics.utils
 import utils
+from dev_constants import DEV_DIRS
 from heuristics.utils import Instance
 
 DATA_DIR = pathlib.Path("data/")
 OUT_DIR = pathlib.Path("extract/narration/")
 RUN_PARALLEL = True
 USE_DEV_DIRS = True
-DEV_DIRS = [
-    pathlib.Path("data/1657225964-b1c9306d-4ec1-42ad-a1f0-d4a9fbace397"),
-]
 
 
 class Runner:

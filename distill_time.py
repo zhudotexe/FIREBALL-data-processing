@@ -1,65 +1,73 @@
-# group all consecutive automation runs from the same user together
-# assign each utterance from each non-DM user to the nearest (in time) automation run group from that user
-# assign each utterance from the DM user to the nearest (in time) automation run group, from any user
 import collections
+import itertools
 import logging
 import pathlib
 
 import tqdm.contrib.concurrent
 import tqdm.contrib.logging
 
-from heuristics.utils import Event, Instance, MessageGroup
+from dev_constants import DEV_DIRS
+from heuristics.utils import Event, Instance, MessageGroup, is_bot_message
 from utils import combat_dir_iterator, get_combat_dirs, write_jsonl
 
 DATA_DIR = pathlib.Path("data/")
 OUT_DIR = pathlib.Path("extract/experiment1/")
 RUN_PARALLEL = True
-USE_DEV_DIRS = True
-DEV_DIRS = [
-    pathlib.Path("data/1657225964-b1c9306d-4ec1-42ad-a1f0-d4a9fbace397"),
-]
+USE_DEV_DIRS = False
 
 
-def group_utterances_for_user(messages: list[MessageGroup]) -> list[dict[str, list[Event]]]:
-    """
-    Given all the message-based events for a user, return a list of dicts {before, commands, after},
-    clustered based on nearest commands in time.
-    """
-    triples = collections.defaultdict(lambda: ([], []))  # command -> (before, after)
+def group_utterances(combat_dir: pathlib.Path):
+    """Assign each message to the nearest automation run, chronologically."""
+    inst = Instance(combat_dir_iterator(combat_dir))
+    triples = collections.defaultdict(lambda: ([], []))  # run -> (before, after)
 
-    non_messages = [g for g in messages if not g.is_only_message()]
-    # todo: group all consecutive together
+    if not inst.message_groups:
+        return
 
-    def nearest_non_message(event):
-        nearest_sorted = sorted(non_messages, key=lambda grp: abs(grp.message["timestamp"] - event["timestamp"]))
+    # group consecutive message groups
+    message_group_lookups = {}
+    grouped_message_groups = itertools.groupby(
+        inst.message_groups, key=lambda mgrp: (mgrp.is_only_message(), mgrp.message["author_id"])
+    )
+    for (is_only_message, author_id), gs in grouped_message_groups:
+        gs = list(gs)
+        if not is_only_message and len(gs) > 1:
+            new_g = MessageGroup.concat(gs)
+            for g in gs:
+                message_group_lookups[g] = new_g
+
+    # do the tagging
+    automation_runs: list[MessageGroup] = [g for g in inst.message_groups if g.has_event_of_type("automation_run")]
+    all_utterances: list[Event] = [g.message for g in inst.message_groups if g.is_only_message()]
+
+    def nearest_automation_run(event):
+        nearest_sorted = sorted(automation_runs, key=lambda grp: abs(grp.message["timestamp"] - event["timestamp"]))
         if nearest_sorted:
             return nearest_sorted[0]
         return None
 
-    only_messages = [g for g in messages if g.is_only_message()]
-    for mgroup in only_messages:
-        message = mgroup.message
-        nearest_group = nearest_non_message(message)
+    for message in all_utterances:
+        # FILTERS
+        # ignore short messages
+        if len(message["content"].split()) < 5:
+            continue
+        # ignore bot messages
+        if is_bot_message(message):
+            continue
+
+        # GROUP
+        nearest_group = nearest_automation_run(message)
         if nearest_group is None:
             continue
+        tagged_group = message_group_lookups.get(nearest_group, nearest_group)
         if message["timestamp"] < nearest_group.message["timestamp"]:
-            triples[nearest_group][0].append(message)
+            triples[tagged_group][0].append(message)
         else:
-            triples[nearest_group][1].append(message)
+            triples[tagged_group][1].append(message)
 
-    return [
+    out = [
         {"before": before, "commands": commands.events, "after": after} for commands, (before, after) in triples.items()
     ]
-
-
-def group_utterances(combat_dir: pathlib.Path):
-    inst = Instance(combat_dir_iterator(combat_dir))
-
-    out = []
-
-    message_groups = inst.partitioned_groups(lambda message: message["author_id"])
-    for user_id, messages in message_groups:
-        out.extend(group_utterances_for_user(messages))
 
     # discard if we have nothing
     if not out:
