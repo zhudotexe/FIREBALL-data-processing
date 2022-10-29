@@ -37,6 +37,12 @@ class MessageGroup:
         self.message = message
         self.events = [message]
 
+    @classmethod
+    def concat(cls, other_groups: list["MessageGroup"]):
+        inst = cls(other_groups[0].message)
+        inst.events = sum((g.events for g in other_groups), [])
+        return inst
+
     # list compatibility
     def append(self, event: Event):
         self.events.append(event)
@@ -50,10 +56,16 @@ class MessageGroup:
     def __getitem__(self, idx):
         return self.events[idx]
 
+    def __hash__(self):
+        return hash(self.message["message_id"])
+
     # helpers
     def is_only_message(self):
         """True if this message group is just a message (i.e. it did not trigger a command or anything)."""
         return len(self.events) == 1
+
+    def has_event_of_type(self, event_type: str):
+        return any(e["event_type"] == event_type for e in self.events)
 
 
 class Instance:

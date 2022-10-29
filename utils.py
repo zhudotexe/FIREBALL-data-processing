@@ -58,3 +58,23 @@ def dataset_checksum(datapath: AnyPath) -> str:
     """Returns the checksum of the dataset at the given path."""
     num_cores = os.cpu_count() or 1
     return dirhash.dirhash(datapath, "md5", match=("*.gz",), jobs=num_cores)
+
+
+def write_jsonl(fpath: AnyPath, data: list):
+    """
+    Write a list of data to the file at *fpath*. If the supplied path ends with `.gz`, zips the output file.
+    """
+    if isinstance(fpath, pathlib.Path):
+        should_compress = fpath.suffix.endswith(".gz")
+    else:
+        should_compress = fpath.endswith(".gz")
+
+    if should_compress:
+        f = gzip.open(fpath, "wt")
+    else:
+        f = open(fpath, "w")
+
+    for line in data:
+        f.write(json.dumps(line, default=lambda obj: obj.dict()) + "\n")
+
+    f.close()
