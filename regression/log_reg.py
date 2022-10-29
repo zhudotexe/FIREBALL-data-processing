@@ -5,6 +5,8 @@ import argparse
 import numpy as np
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC
+from sklearn.naive_bayes import GaussianNB
 from sklearn.model_selection import KFold
 from sklearn import preprocessing
 from sklearn.metrics import f1_score, accuracy_score, classification_report
@@ -19,6 +21,7 @@ parser.add_argument("--predictions_base", \
     help="prefix for files to output predictions", default="predictions")
 # parser.add_argument("--train_predictions_base", \
     # help="prefix for files to output predictions on training set", default="X_pred.csv")
+parser.add_argument("--classifier", help="classifier to use", default="log_reg", choices=["log_reg", "svm","naive_bayes"])
 parser.add_argument("--penalty", help="penalty for the model", default="l2")
 parser.add_argument("--Cs", \
     help="values to test for C, the inverse strength of regularization", default=[.01,.1,1,10,100])
@@ -51,11 +54,18 @@ def main(args):
             y_train = ys[target].iloc[train_index]
             y_val = ys[target].iloc[val_index]
             for C in args.Cs:
-                model = LogisticRegression(penalty=args.penalty, C=C, class_weight=args.class_weight).fit(X_train_scaled,y_train)
+                if args.classifier == "log_reg":
+                    model = LogisticRegression(C=C, class_weight=args.class_weight, \
+                        penalty=args.penalty).fit(X_train_scaled, y_train)
+                elif args.classifier == "svm":
+                    model = SVC(C=C, class_weight=args.class_weight, \
+                        kernel='linear').fit(X_train_scaled, y_train)
+                elif args.classifier == "naive_bayes":
+                    model = GaussianNB().fit(X_train_scaled, y_train)
                 val_scores[target][C].append(metric(y_val, model.predict(X_val_scaled)))
 
     # Find best C for each target by mean validation accuracy
-    with open(args.val_out, 'w') as f:
+    with open(args.classifier+"_"+args.val_out, 'w') as f:
         for target in targets:
             best_val_score = 0
             for C in args.Cs:
@@ -73,14 +83,23 @@ def main(args):
     X_full = full.copy()
     scaler = scaler.fit(X_full)
     X_full_scaled = scaler.transform(X_full)
-    with open(args.train_out, 'w') as f:
+    with open(args.classifier+"_"+args.train_out, 'w') as f:
         for target in targets:
-            model = LogisticRegression(penalty=args.penalty, C = best_Cs[target],\
-                 class_weight=args.class_weight).fit(X_scaled,ys[target])
+            if args.classifier == "log_reg":
+                model = LogisticRegression(C=best_Cs[target], class_weight=args.class_weight, \
+                    penalty=args.penalty).fit(X_scaled, ys[target])
+            elif args.classifier == "svm":
+                model = SVC(C=best_Cs[target], class_weight=args.class_weight, \
+                    kernel='linear').fit(X_scaled, ys[target])
+            elif args.classifier == "naive_bayes":
+                model = GaussianNB().fit(X_scaled, ys[target])
             full[f"{target}_pred"] = model.predict(X_full_scaled)
-            full[f"{target}_pred_prob"] = model.predict_proba(X_full_scaled)[:,1]
-            out = full[[f"{target}_pred",f"{target}_pred_prob"]]
-            out.to_csv(args.predictions_base+f"_{target}.csv")
+            if args.classifier != "svm":
+                full[f"{target}_pred_prob"] = model.predict_proba(X_full_scaled)[:,1]
+                out = full[[f"{target}_pred",f"{target}_pred_prob"]]
+            else:
+                out = full[[f"{target}_pred"]]
+            out.to_csv(args.classifier+"_"+args.predictions_base+f"_{target}.csv")
             f.write(f"Train {args.metric} score for {target}: {metric(model.predict(X_scaled),ys[target])}\n")
             f.write(classification_report(model.predict(X_scaled),ys[target]))
 if __name__ == "__main__":

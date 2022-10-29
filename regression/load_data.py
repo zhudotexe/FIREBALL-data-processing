@@ -17,13 +17,10 @@ def main(args):
     features = pd.read_csv(args.features, header=0, index_col=0)
     print(labels.head(10), features.head(10))
     dataset = features.join(labels, how="inner", on="instance_id")
-<<<<<<< HEAD
     dataset["RP to CMD"].fillna(-1,inplace=True)
     dataset["CMD to NARR"].fillna(-1,inplace=True)
     dataset["RP to CMD or CMD to NARR"] = dataset[["RP to CMD", "CMD to NARR"]].max(axis=1)
     dataset["RP to CMD and CMD to NARR"] = dataset[["RP to CMD", "CMD to NARR"]].min(axis=1)
-=======
->>>>>>> bbaf5f2a0e58f57fb6cbf1d15989a220812b4e94
     dataset.to_csv(args.output)
 if __name__ == "__main__":
     main(args)
