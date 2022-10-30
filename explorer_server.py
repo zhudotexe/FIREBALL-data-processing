@@ -97,17 +97,17 @@ def get_distilled_instance(basepath: pathlib.Path, instance_id: str):
     return StreamingResponse(utils.read_gzipped_file_raw(distill_path), media_type="application/jsonl+json")
 
 
-@app.get("/distill/rp/{instance_id}")
-def get_instance_rp_distill(instance_id: str):
-    """Returns a streaming response of {"utterances": [message...], "commands": [events...]} dicts."""
-    return get_distilled_instance(RP_EXTRACT_DIR, instance_id)
-
-
-@app.get("/distill/narration/{instance_id}")
-def get_instance_narration_distill(instance_id: str):
-    """Returns a streaming response of {"state": [events...], "utterances": [message...]} dicts."""
-    return get_distilled_instance(NARRATION_EXTRACT_DIR, instance_id)
-
+# @app.get("/distill/rp/{instance_id}")
+# def get_instance_rp_distill(instance_id: str):
+#     """Returns a streaming response of {"utterances": [message...], "commands": [events...]} dicts."""
+#     return get_distilled_instance(RP_EXTRACT_DIR, instance_id)
+#
+#
+# @app.get("/distill/narration/{instance_id}")
+# def get_instance_narration_distill(instance_id: str):
+#     """Returns a streaming response of {"state": [events...], "utterances": [message...]} dicts."""
+#     return get_distilled_instance(NARRATION_EXTRACT_DIR, instance_id)
+#
 
 @app.get("/distill/experiment1/{instance_id}")
 def get_instance_experiment1_distill(instance_id: str):
