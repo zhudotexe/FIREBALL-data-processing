@@ -21,7 +21,9 @@ Output: {
 """
 import glob
 import logging
+import os.path
 import pathlib
+import sys
 
 import tqdm.contrib.concurrent
 import tqdm.contrib.logging
@@ -29,10 +31,16 @@ import tqdm.contrib.logging
 from heuristics.utils import Instance, MessageGroup
 from utils import combat_dir_iterator, read_gzipped_file, write_jsonl
 
+# hack to add avrae submodule to pypath
+# if this errors, pip install -r avrae/requirements.txt
+sys.path.append(os.path.join(os.path.abspath(os.path.dirname(__file__)), "avrae"))
+from avrae.utils.argparser import argsplit
+
 DATA_DIR = pathlib.Path("data/")
 IN_DIR = pathlib.Path("extract/experiment1/")
 OUT_DIR = pathlib.Path("extract/experiment2/")
-RUN_PARALLEL = True
+RUN_PARALLEL = False
+log = logging.getLogger("distill2")
 
 
 class Distill2Inst(Instance):
@@ -51,7 +59,6 @@ class Distill2Inst(Instance):
 
     def extract_characters(self) -> dict:
         """Extract all of the characters by (owner, upstream_id) in a map from init joins"""
-        # TODO move me to distill3
         characters = {}
         for event in self.find_all(lambda e: e["event_type"] == "command" and e["command_name"] == "init join"):
             caster = event["caster"]
@@ -59,6 +66,39 @@ class Distill2Inst(Instance):
             upstream = caster["upstream"]
             characters[(owner, upstream)] = caster
         return characters
+
+    def hydrate_combatant(self, combatant: dict) -> dict:
+        """Hydrates a sparse PlayerCombatant with attributes from the character."""
+        if combatant.get("type") != "player":
+            return combatant
+        character = self.characters.get((combatant["owner_id"], combatant["character_id"]))
+        if character is None:
+            log.warning("Could not find character")
+            return combatant
+        # combatant.py#L728
+        hydrate_character_attributes = (
+            "stats",
+            "levels",
+            "skills",
+            "saves",
+            "spellbook",
+            "hp",
+            "temp_hp",
+            "actions",
+            "description",
+            "race",
+        )
+        return {
+            **combatant,
+            **{k: character[k] for k in hydrate_character_attributes},
+        }
+
+    def get_caster_id(self, caster: dict):
+        if "owner_id" in caster and "character_id" in caster:
+            return f"{caster['owner_id']}-{caster['character_id']}"
+        if "owner" in caster and "upstream" in caster:
+            return f"{caster['owner']}-{caster['upstream']}"
+        return caster.get("id")
 
     # ==== normalizers =====
     def normalize_command_group(self, group: MessageGroup) -> str | None:
@@ -72,14 +112,18 @@ class Distill2Inst(Instance):
         content = content.replace(command["prefix"], "!", 1)
 
         # normalize snippets
-        # TODO: import avrae and use argsplit
-        content_words = content.split()
-        for snippet_resolution in group.find_all_of_type("snippet_resolution"):
-            for idx, word in enumerate(content_words):
-                if word == snippet_resolution["snippet_name"]:
-                    content_words[idx] = snippet_resolution["content_after"]
-                    break
-        content = " ".join(content_words)
+        snippet_resolutions = group.find_all_of_type("snippet_resolution")
+        if snippet_resolutions:
+            try:
+                content_words = argsplit(content)
+            except:
+                content_words = content.split()
+            for snippet_resolution in snippet_resolutions:
+                for idx, word in enumerate(content_words):
+                    if word == snippet_resolution["snippet_name"]:
+                        content_words[idx] = snippet_resolution["content_after"]
+                        break
+            content = " ".join(content_words)
 
         # TODO: we can probably rebuild cast/attack invocations by importing avrae
         # lets us reference exact action/attack/spell names
@@ -112,6 +156,17 @@ class Distill2Inst(Instance):
             if norm:
                 commands_norm.append(norm)
 
+        # ensure the caster is the same for all commands and present
+        seen_casters = set()
+        for g in commands_grouped:
+            command = g.find_event_of_type("command")
+            if command is None:
+                continue
+            seen_casters.add(self.get_caster_id(command["caster"]))
+        if len(seen_casters) > 1:
+            log.warning(f"triple has {len(seen_casters)} different casters, discarding")
+            return None
+
         # TODO: stringify automation run for GPT-3
         # TODO: stringify caster attributes for GPT-3
 
@@ -122,7 +177,6 @@ class Distill2Inst(Instance):
             "commands_norm": commands_norm,
             # "after": after,
             "after_utterances": after_utterances,
-            "caster_before": {},  # the state of the caster before any automation runs
         }
 
 
