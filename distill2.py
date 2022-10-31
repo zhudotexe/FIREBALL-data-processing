@@ -1,4 +1,12 @@
 """
+Distill2: Given time-grouped triples, normalize the utterances:
+- filter IC/OOC utterances (TODO)
+- remove utterances from irrelevant users
+and normalize the commands:
+- resolve aliases
+- resolve snippets
+- normalize the prefix
+
 Input: {"before": [Message...], "commands": [Event...], "after": [Message...]}
 
 Output: {
@@ -27,98 +35,118 @@ OUT_DIR = pathlib.Path("extract/experiment2/")
 RUN_PARALLEL = True
 
 
-def extract_dms_from_events(inst: Instance) -> set[str]:
-    """Given events, return a set of user IDs who were DMs at any point during the combat."""
-    out = set()
-    for event in inst.find_all(lambda e: e["event_type"] == "combat_state_update"):
-        out.add(str(event["data"]["dm"]))
-    return out
+class Distill2Inst(Instance):
+    def __init__(self, events):
+        super().__init__(events)
+        self.dms = self.extract_dms_from_events()
+        self.characters = self.extract_characters()
 
+    # ==== init: extract info ====
+    def extract_dms_from_events(self) -> set[str]:
+        """Given events, return a set of user IDs who were DMs at any point during the combat."""
+        out = set()
+        for event in self.find_all(lambda e: e["event_type"] == "combat_state_update"):
+            out.add(str(event["data"]["dm"]))
+        return out
 
-def normalize_command_group(group: MessageGroup) -> str | None:
-    command = group.find_event_of_type("command")
-    if command is None:
-        return None
-    # use post-alias content
-    content: str = command["content"]
+    def extract_characters(self) -> dict:
+        """Extract all of the characters by (owner, upstream_id) in a map from init joins"""
+        # TODO move me to distill3
+        characters = {}
+        for event in self.find_all(lambda e: e["event_type"] == "command" and e["command_name"] == "init join"):
+            caster = event["caster"]
+            owner = caster["owner"]
+            upstream = caster["upstream"]
+            characters[(owner, upstream)] = caster
+        return characters
 
-    # normalize prefix
-    content = content.replace(command["prefix"], "!", 1)
+    # ==== normalizers =====
+    def normalize_command_group(self, group: MessageGroup) -> str | None:
+        command = group.find_event_of_type("command")
+        if command is None:
+            return None
+        # use post-alias content
+        content: str = command["content"]
 
-    # normalize snippets
-    # TODO: import avrae and use argsplit
-    content_words = content.split()
-    for snippet_resolution in group.find_all_of_type("snippet_resolution"):
-        for idx, word in enumerate(content_words):
-            if word == snippet_resolution["snippet_name"]:
-                content_words[idx] = snippet_resolution["content_after"]
-                break
-    content = " ".join(content_words)
+        # normalize prefix
+        content = content.replace(command["prefix"], "!", 1)
 
-    # TODO: we can probably rebuild cast/attack invocations by importing avrae
-    # lets us reference exact action/attack/spell names
-    return content
+        # normalize snippets
+        # TODO: import avrae and use argsplit
+        content_words = content.split()
+        for snippet_resolution in group.find_all_of_type("snippet_resolution"):
+            for idx, word in enumerate(content_words):
+                if word == snippet_resolution["snippet_name"]:
+                    content_words[idx] = snippet_resolution["content_after"]
+                    break
+        content = " ".join(content_words)
 
+        # TODO: we can probably rebuild cast/attack invocations by importing avrae
+        # lets us reference exact action/attack/spell names
+        return content
 
-def process_triple(triple: dict, dms) -> dict | None:
-    """Given a triple, return a processed triple"""
-    before = triple["before"]
-    commands = triple["commands"]
-    after = triple["after"]
-    command_author = commands[0]["author_id"]
+    def process_triple(self, triple: dict) -> dict | None:
+        """Given a triple, return a processed triple - main entrypoint"""
+        before = triple["before"]
+        commands = triple["commands"]
+        after = triple["after"]
+        command_author = commands[0]["author_id"]
 
-    # normalize utterances
-    author_filter = lambda msg: msg["author_id"] == command_author or msg["author_id"] in dms
-    before = list(filter(author_filter, before))
-    before_utterances = [msg["content"] for msg in before]
-    after = list(filter(author_filter, after))
-    after_utterances = [msg["content"] for msg in after]
+        # normalize utterances
+        author_filter = lambda msg: msg["author_id"] == command_author or msg["author_id"] in self.dms
+        before = list(filter(author_filter, before))
+        before_utterances = [msg["content"] for msg in before]
+        after = list(filter(author_filter, after))
+        after_utterances = [msg["content"] for msg in after]
 
-    # normalize commands
-    commands_grouped = Instance(commands).message_groups
-    assert sum(len(g) for g in commands_grouped) == len(commands)
-    commands_norm = []
-    for g in commands_grouped:
-        norm = normalize_command_group(g)
-        if norm:
-            commands_norm.append(norm)
+        # discard if we have no filtered utterances
+        if not (before or after):
+            return None
 
-    # TODO: stringify automation run for GPT-3
-    # TODO: stringify caster attributes for GPT-3
+        # normalize commands
+        commands_grouped = Instance(commands).message_groups
+        assert sum(len(g) for g in commands_grouped) == len(commands)
+        commands_norm = []
+        for g in commands_grouped:
+            norm = self.normalize_command_group(g)
+            if norm:
+                commands_norm.append(norm)
 
-    # discard if we have no filtered utterances
-    if not (before or after):
-        return None
+        # TODO: stringify automation run for GPT-3
+        # TODO: stringify caster attributes for GPT-3
 
-    return {
-        # "before": before,
-        "before_utterances": before_utterances,
-        # "commands": commands,
-        "commands_norm": commands_norm,
-        # "after": after,
-        "after_utterances": after_utterances,
-    }
+        return {
+            # "before": before,
+            "before_utterances": before_utterances,
+            # "commands": commands,
+            "commands_norm": commands_norm,
+            # "after": after,
+            "after_utterances": after_utterances,
+            "caster_before": {},  # the state of the caster before any automation runs
+        }
 
 
 def process_file(fp: pathlib.Path):
     triple_stream = read_gzipped_file(fp)
+    num_triples_in = 0
     combat_id, *_ = fp.stem.split(".")
     event_stream = combat_dir_iterator(DATA_DIR / combat_id)
-    inst = Instance(event_stream)
-    dms = extract_dms_from_events(inst)
+    inst = Distill2Inst(event_stream)
     out = []
 
     for triple in triple_stream:
-        processed = process_triple(triple, dms)
+        num_triples_in += 1
+        processed = inst.process_triple(triple)
         if processed is not None:
             out.append(processed)
 
     # discard if we have nothing
     if not out:
-        return
+        return num_triples_in, 0
 
     # see what we get
     write_jsonl(OUT_DIR / f"{combat_id}.jsonl", out)
+    return num_triples_in, len(out)
 
 
 if __name__ == "__main__":
@@ -128,7 +156,17 @@ if __name__ == "__main__":
     files = [pathlib.Path(IN_DIR, fn) for fn in filenames]
     with tqdm.contrib.logging.logging_redirect_tqdm():
         if RUN_PARALLEL:
-            tqdm.contrib.concurrent.process_map(process_file, files, chunksize=10)
+            results = tqdm.contrib.concurrent.process_map(process_file, files, chunksize=10)
         else:
+            results = []
             for d in tqdm.tqdm(files):
-                process_file(d)
+                results.append(process_file(d))
+
+    kept_distill_count = sum(1 for (i, o) in results if o)
+    n_triples_in = sum(i for i, o in results)
+    n_triples_out = sum(o for i, o in results)
+    print(
+        f"Distill complete!\n"
+        f"Instances: {len(filenames)} -> {kept_distill_count}\n"
+        f"Triples: {n_triples_in} -> {n_triples_out}"
+    )

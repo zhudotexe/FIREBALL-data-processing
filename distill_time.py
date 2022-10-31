@@ -71,10 +71,11 @@ def group_utterances(combat_dir: pathlib.Path):
 
     # discard if we have nothing
     if not out:
-        return
+        return False
 
     # see what we get
     write_jsonl(OUT_DIR / f"{combat_dir.stem}.jsonl.gz", out)
+    return True
 
 
 if __name__ == "__main__":
@@ -83,7 +84,14 @@ if __name__ == "__main__":
     dirs_to_distill = get_combat_dirs(DATA_DIR) if not USE_DEV_DIRS else DEV_DIRS
     with tqdm.contrib.logging.logging_redirect_tqdm():
         if RUN_PARALLEL:
-            tqdm.contrib.concurrent.process_map(group_utterances, dirs_to_distill, chunksize=10)
+            results = tqdm.contrib.concurrent.process_map(group_utterances, dirs_to_distill, chunksize=10)
         else:
+            results = []
             for d in tqdm.tqdm(dirs_to_distill):
-                group_utterances(d)
+                results.append(group_utterances(d))
+
+    kept_distill_count = sum(1 for b in results if b)
+    print(
+        f"Distill finished! {len(dirs_to_distill)} ->"
+        f" {kept_distill_count} ({len(dirs_to_distill) - kept_distill_count} discarded)"
+    )
