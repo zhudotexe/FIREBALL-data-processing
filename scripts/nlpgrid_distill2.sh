@@ -4,4 +4,5 @@
 #$ -wd /nlp/data/andrz/avrae-dataset
 #$ -pe parallel-onenode 60
 #$ -l h_vmem=16G
+source /nlp/data/andrz/avrae-dataset/venv/bin/activate
 /nlp/data/andrz/avrae-dataset/venv/bin/python distill2.py
