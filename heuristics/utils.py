@@ -128,6 +128,15 @@ class Instance:
         """Returns the first event such that query(event) holds, or None if no such event exists."""
         return next(filter(query, self.events), None)
 
-    def find_all(self, query: Callable[[Event], bool]) -> list[Event]:
+    def find_all(self, query: Callable[[Event], bool]) -> Iterable[Event]:
         """Returns a list of events such that query(event) holds."""
-        return list(filter(query, self.events))
+        return filter(query, self.events)
+
+    def combat_state_at_event(self, event: Event) -> dict:
+        """Returns the combat state at a current event."""
+        if event not in self.events:
+            raise ValueError("passed event is not in this instance")
+        idx = self.events.index(event)
+        for event in self.events[idx::-1]:
+            if event["event_type"] == "combat_state_update":
+                return event["data"]

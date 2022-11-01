@@ -163,7 +163,7 @@ class Distill2Inst(Instance):
             if command is None:
                 continue
             seen_casters.add(self.get_caster_id(command["caster"]))
-        if len(seen_casters) > 1:
+        if len(seen_casters) != 1:
             log.warning(f"triple has {len(seen_casters)} different casters, discarding")
             return None
 

@@ -14,6 +14,38 @@ DATA_DIR = pathlib.Path("data/")
 OUT_DIR = pathlib.Path("extract/experiment1/")
 RUN_PARALLEL = True
 USE_DEV_DIRS = False
+log = logging.getLogger("distill1")
+
+
+def fix_missing_casters(inst: Instance):
+    """
+    Fills the `caster` key for `!i a` and `!i cast` command events before Nov 1, 2022
+    ignore `!i rc` and `!i aoo` commands, and `!i a`/`!i cast` if current combatant is a group
+    otherwise assume the caster is the current combatant
+    https://github.com/avrae/avrae/pull/1873
+    """
+    needs_fixing = inst.find_all(
+        lambda e: e["event_type"] == "command"
+        and e["caster"] is None
+        and e["command_name"] in {"init attack", "init cast"}
+    )
+    i = 0
+    j = 0
+    for event in needs_fixing:
+        j += 1
+        state = inst.combat_state_at_event(event)
+        if state is None:
+            continue
+        if state["current"] is None:
+            continue
+        current_combatant = state["combatants"][state["current"]]
+        if current_combatant["type"] == "group":
+            continue
+        i += 1
+        event["caster"] = current_combatant
+
+    # if needs_fixing:
+    #     log.info(f"Fixed {i}/{j} events")
 
 
 def group_utterances(combat_dir: pathlib.Path):
@@ -23,6 +55,9 @@ def group_utterances(combat_dir: pathlib.Path):
 
     if not inst.message_groups:
         return
+
+    # Nov 1 bug
+    fix_missing_casters(inst)
 
     # group consecutive message groups
     message_group_lookups = {}
