@@ -13,19 +13,13 @@ Output: {
 """
 import glob
 import logging
-import os.path
 import pathlib
-import sys
 
 import tqdm.contrib.concurrent
 import tqdm.contrib.logging
 
 from heuristics.utils import Instance
 from utils import combat_dir_iterator, read_gzipped_file, write_jsonl
-
-# hack to add avrae submodule to pypath
-# if this errors, pip install -r avrae/requirements.txt
-sys.path.append(os.path.join(os.path.abspath(os.path.dirname(__file__)), "avrae"))
 
 DATA_DIR = pathlib.Path("data/")
 IN_DIR = pathlib.Path("extract/experiment1/")
@@ -62,7 +56,7 @@ class Distill2Inst(Instance):
         after = triple["after"]
         command_author = commands[0]["author_id"]
 
-        # normalize utterances
+        # filter utterances to only the user who ran the commands or a DM
         author_filter = lambda msg: msg["author_id"] == command_author or msg["author_id"] in self.dms
         before = list(filter(author_filter, before))
         after = list(filter(author_filter, after))
@@ -71,7 +65,7 @@ class Distill2Inst(Instance):
         if not (before or after):
             return None
 
-        # ensure the caster is the same for all commands
+        # ensure the caster (not author) is the same for all commands
         seen_casters = set()
         for e in commands:
             if e["event_type"] != "command":
