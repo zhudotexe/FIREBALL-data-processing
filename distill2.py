@@ -39,8 +39,9 @@ from avrae.utils.argparser import argsplit
 DATA_DIR = pathlib.Path("data/")
 IN_DIR = pathlib.Path("extract/experiment1/")
 OUT_DIR = pathlib.Path("extract/experiment2/")
-RUN_PARALLEL = False
+RUN_PARALLEL = True
 log = logging.getLogger("distill2")
+loglevel = logging.WARNING
 
 
 class Distill2Inst(Instance):
@@ -158,13 +159,18 @@ class Distill2Inst(Instance):
 
         # ensure the caster is the same for all commands and present
         seen_casters = set()
-        for g in commands_grouped:
-            command = g.find_event_of_type("command")
+        for e in commands:
+            if e["event_type"] != "command":
+                continue
+            command = e
             if command is None:
+                continue
+            caster = command["caster"]
+            if caster is None:
                 continue
             seen_casters.add(self.get_caster_id(command["caster"]))
         if len(seen_casters) != 1:
-            log.warning(f"triple has {len(seen_casters)} different casters, discarding")
+            log.info(f"triple has {len(seen_casters)} different casters, discarding")
             return None
 
         # TODO: stringify automation run for GPT-3
@@ -204,7 +210,7 @@ def process_file(fp: pathlib.Path):
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
+    logging.basicConfig(level=loglevel, format="%(levelname)s: %(message)s")
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     filenames = sorted(glob.glob("*.gz", root_dir=IN_DIR))
     files = [pathlib.Path(IN_DIR, fn) for fn in filenames]
