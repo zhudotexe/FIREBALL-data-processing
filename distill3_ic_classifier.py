@@ -19,23 +19,29 @@ import sys
 
 import tqdm.contrib.concurrent
 import tqdm.contrib.logging
-
+from tokenizers import AutoModelForSequenceClassification, AutoTokenizer, pipeline
 from heuristics.utils import Instance
 from utils import combat_dir_iterator, read_gzipped_file, write_jsonl
 
 DATA_DIR = pathlib.Path("data/")
 IN_DIR = pathlib.Path("extract/experiment2/")
 OUT_DIR = pathlib.Path("extract/experiment3/")
-RUN_PARALLEL = True
+MODEL_DIR = pathlib.Path("models/ic_ooc_1-finetuned/checkpoint-9500")
+
 log = logging.getLogger("distill3")
 loglevel = logging.INFO
 
 
-def process_triple(triple: dict) -> dict:
-    # TODO do the filtering based on triple["after"][*]["content"]
-    # TODO if not (before or after): return (discard triples where everything is filtered out)
-    pass
 
+def process_triple(triple, classifier) -> dict:
+    text_samples = [utterance.strip() for utterance in triple["after_utterances"]]
+    predictions = classifier(text_samples)
+    # IC  = 1, OOC = 0 labels
+    filtered_utterances = [text for text, prediction in zip(text_samples, predictions) if prediction["label"]=="LABEL_0"]
+    if filtered_utterances:
+        triple["after_utterances"] = filtered_utterances
+        return triple
+    return None
 
 def process_file(fp: pathlib.Path):
     """
@@ -51,7 +57,7 @@ def process_file(fp: pathlib.Path):
         num_triples_in += 1
         processed = process_triple(triple)
         if processed is not None:
-            out.append(processed)
+            out+= [processed]
 
     # discard if we have nothing
     if not out:
@@ -67,13 +73,14 @@ if __name__ == "__main__":
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     filenames = sorted(glob.glob("*.gz", root_dir=IN_DIR))
     files = [pathlib.Path(IN_DIR, fn) for fn in filenames]
+    model = AutoModelForSequenceClassification.from_pretrained(MODEL_DIR)
+    tokenizer = AutoTokenizer.from_pretrained(MODEL_DIR)
+    classifier = pipeline("text-classification", model=model, tokenizer=tokenizer)
     with tqdm.contrib.logging.logging_redirect_tqdm():
-        if RUN_PARALLEL:
-            results = tqdm.contrib.concurrent.process_map(process_file, files, chunksize=10)
-        else:
-            results = []
-            for d in tqdm.tqdm(files):
-                results.append(process_file(d))
+        results = []
+        for d in tqdm.tqdm(files):
+            results.append(process_file(d))
+
 
     kept_distill_count = sum(1 for (i, o) in results if o)
     n_triples_in = sum(i for i, o in results)
