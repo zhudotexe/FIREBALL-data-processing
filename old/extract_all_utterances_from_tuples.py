@@ -7,9 +7,9 @@ import pathlib
 
 import utils
 
-RP_EXTRACT_DIR = pathlib.Path("extract/rp/")
-NARR_EXTRACT_DIR = pathlib.Path("extract/narration/")
-OUTPUT_FILE = pathlib.Path("extract/all_utterances.csv")
+RP_EXTRACT_DIR = pathlib.Path("../extract/rp/")
+NARR_EXTRACT_DIR = pathlib.Path("../extract/narration/")
+OUTPUT_FILE = pathlib.Path("../extract/all_utterances.csv")
 
 
 class UtteranceWriter:

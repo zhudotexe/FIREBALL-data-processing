@@ -18,8 +18,8 @@ const activeTab = ref(0);
 
 // data
 const events = reactive<AnyEvent[]>([]);
-const rpDistill = reactive<RPToCommandDistill[]>([]);
-const narrationDistill = reactive<StateToNarrationDistill[]>([]);
+// const rpDistill = reactive<RPToCommandDistill[]>([]);
+// const narrationDistill = reactive<StateToNarrationDistill[]>([]);
 const experiment1Distill = reactive<TimeBasedDistill[]>([]);
 const isLoading = ref(true);
 
@@ -30,16 +30,16 @@ onMounted(async () => {
   }
   isLoading.value = false;
 });
-onMounted(async () => {
-  for await (const event of props.client.loadRPCommandDistill(props.instanceId)) {
-    rpDistill.push(event);
-  }
-});
-onMounted(async () => {
-  for await (const event of props.client.loadStateNarrationDistill(props.instanceId)) {
-    narrationDistill.push(event);
-  }
-});
+// onMounted(async () => {
+//   for await (const event of props.client.loadRPCommandDistill(props.instanceId)) {
+//     rpDistill.push(event);
+//   }
+// });
+// onMounted(async () => {
+//   for await (const event of props.client.loadStateNarrationDistill(props.instanceId)) {
+//     narrationDistill.push(event);
+//   }
+// });
 onMounted(async () => {
   for await (const event of props.client.loadTimeBasedDistill(props.instanceId)) {
     experiment1Distill.push(event);
@@ -71,12 +71,12 @@ onMounted(async () => {
         <li :class="{ 'is-active': activeTab === 0 }">
           <a @click="activeTab = 0">Events ({{ events.length }})</a>
         </li>
-        <li :class="{ 'is-active': activeTab === 1 }" v-if="rpDistill.length > 0">
-          <a @click="activeTab = 1">Distilled: RP to Command ({{ rpDistill.length }})</a>
-        </li>
-        <li :class="{ 'is-active': activeTab === 2 }" v-if="narrationDistill.length > 0">
-          <a @click="activeTab = 2">Distilled: State to Narration ({{ narrationDistill.length }})</a>
-        </li>
+        <!--<li :class="{ 'is-active': activeTab === 1 }" v-if="rpDistill.length > 0">-->
+        <!--  <a @click="activeTab = 1">Distilled: RP to Command ({{ rpDistill.length }})</a>-->
+        <!--</li>-->
+        <!--<li :class="{ 'is-active': activeTab === 2 }" v-if="narrationDistill.length > 0">-->
+        <!--  <a @click="activeTab = 2">Distilled: State to Narration ({{ narrationDistill.length }})</a>-->
+        <!--</li>-->
         <li :class="{ 'is-active': activeTab === 3 }" v-if="experiment1Distill.length > 0">
           <a @click="activeTab = 3">Distilled: By Time ({{ experiment1Distill.length }})</a>
         </li>
@@ -88,15 +88,15 @@ onMounted(async () => {
       <EventsTab :events="events"/>
     </div>
 
-    <!-- distill: rp -->
-    <div v-if="activeTab === 1">
-      <DistillRPTab :events="rpDistill"/>
-    </div>
+    <!--&lt;!&ndash; distill: rp &ndash;&gt;-->
+    <!--<div v-if="activeTab === 1">-->
+    <!--  <DistillRPTab :events="rpDistill"/>-->
+    <!--</div>-->
 
-    <!-- distill: narration -->
-    <div v-if="activeTab === 2">
-      <DistillNarrationTab :events="narrationDistill"/>
-    </div>
+    <!--&lt;!&ndash; distill: narration &ndash;&gt;-->
+    <!--<div v-if="activeTab === 2">-->
+    <!--  <DistillNarrationTab :events="narrationDistill"/>-->
+    <!--</div>-->
 
     <!-- distill: group by time -->
     <div v-if="activeTab === 3">

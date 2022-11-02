@@ -1,0 +1,3 @@
+[submodule "avrae"]
+	path = avrae
+	url = https://github.com/avrae/avrae.git

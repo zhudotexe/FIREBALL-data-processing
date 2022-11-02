@@ -15,8 +15,8 @@ import utils
 from dev_constants import DEV_DIRS
 from heuristics.utils import Instance
 
-DATA_DIR = pathlib.Path("data/")
-OUT_DIR = pathlib.Path("extract/narration/")
+DATA_DIR = pathlib.Path("../data/")
+OUT_DIR = pathlib.Path("../extract/narration/")
 RUN_PARALLEL = True
 USE_DEV_DIRS = True
 

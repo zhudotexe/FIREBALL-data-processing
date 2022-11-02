@@ -67,6 +67,12 @@ class MessageGroup:
     def has_event_of_type(self, event_type: str):
         return any(e["event_type"] == event_type for e in self.events)
 
+    def find_event_of_type(self, event_type: str):
+        return next((e for e in self.events if e["event_type"] == event_type), None)
+
+    def find_all_of_type(self, event_type: str):
+        return [e for e in self.events if e["event_type"] == event_type]
+
 
 class Instance:
     """Wrapper class to help reason over entire instances. Construct with a pristine event stream."""
@@ -121,3 +127,16 @@ class Instance:
     def find(self, query: Callable[[Event], bool]) -> Optional[Event]:
         """Returns the first event such that query(event) holds, or None if no such event exists."""
         return next(filter(query, self.events), None)
+
+    def find_all(self, query: Callable[[Event], bool]) -> Iterable[Event]:
+        """Returns a list of events such that query(event) holds."""
+        return filter(query, self.events)
+
+    def combat_state_at_event(self, event: Event) -> dict:
+        """Returns the combat state at a current event."""
+        if event not in self.events:
+            raise ValueError("passed event is not in this instance")
+        idx = self.events.index(event)
+        for event in self.events[idx::-1]:
+            if event["event_type"] == "combat_state_update":
+                return event["data"]
