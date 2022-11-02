@@ -7,7 +7,7 @@ import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
 from sklearn.naive_bayes import GaussianNB
-from sklearn.model_selection import KFold
+from sklearn.model_selection import KFold, StratifiedKFold
 from sklearn import preprocessing
 from sklearn.metrics import f1_score, accuracy_score, classification_report
 parser = argparse.ArgumentParser(description="Fits a Logistic Regression model and predicts labels for a dataset")
@@ -37,7 +37,7 @@ def main(args):
     data = pd.read_csv(args.train, header=0, index_col=0)
     targets = ["RP to CMD", "CMD to NARR", "RP to CMD or CMD to NARR", "RP to CMD and CMD to NARR"]
     X = data.drop(targets, axis=1)
-    kf = KFold(shuffle=True, random_state=23, n_splits=args.splits)
+    kf = StratifiedKFold(shuffle=True, random_state=23, n_splits=args.splits)
     ys = {target : data[target] for target in targets}
     best_Cs = {}
     val_scores = {target : {C : [] for C in args.Cs} for target in targets} # val_accs[target][C] 
@@ -45,12 +45,12 @@ def main(args):
     X_scaled = scaler.transform(X)
     metric = f1_score if args.metric == "f1" else accuracy_score
     # Run K-Fold CV
-    for train_index, val_index in kf.split(X):
-        X_train, X_val = X.iloc[train_index], X.iloc[val_index]
-        scaler = preprocessing.StandardScaler().fit(X_train)
-        X_train_scaled = scaler.transform(X_train)
-        X_val_scaled = scaler.transform(X_val)
-        for target in targets:
+    for target in targets:
+        for train_index, val_index in kf.split(X, ys[target]):
+            X_train, X_val = X.iloc[train_index], X.iloc[val_index]
+            scaler = preprocessing.StandardScaler().fit(X_train)
+            X_train_scaled = scaler.transform(X_train)
+            X_val_scaled = scaler.transform(X_val)
             y_train = ys[target].iloc[train_index]
             y_val = ys[target].iloc[val_index]
             for C in args.Cs:
