@@ -34,13 +34,16 @@ loglevel = logging.INFO
 
 
 def process_triple(triple, classifier) -> dict:
-    text_samples = [event["content"].strip() for event in triple["after"]]
+    after = triple["after"]
+    text_samples = [event["content"].strip() for event in after]
     tokenizer_kwargs = {'padding':True,'truncation':True}
     predictions = classifier(text_samples, **tokenizer_kwargs)
     # IC  = 1, OOC = 0 labels
-    filtered_utterances = [text for text, prediction in zip(text_samples, predictions) if prediction["label"]=="LABEL_1"]
+    filtered_utterances = [event for event, prediction in zip(after, predictions) if prediction["label"]=="LABEL_1"]
     if filtered_utterances:
         triple["after"] = filtered_utterances
+        log.info(triple.keys())
+        log.info(f'msg content: {len([msg["content"] for msg in triple["after"]])}')
         return triple
     return None
 
@@ -62,6 +65,7 @@ def process_file(fp: pathlib.Path, classifier):
 
     # discard if we have nothing
     if not out:
+        log.info("nothing was processed")
         return num_triples_in, 0
 
     # see what we get
