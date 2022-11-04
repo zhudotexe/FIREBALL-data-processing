@@ -28,6 +28,13 @@ def read_gzipped_file(fp: AnyPath) -> Iterable[dict]:
         yield json.loads(line)
 
 
+def read_jsonl_file(fp: AnyPath) -> Iterable[dict]:
+    """Given a path to a JSONL file, return an iterator of events in the file."""
+    with open(fp, "r") as f:
+        for line in f:
+            yield json.loads(line)
+
+
 def combat_dir_iterator(dirpath: AnyPath) -> Iterable[dict]:
     """Given a path to a directory of gzipped combat event files, return an iterator of events in the dir."""
     for fp in sorted(glob.glob("*.gz", root_dir=dirpath)):
