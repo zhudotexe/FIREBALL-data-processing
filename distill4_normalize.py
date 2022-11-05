@@ -92,7 +92,7 @@ class Distill4Inst(Instance):
     def extract_characters_forward(self, until):
         """Extract all of the characters by (owner, upstream_id) in all events from the start until *until*"""
         idx = self.events.index(until)
-        for event in self.events[: idx]:
+        for event in self.events[:idx]:
             self._extract_character_from_event(event)
 
     def extract_characters_backward(self, until):
@@ -136,7 +136,7 @@ class Distill4Inst(Instance):
             race = combatant.character.race
             class_ = str(combatant.character.levels)
             description = combatant.character.description
-            actions = ", ".join(a.name for a in combatant.character.actions)
+            actions = ", ".join(set(a.name for a in combatant.character.actions))
         elif isinstance(combatant, MonsterCombatant):
             race = combatant.monster_name
 
@@ -200,6 +200,84 @@ class Distill4Inst(Instance):
             long_parts.append(f"Effects: {actor_attrs['effects']}")
 
         return {"short": " ".join(short_parts), "long": "\n".join(long_parts)}
+
+    def stringify_automation_run(self, event):
+        caster = event["caster"]["name"]
+        targets = [(t["name"] if not isinstance(t, str) else t) for t in event["targets"]]
+
+        current_target = None
+
+        def stringify_many(nodes):
+            out = []
+            for child in nodes:
+                if result := stringify(child):
+                    out.append(result)
+            return "\n".join(out)
+
+        def stringify(result_node):
+            nonlocal current_target
+            match result_node:
+                case {"type": "root" | "condition" | "spell"}:
+                    return stringify_many(result_node["children"])
+                case {"type": "target"}:
+                    return stringify_many(result_node["results"])
+                case {"type": "target_iteration", "target_type": "self"}:
+                    previous_target = current_target
+                    current_target = caster
+                    result = stringify_many(result_node["results"])
+                    current_target = previous_target
+                    return result
+                case {"type": "target_iteration", "target_index": int()}:
+                    previous_target = current_target
+                    current_target = targets[result_node["target_index"]]
+                    result = stringify_many(result_node["results"])
+                    current_target = previous_target
+                    return result
+                case {"type": "attack", "did_hit": hit, "did_crit": crit}:
+                    children = stringify_many(result_node["children"])
+                    base = f"{caster} attacked {current_target} "
+                    if crit:
+                        base += "and crit!"
+                    elif hit:
+                        base += "and hit."
+                    else:
+                        base += "but missed."
+                    return f"{base}\n{children}"
+                case {"type": "save", "ability": ability, "did_save": success}:
+                    children = stringify_many(result_node["children"])
+                    base = f"{current_target} rolled a {ability} save " + (
+                        "and succeeded." if success else "but failed."
+                    )
+                    return f"{base}\n{children}"
+                case {"type": "damage", "damage": amount}:
+                    if amount < 0:
+                        return f"{current_target} healed for {amount} health."
+                    return f"{current_target} took {amount} damage."
+                case {"type": "temphp", "amount": amount}:
+                    return f"{current_target} gained {amount} temp HP."
+                case {"type": "ieffect", "effect": effect}:
+                    return f"{current_target} gained {effect['name']}."
+                case {"type": "remove_ieffect", "removed_effect": effect}:
+                    return f"{current_target} is no longer {effect['name']}."
+                case {"type": "check", "skill_name": skill_name, "did_succeed": success, "contest_skill_name": None}:
+                    children = stringify_many(result_node["children"])
+                    base = f"{current_target} rolled a {skill_name} check " + (
+                        "and succeeded." if success else "but failed."
+                    )
+                    return f"{base}\n{children}"
+                case {
+                    "type": "check",
+                    "skill_name": skill_name,
+                    "did_succeed": success,
+                    "contest_skill_name": contest_skill,
+                }:
+                    children = stringify_many(result_node["children"])
+                    base = f"{current_target} rolled a {skill_name} contest against {caster}'s {contest_skill} " + (
+                        "and succeeded." if success else "but failed."
+                    )
+                    return f"{base}\n{children}"
+
+        return stringify(event["automation_result"])
 
     # ==== normalizers =====
     def normalize_command_group(self, group: MessageGroup) -> str | None:
@@ -274,7 +352,10 @@ class Distill4Inst(Instance):
                 if actor_str not in targets:
                     targets.append(actor_str)
 
-        # TODO: stringify automation run for GPT-3
+        # stringify automation run
+        automation_norm = []
+        for e in commands_inst.find_all_of_type("automation_run"):
+            automation_norm.append(self.stringify_automation_run(e))
 
         # state after
         self.extract_characters_backward(commands[-1])
@@ -294,10 +375,10 @@ class Distill4Inst(Instance):
         return {
             "before_utterances": before_utterances,
             "combat_state_before": actor_list_before,  # list of actors
-            "caster": caster_norm,  # actor
-            "targets": targets,  # list of actors
             "commands_norm": commands_norm,
-            "automation_results": None,  # list of str
+            "automation_results": automation_norm,  # list of str
+            "caster_after": caster_norm,  # actor
+            "targets_after": targets,  # list of actors
             "combat_state_after": actor_list_after,  # list of actors
             "after_utterances": after_utterances,
         }
