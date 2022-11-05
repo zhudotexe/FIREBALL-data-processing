@@ -40,7 +40,7 @@ from gamedata import Monster  # this import is wonky because of namespace weirdn
 DATA_DIR = pathlib.Path("data/")
 IN_DIR = pathlib.Path("extract/experiment2/")
 OUT_DIR = pathlib.Path("extract/experiment4/")
-RUN_PARALLEL = False
+RUN_PARALLEL = True
 log = logging.getLogger("distill4")
 loglevel = logging.INFO
 
@@ -394,9 +394,12 @@ def process_file(fp: pathlib.Path):
 
     for triple in triple_stream:
         num_triples_in += 1
-        processed = inst.process_triple(triple)
-        if processed:
-            out.append(processed)
+        try:
+            processed = inst.process_triple(triple)
+            if processed:
+                out.append(processed)
+        except Exception:
+            log.exception(f"something went wrong processing {fp}")
 
     if not out:
         return num_triples_in, 0
