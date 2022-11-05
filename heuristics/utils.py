@@ -132,6 +132,9 @@ class Instance:
         """Returns a list of events such that query(event) holds."""
         return filter(query, self.events)
 
+    def find_all_of_type(self, event_type: str):
+        return [e for e in self.events if e["event_type"] == event_type]
+
     def combat_state_at_event(self, event: Event) -> dict:
         """Returns the combat state at a current event."""
         if event not in self.events:
