@@ -152,55 +152,6 @@ class Distill4Inst(Instance):
             "description": description,  # nullable
         }
 
-    def stringify_actor(self, actor: dict | Combatant, combat: Combat):
-        actor_attrs = self.normalize_actor(actor, combat)
-        # Name (Race/creature type; class if available) <X/Y HP> [Effects]
-        short_parts = [actor_attrs["name"]]
-        # Description: ...
-        #
-        # ---
-        # Name: NAME
-        # Class:
-        # Race:
-        # Attacks:
-        # Spells:
-        # Actions:
-        # Effects:
-        long_parts = []
-
-        # short parts
-        race_and_class_parts = []
-        if actor_attrs["race"]:
-            race_and_class_parts.append(actor_attrs["race"])
-        if actor_attrs["class"]:
-            race_and_class_parts.append(actor_attrs["class"])
-        race_and_class = "; ".join(race_and_class_parts)
-
-        if race_and_class:
-            short_parts.append(f"({race_and_class})")
-        short_parts.append(actor_attrs["hp"])
-        if actor_attrs["effects"]:
-            short_parts.append(actor_attrs["effects"])
-
-        # long parts
-        if actor_attrs["description"]:
-            long_parts.append(f"Description: {actor_attrs['description']}\n---")
-        long_parts.append(f"Name: {actor_attrs['name']}")
-        if actor_attrs["class"]:
-            long_parts.append(f"Class: {actor_attrs['class']}")
-        if actor_attrs["race"]:
-            long_parts.append(f"Race: {actor_attrs['race']}")
-        if actor_attrs["attacks"]:
-            long_parts.append(f"Attacks: {actor_attrs['attacks']}")
-        if actor_attrs["spells"]:
-            long_parts.append(f"Spells: {actor_attrs['spells']}")
-        if actor_attrs["actions"]:
-            long_parts.append(f"Actions: {actor_attrs['actions']}")
-        if actor_attrs["effects"]:
-            long_parts.append(f"Effects: {actor_attrs['effects']}")
-
-        return {"short": " ".join(short_parts), "long": "\n".join(long_parts)}
-
     def stringify_automation_run(self, event):
         caster = event["caster"]["name"]
         targets = [(t["name"] if not isinstance(t, str) else t) for t in event["targets"]]
@@ -335,6 +286,10 @@ class Distill4Inst(Instance):
             self.normalize_actor(actor, combat_before) for actor in combat_before.get_combatants(groups=False)
         ]
 
+        # current turn
+        current_actor = combat_before.current_combatant
+        current_turn = current_actor.name if current_actor is not None else None
+
         # caster
         for e in commands_inst.find_all_of_type("automation_run"):
             caster = e["caster"]
@@ -347,7 +302,8 @@ class Distill4Inst(Instance):
         for e in commands_inst.find_all_of_type("automation_run"):
             for target in e["targets"]:
                 if isinstance(target, str):
-                    targets.append({"short": target, "long": f"Name: {target}"})
+                    log.info("Skipping string target")
+                    return
                 actor_str = self.normalize_actor(copy.deepcopy(target), combat_before)
                 if actor_str not in targets:
                     targets.append(actor_str)
@@ -375,6 +331,7 @@ class Distill4Inst(Instance):
         return {
             "before_utterances": before_utterances,
             "combat_state_before": actor_list_before,  # list of actors
+            "current_turn": current_turn,
             "commands_norm": commands_norm,
             "automation_results": automation_norm,  # list of str
             "caster_after": caster_norm,  # actor
