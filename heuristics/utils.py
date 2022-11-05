@@ -143,3 +143,12 @@ class Instance:
         for event in self.events[idx::-1]:
             if event["event_type"] == "combat_state_update":
                 return event["data"]
+
+    def combat_state_after_event(self, event: Event) -> dict:
+        """Returns the next combat state after a certain event."""
+        if event not in self.events:
+            raise ValueError("passed event is not in this instance")
+        idx = self.events.index(event)
+        for event in self.events[idx:]:
+            if event["event_type"] == "combat_state_update":
+                return event["data"]

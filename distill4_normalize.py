@@ -15,6 +15,7 @@ Output: {
     "after_utterances": [str...],
 }
 """
+import copy
 import glob
 import logging
 import os.path
@@ -24,8 +25,8 @@ import sys
 import tqdm.contrib.concurrent
 import tqdm.contrib.logging
 
-from heuristics.utils import Event, Instance, MessageGroup
 from dataset.utils import combat_dir_iterator, read_gzipped_file, write_jsonl
+from heuristics.utils import Instance, MessageGroup
 
 # hack to add avrae submodule to pypath
 # if this errors, pip install -r avrae/requirements.txt
@@ -34,30 +35,43 @@ from avrae.utils.argparser import argsplit
 from avrae.cogs5e.models.character import Character
 from avrae.cogs5e.initiative import Combat, Combatant, MonsterCombatant, PlayerCombatant
 from avrae.cogs5e.initiative.combat import deserialize_combatant_sync
-from avrae.gamedata import Monster
+from gamedata import Monster  # this import is wonky because of namespace weirdness
 
 DATA_DIR = pathlib.Path("data/")
 IN_DIR = pathlib.Path("extract/experiment2/")
 OUT_DIR = pathlib.Path("extract/experiment4/")
 RUN_PARALLEL = False
 log = logging.getLogger("distill4")
-loglevel = logging.WARNING
+loglevel = logging.INFO
+
+
+# object to make interacting with avrae work
+class FakeContext:
+    def __getattr__(self, _):
+        return self
+
+    def __int__(self):
+        return 0
+
+
+ctx = FakeContext()
 
 
 class Distill4Inst(Instance):
     def __init__(self, events):
         super().__init__(events)
         self.monkey_patch()
-        self.characters = self.extract_characters()
+        self.characters = {}
 
     def monkey_patch(self):
+        @classmethod
         def from_dict(cls, raw, ctx, combat):
-            inst = super().from_dict_sync(raw, ctx, combat)
+            inst = super(PlayerCombatant, cls).from_dict(raw, ctx, combat)
             inst.character_id = raw["character_id"]
             inst.character_owner = raw["character_owner"]
-            character = self.characters.get((raw["owner_id"], raw["character_id"]))
+            character = self.characters.get((raw["character_owner"], raw["character_id"]))
             if character is None:
-                from avrae.cogs5e.models.errors import NoCharacter
+                from cogs5e.models.errors import NoCharacter
 
                 raise NoCharacter
             inst._character = character
@@ -65,15 +79,27 @@ class Distill4Inst(Instance):
 
         PlayerCombatant.from_dict = PlayerCombatant.from_dict_sync = from_dict
 
-    def extract_characters(self) -> dict:
-        """Extract all of the characters by (owner, upstream_id) in a map from init joins"""
-        characters = {}
-        for event in self.find_all(lambda e: e["event_type"] == "command" and e["command_name"] == "init join"):
-            caster = event["caster"]
-            owner = caster["owner"]
-            upstream = caster["upstream"]
-            characters[(owner, upstream)] = Character.from_dict(caster)
-        return characters
+    def _extract_character_from_event(self, event):
+        if event["event_type"] not in ("command", "automation_run"):
+            return
+        caster = event["caster"]
+        if caster is None or "upstream" not in caster:
+            return
+        owner = caster["owner"]
+        upstream = caster["upstream"]
+        self.characters[(owner, upstream)] = Character.from_dict(copy.deepcopy(caster))
+
+    def extract_characters_forward(self, until):
+        """Extract all of the characters by (owner, upstream_id) in all events from the start until *until*"""
+        idx = self.events.index(until)
+        for event in self.events[: idx]:
+            self._extract_character_from_event(event)
+
+    def extract_characters_backward(self, until):
+        """Extract all of the characters by (owner, upstream_id) in all events from the end until *until*"""
+        idx = self.events.index(until)
+        for event in self.events[:idx:-1]:
+            self._extract_character_from_event(event)
 
     def normalize_actor(self, actor: dict | Combatant, combat: Combat) -> dict:
         # make everything a Combatant
@@ -85,16 +111,16 @@ class Distill4Inst(Instance):
                 # player
                 character = Character.from_dict(actor)
                 combatant = PlayerCombatant.from_character(
-                    character, ctx=None, combat=combat, controller_id=0, init=0, private=False
+                    character, ctx=ctx, combat=combat, controller_id=0, init=0, private=False
                 )
             else:
                 # monster
-                monster = Monster.from_data(actor)
+                monster = Monster.from_bestiary(actor, "Unknown Source")
                 combatant = MonsterCombatant.from_monster(
-                    monster, ctx=None, combat=combat, name=monster.name, controller_id=0, init=0, private=False
+                    monster, ctx=ctx, combat=combat, name=monster.name, controller_id=0, init=0, private=False
                 )
         else:
-            combatant = deserialize_combatant_sync(actor, None, combat)
+            combatant = deserialize_combatant_sync(actor, ctx, combat)
 
         # extract common things
         name = combatant.name
@@ -215,7 +241,8 @@ class Distill4Inst(Instance):
         after_utterances = [msg["content"] for msg in after]
 
         # normalize commands
-        commands_grouped = Instance(commands).message_groups
+        commands_inst = Instance(commands)
+        commands_grouped = commands_inst.message_groups
         assert sum(len(g) for g in commands_grouped) == len(commands)
         commands_norm = []
         for g in commands_grouped:
@@ -224,40 +251,51 @@ class Distill4Inst(Instance):
                 commands_norm.append(norm)
 
         # state before
-        combat_before = Combat.from_dict_sync(self.combat_state_at_event(commands[0]), None)
+        self.extract_characters_forward(commands[0])
+        combat_before = Combat.from_dict_sync(copy.deepcopy(self.combat_state_at_event(commands[0])), ctx)
         actor_list_before = [
-            self.stringify_actor(actor, combat_before) for actor in combat_before.get_combatants(groups=False)
+            self.normalize_actor(actor, combat_before) for actor in combat_before.get_combatants(groups=False)
         ]
 
         # caster
-        for e in self.find_all_of_type("command"):
+        for e in commands_inst.find_all_of_type("automation_run"):
             caster = e["caster"]
             if caster is not None:
                 break  # guaranteed to break because of distill2
-        caster_str = self.stringify_actor(caster, combat_before)
+        caster_norm = self.normalize_actor(copy.deepcopy(caster), combat_before)
 
         # targets
-        target_strs = []
-        for e in self.find_all_of_type("command"):
+        targets = []
+        for e in commands_inst.find_all_of_type("automation_run"):
             for target in e["targets"]:
-                actor_str = self.stringify_actor(target, combat_before)
-                if actor_str not in target_strs:
-                    target_strs.append(actor_str)
+                if isinstance(target, str):
+                    targets.append({"short": target, "long": f"Name: {target}"})
+                actor_str = self.normalize_actor(copy.deepcopy(target), combat_before)
+                if actor_str not in targets:
+                    targets.append(actor_str)
 
         # TODO: stringify automation run for GPT-3
 
         # state after
-        last_combat_update = self.find_all_of_type("combat_state_update")[-1]["data"]
-        combat_after = Combat.from_dict_sync(last_combat_update, None)
+        self.extract_characters_backward(commands[-1])
+        update_in_commands = commands_inst.find_all_of_type("combat_state_update")
+        if not update_in_commands:
+            last_combat_update = self.combat_state_after_event(commands[-1])
+            if last_combat_update is None:
+                log.info("Could not find final combat state update")
+                return
+        else:
+            last_combat_update = update_in_commands[-1]["data"]
+        combat_after = Combat.from_dict_sync(copy.deepcopy(last_combat_update), ctx)
         actor_list_after = [
-            self.stringify_actor(actor, combat_after) for actor in combat_after.get_combatants(groups=False)
+            self.normalize_actor(actor, combat_after) for actor in combat_after.get_combatants(groups=False)
         ]
 
         return {
             "before_utterances": before_utterances,
             "combat_state_before": actor_list_before,  # list of actors
-            "caster": caster_str,  # actor
-            "targets": target_strs,  # list of actors
+            "caster": caster_norm,  # actor
+            "targets": targets,  # list of actors
             "commands_norm": commands_norm,
             "automation_results": None,  # list of str
             "combat_state_after": actor_list_after,  # list of actors
@@ -276,7 +314,11 @@ def process_file(fp: pathlib.Path):
     for triple in triple_stream:
         num_triples_in += 1
         processed = inst.process_triple(triple)
-        out.append(processed)
+        if processed:
+            out.append(processed)
+
+    if not out:
+        return num_triples_in, 0
 
     # see what we get
     write_jsonl(OUT_DIR / f"{combat_id}.jsonl", out)
@@ -290,9 +332,17 @@ if __name__ == "__main__":
     files = [pathlib.Path(IN_DIR, fn) for fn in filenames]
     with tqdm.contrib.logging.logging_redirect_tqdm():
         if RUN_PARALLEL:
-            tqdm.contrib.concurrent.process_map(process_file, files, chunksize=10)
+            results = tqdm.contrib.concurrent.process_map(process_file, files, chunksize=10)
         else:
+            results = []
             for d in tqdm.tqdm(files):
-                process_file(d)
+                results.append(process_file(d))
 
-    print(f"Normalization complete!")
+    kept_distill_count = sum(1 for (i, o) in results if o)
+    n_triples_in = sum(i for i, o in results)
+    n_triples_out = sum(o for i, o in results)
+    print(
+        f"Normalization complete!\n"
+        f"Instances: {len(filenames)} -> {kept_distill_count}\n"
+        f"Triples: {n_triples_in} -> {n_triples_out}"
+    )

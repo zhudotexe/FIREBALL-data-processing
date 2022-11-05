@@ -81,9 +81,6 @@ class Distill2Inst(Instance):
             log.info(f"triple has {len(seen_casters)} different casters, discarding")
             return None
 
-        # TODO: stringify automation run for GPT-3
-        # TODO: stringify caster attributes for GPT-3
-
         return {
             "before": before,
             "commands": commands,
