@@ -18,15 +18,15 @@ import pathlib
 import tqdm.contrib.concurrent
 import tqdm.contrib.logging
 
+from dataset.utils import combat_dir_iterator, read_gzipped_file, write_jsonl
 from heuristics.utils import Instance
-from utils import combat_dir_iterator, read_gzipped_file, write_jsonl
 
 DATA_DIR = pathlib.Path("data/")
 IN_DIR = pathlib.Path("extract/experiment1/")
 OUT_DIR = pathlib.Path("extract/experiment2/")
 RUN_PARALLEL = True
 log = logging.getLogger("distill2")
-loglevel = logging.WARNING
+loglevel = logging.INFO
 
 
 class Distill2Inst(Instance):
@@ -68,7 +68,7 @@ class Distill2Inst(Instance):
         # ensure the caster (not author) is the same for all commands
         seen_casters = set()
         for e in commands:
-            if e["event_type"] != "command":
+            if e["event_type"] != "automation_run":
                 continue
             command = e
             if command is None:

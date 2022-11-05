@@ -21,7 +21,7 @@ import tqdm.contrib.concurrent
 import tqdm.contrib.logging
 
 from heuristics.utils import Instance
-from utils import combat_dir_iterator, read_gzipped_file, write_jsonl
+from dataset.utils import combat_dir_iterator, read_gzipped_file, write_jsonl
 
 DATA_DIR = pathlib.Path("data/")
 IN_DIR = pathlib.Path("extract/experiment2/")

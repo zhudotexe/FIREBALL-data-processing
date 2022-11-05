@@ -9,8 +9,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 
-import utils
-from dataset import Dataset
+import dataset.utils
+from dataset.dataset import Dataset
 
 log = logging.getLogger("explorer_server")
 
@@ -84,7 +84,7 @@ def get_instance_events(instance_id: str):
         raise HTTPException(status_code=404, detail="instance does not exist")
     # stream the response in order to reduce memory usage (big instances can be 250MB+, don't consume entire iterator)
     return StreamingResponse(
-        utils.combat_dir_iterator_raw(state.data_dir_path / instance_id), media_type="application/jsonl+json"
+        dataset.utils.combat_dir_iterator_raw(state.data_dir_path / instance_id), media_type="application/jsonl+json"
     )
 
 
@@ -94,7 +94,7 @@ def get_distilled_instance(basepath: pathlib.Path, instance_id: str):
     distill_path = basepath / f"{instance_id}.jsonl.gz"
     if not distill_path.exists():
         raise HTTPException(status_code=404, detail="instance is not distilled")
-    return StreamingResponse(utils.read_gzipped_file_raw(distill_path), media_type="application/jsonl+json")
+    return StreamingResponse(dataset.utils.read_gzipped_file_raw(distill_path), media_type="application/jsonl+json")
 
 
 # @app.get("/distill/rp/{instance_id}")
@@ -108,6 +108,7 @@ def get_distilled_instance(basepath: pathlib.Path, instance_id: str):
 #     """Returns a streaming response of {"state": [events...], "utterances": [message...]} dicts."""
 #     return get_distilled_instance(NARRATION_EXTRACT_DIR, instance_id)
 #
+
 
 @app.get("/distill/experiment1/{instance_id}")
 def get_instance_experiment1_distill(instance_id: str):

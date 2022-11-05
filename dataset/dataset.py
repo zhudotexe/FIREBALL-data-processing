@@ -6,7 +6,7 @@ import pathlib
 import pandas as pd
 
 import heuristics
-import utils
+from dataset import utils
 
 log = logging.getLogger(__name__)
 

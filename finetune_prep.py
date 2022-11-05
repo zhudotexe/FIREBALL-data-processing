@@ -5,7 +5,7 @@ import pathlib
 
 import tqdm.contrib.logging
 
-from utils import read_jsonl_file
+from dataset.utils import read_jsonl_file
 
 OUT_UTT_TO_CMD_FILE = pathlib.Path("extract/ft-utt-cmd.jsonl")
 OUT_STA_TO_NAR_FILE = pathlib.Path("extract/ft-sta-nar.jsonl")
