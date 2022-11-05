@@ -13,16 +13,14 @@ Output: {
 """
 import glob
 import logging
-import os.path
 import pathlib
-import sys
 
+import torch
 import tqdm.contrib.concurrent
 import tqdm.contrib.logging
-import torch
 from transformers import AutoModelForSequenceClassification, AutoTokenizer, pipeline
-from heuristics.utils import Instance
-from dataset.utils import combat_dir_iterator, read_gzipped_file, write_jsonl
+
+from dataset.utils import read_gzipped_file, write_jsonl
 
 DATA_DIR = pathlib.Path("data/")
 IN_DIR = pathlib.Path("extract/experiment2/")
@@ -33,19 +31,20 @@ log = logging.getLogger("distill3")
 loglevel = logging.INFO
 
 
-def process_triple(triple, classifier) -> dict:
+def process_triple(triple, classifier) -> dict | None:
     after = triple["after"]
     text_samples = [event["content"].strip() for event in after]
-    tokenizer_kwargs = {'padding':True,'truncation':True}
+    tokenizer_kwargs = {"padding": True, "truncation": True}
     predictions = classifier(text_samples, **tokenizer_kwargs)
     # IC  = 1, OOC = 0 labels
-    filtered_utterances = [event for event, prediction in zip(after, predictions) if prediction["label"]=="LABEL_1"]
-    if filtered_utterances:
-        triple["after"] = filtered_utterances
-        log.info(triple.keys())
-        log.info(f'msg content: {len([msg["content"] for msg in triple["after"]])}')
+    filtered_utterances = [event for event, prediction in zip(after, predictions) if prediction["label"] == "LABEL_1"]
+    triple["after"] = filtered_utterances
+    log.debug(triple.keys())
+    log.info(f'after content: {sum(len(msg["content"]) for msg in triple["after"])} in {len(triple["after"])} events')
+    if triple["after"] or triple["before"]:
         return triple
     return None
+
 
 def process_file(fp: pathlib.Path, classifier):
     """
@@ -61,7 +60,7 @@ def process_file(fp: pathlib.Path, classifier):
         num_triples_in += 1
         processed = process_triple(triple, classifier)
         if processed is not None:
-            out+= [processed]
+            out.append(processed)
 
     # discard if we have nothing
     if not out:
@@ -91,7 +90,6 @@ if __name__ == "__main__":
         results = []
         for d in tqdm.tqdm(files):
             results.append(process_file(d, classifier))
-
 
     kept_distill_count = sum(1 for (i, o) in results if o)
     n_triples_in = sum(i for i, o in results)
