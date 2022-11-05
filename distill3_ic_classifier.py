@@ -19,25 +19,35 @@ import sys
 
 import tqdm.contrib.concurrent
 import tqdm.contrib.logging
-
+import torch
+from transformers import AutoModelForSequenceClassification, AutoTokenizer, pipeline
 from heuristics.utils import Instance
 from dataset.utils import combat_dir_iterator, read_gzipped_file, write_jsonl
 
 DATA_DIR = pathlib.Path("data/")
 IN_DIR = pathlib.Path("extract/experiment2/")
 OUT_DIR = pathlib.Path("extract/experiment3/")
-RUN_PARALLEL = True
+MODEL_DIR = pathlib.Path("models/ic_ooc_1-finetuned/checkpoint-9500")
+
 log = logging.getLogger("distill3")
 loglevel = logging.INFO
 
 
-def process_triple(triple: dict) -> dict:
-    # TODO do the filtering based on triple["after"][*]["content"]
-    # TODO if not (before or after): return (discard triples where everything is filtered out)
-    pass
+def process_triple(triple, classifier) -> dict:
+    after = triple["after"]
+    text_samples = [event["content"].strip() for event in after]
+    tokenizer_kwargs = {'padding':True,'truncation':True}
+    predictions = classifier(text_samples, **tokenizer_kwargs)
+    # IC  = 1, OOC = 0 labels
+    filtered_utterances = [event for event, prediction in zip(after, predictions) if prediction["label"]=="LABEL_1"]
+    if filtered_utterances:
+        triple["after"] = filtered_utterances
+        log.info(triple.keys())
+        log.info(f'msg content: {len([msg["content"] for msg in triple["after"]])}')
+        return triple
+    return None
 
-
-def process_file(fp: pathlib.Path):
+def process_file(fp: pathlib.Path, classifier):
     """
     Given a path to a file containing a list of triples, filter the triples and return a pair of
     (n_triples_in, n_triples_out).
@@ -49,12 +59,13 @@ def process_file(fp: pathlib.Path):
 
     for triple in triple_stream:
         num_triples_in += 1
-        processed = process_triple(triple)
+        processed = process_triple(triple, classifier)
         if processed is not None:
-            out.append(processed)
+            out+= [processed]
 
     # discard if we have nothing
     if not out:
+        log.info("nothing was processed")
         return num_triples_in, 0
 
     # see what we get
@@ -64,16 +75,23 @@ def process_file(fp: pathlib.Path):
 
 if __name__ == "__main__":
     logging.basicConfig(level=loglevel, format="%(levelname)s: %(message)s")
+    log.info(f"cuda {torch.cuda.is_available()}")
+    device = 0 if torch.cuda.is_available() else -1
+    log.info(f"device: {device}")
+
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     filenames = sorted(glob.glob("*.gz", root_dir=IN_DIR))
     files = [pathlib.Path(IN_DIR, fn) for fn in filenames]
+    log.info(f"files {len(files)}")
+    model = AutoModelForSequenceClassification.from_pretrained(MODEL_DIR)
+    tokenizer = AutoTokenizer.from_pretrained(MODEL_DIR)
+    classifier = pipeline("text-classification", model=model, tokenizer=tokenizer, device=device)
+    log.info("classifier constructed")
     with tqdm.contrib.logging.logging_redirect_tqdm():
-        if RUN_PARALLEL:
-            results = tqdm.contrib.concurrent.process_map(process_file, files, chunksize=10)
-        else:
-            results = []
-            for d in tqdm.tqdm(files):
-                results.append(process_file(d))
+        results = []
+        for d in tqdm.tqdm(files):
+            results.append(process_file(d, classifier))
+
 
     kept_distill_count = sum(1 for (i, o) in results if o)
     n_triples_in = sum(i for i, o in results)
