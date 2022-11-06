@@ -16,13 +16,13 @@ import json
 import logging
 import pathlib
 
+import sklearn.model_selection
 import tqdm.contrib.logging
 
 from dataset.utils import read_jsonl_file
 
-OUT_UTT_TO_CMD_FILE = pathlib.Path("extract/ft-utt-cmd.jsonl")
-OUT_STA_TO_NAR_FILE = pathlib.Path("extract/ft-sta-nar.jsonl")
 NORMALIZED_IN_DIR = pathlib.Path("extract/experiment4/")
+OUT_DIR = pathlib.Path("extract/")
 
 SEP = "\n<|asep|>\n"
 COMMAND_SEP = "\n<|csep|>\n"
@@ -223,22 +223,34 @@ def writelines(f, dicts):
         f.write("\n")
 
 
-def main(paths: list[pathlib.Path]):
-    lines = 0
-    with open(OUT_UTT_TO_CMD_FILE, mode="w") as f:
-        for d in tqdm.tqdm(paths):
-            utt_cmd = process_utt_cmd(d)
-            lines += len(utt_cmd)
-            writelines(f, utt_cmd)
-    print(f"Wrote {lines} pairs to {OUT_UTT_TO_CMD_FILE}")
+def do_prep(paths, processor, file_name, desired_train_pairs=15000, desired_test_pairs=10000):
+    # we have so much data, limit the train size to 10000 pairs sampled from the same instances
+    train_pairs = 0
+    test_pairs = 0
+    rest_pairs = 0
+    train = open(OUT_DIR / f"{file_name}-train-{desired_train_pairs}.jsonl", mode="w")
+    test = open(OUT_DIR / f"{file_name}-test-{desired_test_pairs}.jsonl", mode="w")
+    rest = open(OUT_DIR / f"{file_name}-rest.jsonl", mode="w")
+    for d in tqdm.tqdm(paths):
+        utt_cmd = processor(d)
+        if train_pairs < desired_train_pairs:
+            writelines(train, utt_cmd)
+            train_pairs += len(utt_cmd)
+        elif test_pairs < desired_test_pairs:
+            writelines(test, utt_cmd)
+            test_pairs += len(utt_cmd)
+        else:
+            writelines(rest, utt_cmd)
+            rest_pairs += len(utt_cmd)
+    print(
+        f"Wrote {file_name} data:\n{train_pairs} training pairs\n{test_pairs} testing pairs\n{rest_pairs} other pairs"
+    )
 
-    lines = 0
-    with open(OUT_STA_TO_NAR_FILE, mode="w") as f:
-        for d in tqdm.tqdm(paths):
-            sta_nar = process_sta_nar(d)
-            lines += len(sta_nar)
-            writelines(f, sta_nar)
-    print(f"Wrote {lines} triples to {OUT_STA_TO_NAR_FILE}")
+
+def main(paths: list[pathlib.Path]):
+    paths = sklearn.utils.shuffle(paths, random_state=42)
+    do_prep(paths, process_utt_cmd, "ft-utt-cmd")
+    do_prep(paths, process_sta_nar, "ft-sta-nar")
 
 
 if __name__ == "__main__":
