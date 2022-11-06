@@ -217,40 +217,74 @@ def process_sta_nar(fp: pathlib.Path):
     return out
 
 
-def writelines(f, dicts):
-    for d in dicts:
-        f.write(json.dumps(d))
-        f.write("\n")
+def writeline(f, d):
+    f.write(json.dumps(d))
+    f.write("\n")
 
 
-def do_prep(paths, processor, file_name, desired_train_pairs=15000, desired_test_pairs=10000):
-    # we have so much data, limit the train size to 10000 pairs sampled from the same instances
-    train_pairs = 0
-    test_pairs = 0
-    rest_pairs = 0
-    train = open(OUT_DIR / f"{file_name}-train-{desired_train_pairs}.jsonl", mode="w")
-    test = open(OUT_DIR / f"{file_name}-test-{desired_test_pairs}.jsonl", mode="w")
-    rest = open(OUT_DIR / f"{file_name}-rest.jsonl", mode="w")
-    for d in tqdm.tqdm(paths):
-        utt_cmd = processor(d)
-        if train_pairs < desired_train_pairs:
-            writelines(train, utt_cmd)
-            train_pairs += len(utt_cmd)
-        elif test_pairs < desired_test_pairs:
-            writelines(test, utt_cmd)
-            test_pairs += len(utt_cmd)
-        else:
-            writelines(rest, utt_cmd)
-            rest_pairs += len(utt_cmd)
+def do_prep(paths, processor, file_name, desired_train_pairs=10000, desired_test_pairs=10000, train_epochs=4):
+    random_seed = 42
+    # split the dataset roughly proportionally to the desired train/test split
+    test_frac = desired_test_pairs / (desired_train_pairs + desired_test_pairs)
+    paths_train, paths_test = sklearn.model_selection.train_test_split(
+        paths, test_size=test_frac, random_state=random_seed
+    )
+
+    train = []
+    test = []
+
+    trainf = open(OUT_DIR / f"{file_name}-train-{desired_train_pairs}.jsonl", mode="w")
+    testf = open(OUT_DIR / f"{file_name}-test-{desired_test_pairs}.jsonl", mode="w")
+    restf = open(OUT_DIR / f"{file_name}-rest.jsonl", mode="w")
+
+    for d in tqdm.tqdm(paths_train):
+        pairs = processor(d)
+        train.extend((d, pair) for pair in pairs)
+
+    for d in tqdm.tqdm(paths_test):
+        pairs = processor(d)
+        test.extend((d, pair) for pair in pairs)
+
+    # randomly sample desired number of train/test pairs from disjoint instances
+    # then write the rest to restf
+    train = sklearn.utils.shuffle(train, random_state=random_seed)
+    test = sklearn.utils.shuffle(test, random_state=random_seed)
+    train_samples, train_rest = train[:desired_train_pairs], train[desired_train_pairs:]
+    test_samples, test_rest = test[:desired_test_pairs], test[desired_test_pairs:]
+    rest = train_rest + test_rest
+
+    train_insts = set()
+    train_chars = 0
+    for inst, pair in train_samples:
+        writeline(trainf, pair)
+        train_insts.add(inst)
+        train_chars += len(pair["prompt"]) + len(pair["completion"])
+
+    test_insts = set()
+    for inst, pair in test_samples:
+        writeline(testf, pair)
+        test_insts.add(inst)
+
+    for inst, pair in rest:
+        writeline(restf, pair)
+
     print(
-        f"Wrote {file_name} data:\n{train_pairs} training pairs\n{test_pairs} testing pairs\n{rest_pairs} other pairs"
+        f"Wrote {file_name} data:\n"
+        f"{desired_train_pairs} training pairs from {len(train_insts)} instances\n"
+        f"{desired_test_pairs} testing pairs from {len(test_insts)} instances\n"
+        f"{len(rest)} other pairs"
+    )
+    train_tokens = train_chars / 4
+    davinci_ft_price = 0.03 / 1000
+    print(
+        f"Estimated Davinci finetune cost ({train_epochs} epochs):"
+        f" ${train_tokens * davinci_ft_price * train_epochs:.2f}"
     )
 
 
 def main(paths: list[pathlib.Path]):
-    paths = sklearn.utils.shuffle(paths, random_state=42)
-    do_prep(paths, process_utt_cmd, "ft-utt-cmd")
-    do_prep(paths, process_sta_nar, "ft-sta-nar")
+    do_prep(paths, process_utt_cmd, "ft-utt-cmd", desired_train_pairs=10000, desired_test_pairs=1000, train_epochs=2)
+    do_prep(paths, process_sta_nar, "ft-sta-nar", desired_train_pairs=15000, desired_test_pairs=1000, train_epochs=1)
 
 
 if __name__ == "__main__":
@@ -264,6 +298,6 @@ if __name__ == "__main__":
         "Now you can run:\n\n"
         "\topenai tools fine_tunes.prepare_data -f extract/<the file you want>\n\n"
         "to prepare a finetune file, then:\n\n"
-        '\topenai api fine_tunes.create -t "extract/<that file>_prepared.jsonl" -m ada\n\n'
-        "to create a finetune. Be careful about your spending!"
+        '\topenai api fine_tunes.create -t "extract/<that file>_prepared.jsonl" -m ada --n_epochs 1\n\n'
+        "to create a finetune. Be careful about your spending- in order to see more data we lower the number of epochs!"
     )
