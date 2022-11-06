@@ -299,5 +299,6 @@ if __name__ == "__main__":
         "\topenai tools fine_tunes.prepare_data -f extract/<the file you want>\n\n"
         "to prepare a finetune file, then:\n\n"
         '\topenai api fine_tunes.create -t "extract/<that file>_prepared.jsonl" -m ada --n_epochs 1\n\n'
-        "to create a finetune. Be careful about your spending- in order to see more data we lower the number of epochs!"
+        "to create a finetune. Be careful about your spending "
+        "- in order to see more data we lower the number of epochs (see output above)!"
     )
