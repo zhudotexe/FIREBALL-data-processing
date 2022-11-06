@@ -87,17 +87,15 @@ def process_utt_cmd(fp: pathlib.Path):
         current_actor_name = data["current_turn"]
         commands = data["commands_norm"]
         caster_name = data["caster_after"]["name"]
-        target_names = [t["name"] for t in data["targets_after"]]
 
         # if no before utterances, skip
         if not before:
             continue
 
-        # find caster and target in before-states
+        # find caster in before-states
         actors_by_name = {a["name"]: a for a in state_before}
         try:
             caster = actors_by_name[caster_name]
-            targets = [actors_by_name[target_name] for target_name in target_names]
         except KeyError:
             continue
 
@@ -106,10 +104,6 @@ def process_utt_cmd(fp: pathlib.Path):
         # - Name (Race/creature type; class if available) <X/Y HP> [Effects]
         # - ...
         # Current: Name
-        #
-        # Targets:
-        # - Name (Race/creature type; class if available) <X/Y HP>
-        # - ...
         #
         # Description: ...
         #
@@ -133,11 +127,6 @@ def process_utt_cmd(fp: pathlib.Path):
         if actors:
             prompt_parts.append(actors_prompt)
         prompt_parts.append(str(current_actor_name))
-
-        targets_str = [f"- {stringify_actor(a)['short']}" for a in targets]
-        targets_prompt = f"Targets:\n" + "\n".join(targets_str)
-        if targets:
-            prompt_parts.append(targets_prompt)
 
         prompt_parts.append(stringify_actor(caster)["long"])
 
