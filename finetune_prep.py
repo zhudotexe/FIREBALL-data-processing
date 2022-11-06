@@ -1,17 +1,3 @@
-"""
-Input:
-{
-    "before_utterances": before_utterances,     # list of str
-    "combat_state_before": actor_list_before,   # list of actors
-    "current_actor": current_actor,             # actor
-    "commands_norm": commands_norm,             # list of str
-    "automation_results": automation_norm,      # list of str
-    "caster_after": caster_norm,                # actor
-    "targets_after": targets,                   # list of actors
-    "combat_state_after": actor_list_after,     # list of actors
-    "after_utterances": after_utterances,       # list of str
-}
-"""
 import glob
 import json
 import logging
@@ -70,7 +56,7 @@ def process_utt_cmd_train(fp: pathlib.Path):
 def process_utt_cmd_test(fp: pathlib.Path):
     """
     Extracts the available keys for this task from the normalized datum.
-    X: ("before_utterances", "combat_state_before", "current_actor",)
+    X: ("before_utterances", "combat_state_before", "current_actor", "before_idxs")
     y: ("commands_norm",)
     """
     return _map_to_instance(
@@ -78,7 +64,7 @@ def process_utt_cmd_test(fp: pathlib.Path):
         lambda data: _extract_dict_keys(
             data,
             required_keys=("before_utterances",),
-            keys=("combat_state_before", "current_actor", "commands_norm", "speaker_id"),
+            keys=("combat_state_before", "current_actor", "commands_norm", "speaker_id", "before_idxs"),
             instance_id=fp.stem,
         ),
     )
@@ -93,7 +79,8 @@ def process_sta_nar_train(fp: pathlib.Path):
 def process_sta_nar_test(fp: pathlib.Path):
     """
     Extracts the available keys for this task from the normalized datum.
-    X: ("combat_state_after", "caster_after", "targets_after", "automation_results")
+    X: ("combat_state_after", "caster_after", "targets_after", "automation_results", "before_idxs", "command_idxs",
+        "after_idxs")
     y: ("after_utterances",)
     """
     return _map_to_instance(
@@ -101,7 +88,15 @@ def process_sta_nar_test(fp: pathlib.Path):
         lambda data: _extract_dict_keys(
             data,
             required_keys=("after_utterances", "automation_results"),
-            keys=("combat_state_after", "caster_after", "targets_after", "speaker_id"),
+            keys=(
+                "combat_state_after",
+                "caster_after",
+                "targets_after",
+                "speaker_id",
+                "before_idxs",
+                "command_idxs",
+                "after_idxs",
+            ),
             instance_id=fp.stem,
         ),
     )

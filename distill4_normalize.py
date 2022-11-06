@@ -7,12 +7,18 @@ Distill4: Given time-grouped IC/OOC filtered triples, normalize the utterances a
 Input: {"before": [Message...], "commands": [Event...], "after": [Message...]}
 
 Output: {
-    "before": [Message...],
-    "before_utterances": [str...],
-    "commands": [Event...],
-    "commands_norm": [str...],
-    "after": [Message...],
-    "after_utterances": [str...],
+    "before_utterances": before_utterances,     # list of str
+    "combat_state_before": actor_list_before,   # list of actors
+    "current_actor": current_actor,             # actor, nullable
+    "commands_norm": commands_norm,             # list of str
+    "automation_results": automation_norm,      # list of str
+    "caster_after": caster_norm,                # actor
+    "targets_after": targets,                   # list of actors
+    "combat_state_after": actor_list_after,     # list of actors
+    "after_utterances": after_utterances,       # list of str
+    "before_idxs": [],                          # list of int (indexes of events in instance)
+    "command_idxs": [],                         # list of int (indexes of events in instance)
+    "after_idxs": [],                           # list of int (indexes of events in instance)
 }
 """
 import copy
@@ -344,6 +350,10 @@ class Distill4Inst(Instance):
             "targets_after": targets,  # list of actors
             "combat_state_after": actor_list_after,  # list of actors
             "after_utterances": after_utterances,
+            # triple
+            "before_idxs": [self.events.index(b) for b in before],
+            "command_idxs": [self.events.index(b) for b in commands],
+            "after_idxs": [self.events.index(b) for b in after],
         }
 
 
