@@ -3,6 +3,7 @@ Input:
 {
     "before_utterances": before_utterances,     # list of str
     "combat_state_before": actor_list_before,   # list of actors
+    "current_actor": current_actor,             # actor
     "commands_norm": commands_norm,             # list of str
     "automation_results": automation_norm,      # list of str
     "caster_after": caster_norm,                # actor
@@ -19,191 +20,91 @@ import pathlib
 import sklearn.model_selection
 import tqdm.contrib.logging
 
+import prompts
 from dataset.utils import read_jsonl_file
 
 NORMALIZED_IN_DIR = pathlib.Path("extract/experiment4/")
 OUT_DIR = pathlib.Path("extract/")
 
-SEP = "\n<|asep|>\n"
-COMMAND_SEP = "\n<|csep|>\n"
-STOP_SEQ = "\n<|aeot|>"
 
-
-def stringify_actor(actor: dict):
-    # Name (Race/creature type; class if available) <X/Y HP> [Effects]
-    short_parts = [actor["name"]]
-    # Description: ...
-    #
-    # ---
-    # Name: NAME
-    # Class:
-    # Race:
-    # Attacks:
-    # Spells:
-    # Actions:
-    # Effects:
-    long_parts = []
-
-    # short parts
-    race_and_class_parts = []
-    if actor["race"]:
-        race_and_class_parts.append(actor["race"])
-    if actor["class"]:
-        race_and_class_parts.append(actor["class"])
-    race_and_class = "; ".join(race_and_class_parts)
-
-    if race_and_class:
-        short_parts.append(f"({race_and_class})")
-    short_parts.append(actor["hp"])
-    if actor["effects"]:
-        short_parts.append(f"[{actor['effects']}]")
-
-    # long parts
-    if actor["description"]:
-        long_parts.append(f"Description: {actor['description']}\n---")
-    long_parts.append(f"Name: {actor['name']}")
-    if actor["class"]:
-        long_parts.append(f"Class: {actor['class']}")
-    if actor["race"]:
-        long_parts.append(f"Race: {actor['race']}")
-    if actor["attacks"]:
-        long_parts.append(f"Attacks: {actor['attacks']}")
-    if actor["spells"]:
-        long_parts.append(f"Spells: {actor['spells']}")
-    if actor["actions"]:
-        long_parts.append(f"Actions: {actor['actions']}")
-    if actor["effects"]:
-        long_parts.append(f"Effects: {actor['effects']}")
-
-    return {"short": " ".join(short_parts), "long": "\n".join(long_parts)}
-
-
-def process_utt_cmd(fp: pathlib.Path):
+def _map_to_instance(fp: pathlib.Path, f):
     out = []
     norm_stream = read_jsonl_file(fp)
     for data in norm_stream:
-        before = data["before_utterances"]
-        state_before = data["combat_state_before"]
-        current_actor_name = data["current_turn"]
-        commands = data["commands_norm"]
-        caster_name = data["caster_after"]["name"]
-
-        # if no before utterances, skip
-        if not before:
-            continue
-
-        # find caster in before-states
-        actors_by_name = {a["name"]: a for a in state_before}
-        try:
-            caster = actors_by_name[caster_name]
-        except KeyError:
-            continue
-
-        # prompt:
-        # Actors:
-        # - Name (Race/creature type; class if available) <X/Y HP> [Effects]
-        # - ...
-        # Current: Name
-        #
-        # Description: ...
-        #
-        # ---
-        # Name: NAME
-        # Class:
-        # Race:
-        # Attacks:
-        # Spells:
-        # Actions:
-        # Effects:
-        #
-        # RP
-        # <|asep|>
-        # command
-        # <|aeot|>
-        prompt_parts = []
-
-        actors = [f"- {stringify_actor(a)['short']}" for a in state_before]
-        actors_prompt = f"Actors:\n" + "\n".join(actors)
-        if actors:
-            prompt_parts.append(actors_prompt)
-        prompt_parts.append(str(current_actor_name))
-
-        prompt_parts.append(stringify_actor(caster)["long"])
-
-        rp = "\n".join(before)
-        prompt_parts.append(rp)
-
-        # TODO: run ablation by removing parts of the prompt
-
-        prompt = "\n\n".join(prompt_parts) + SEP
-        completion = COMMAND_SEP.join(commands) + STOP_SEQ
-        out.append({"prompt": prompt, "completion": completion})
-
+        result = f(data)
+        if result:
+            out.append(result)
     return out
 
 
-def process_sta_nar(fp: pathlib.Path):
-    out = []
-    norm_stream = read_jsonl_file(fp)
-    for data in norm_stream:
-        after = data["after_utterances"]
-        state_after = data["combat_state_after"]
-        caster = data["caster_after"]
-        targets = data["targets_after"]
-        automation_results = data["automation_results"]
+def _prompt_and_completion(data, prompter, completer) -> dict | None:
+    prompt = prompter(data)
+    completion = completer(data)
+    if not (prompt and completion):
+        return
+    return {"prompt": prompt, "completion": completion}
 
-        # skip if no after utterances
-        if not after:
-            continue
 
-        # prompt:
-        # Actors: (state after)
-        # - Name (Race/creature type; class if available) <X/Y HP> [Effects]
-        # - ...
-        #
-        # Targets: (pulled from after)
-        # - Name (Race/creature type; class if available) <X/Y HP>
-        # - ...
-        #
-        # Description: ... (pulled from after)
-        #
-        # ---
-        # Name: NAME
-        # Class:
-        # Race:
-        # Attacks:
-        # Spells:
-        # Actions:
-        # Effects:
-        #
-        # AUTOMATION_STRINGIFY
-        # <|asep|>
-        # after
-        # <|aeot|>
-
-        prompt_parts = []
-
-        actors = [f"- {stringify_actor(a)['short']}" for a in state_after]
-        actors_prompt = f"Actors:\n" + "\n".join(actors)
-        if actors:
-            prompt_parts.append(actors_prompt)
-
-        targets_str = [f"- {stringify_actor(a)['short']}" for a in targets]
-        targets_prompt = f"Targets:\n" + "\n".join(targets_str)
-        if targets:
-            prompt_parts.append(targets_prompt)
-
-        prompt_parts.append(stringify_actor(caster)["long"])
-
-        prompt_parts.append("\n".join(automation_results))
-
-        # TODO: run ablation by removing parts of the prompt
-
-        prompt = "\n\n".join(prompt_parts) + SEP
-        completion = "\n".join(after) + STOP_SEQ
-        out.append({"prompt": prompt, "completion": completion})
-
+def _extract_dict_keys(data, required_keys, keys, **add_data) -> dict | None:
+    out = {}
+    for key in required_keys:
+        r = data[key]
+        if not r:
+            return
+        out[key] = r
+    for key in keys:
+        out[key] = data[key]
+    out.update(add_data)
     return out
+
+
+def process_utt_cmd_train(fp: pathlib.Path):
+    """
+    Transforms each normalized datum into a GPT-3 prompt (see prompts.py for the prompt).
+    """
+    return _map_to_instance(
+        fp, lambda data: _prompt_and_completion(data, prompts.utt_cmd_prompt, prompts.utt_cmd_completion)
+    )
+
+
+def process_utt_cmd_test(fp: pathlib.Path):
+    """
+    Extracts the available keys for this task from the normalized datum.
+    X: ("before_utterances", "combat_state_before", "current_actor",)
+    y: ("commands_norm",)
+    """
+    return _map_to_instance(
+        fp,
+        lambda data: _extract_dict_keys(
+            data,
+            required_keys=("before_utterances",),
+            keys=("combat_state_before", "current_actor", "commands_norm", "speaker_id"),
+            instance_id=fp.stem,
+        ),
+    )
+
+
+def process_sta_nar_train(fp: pathlib.Path):
+    return _map_to_instance(
+        fp, lambda data: _prompt_and_completion(data, prompts.sta_nar_prompt, prompts.sta_nar_completion)
+    )
+
+
+def process_sta_nar_test(fp: pathlib.Path):
+    """
+    Extracts the available keys for this task from the normalized datum.
+    X: ("combat_state_after", "caster_after", "targets_after", "automation_results")
+    y: ("after_utterances",)
+    """
+    return _map_to_instance(
+        fp,
+        lambda data: _extract_dict_keys(
+            data,
+            required_keys=("after_utterances", "automation_results"),
+            keys=("combat_state_after", "caster_after", "targets_after", "speaker_id"),
+            instance_id=fp.stem,
+        ),
+    )
 
 
 def writeline(f, d):
@@ -211,7 +112,15 @@ def writeline(f, d):
     f.write("\n")
 
 
-def do_prep(paths, processor, file_name, desired_train_pairs=10000, desired_test_pairs=10000, train_epochs=4):
+def do_prep(
+    paths,
+    train_processor,
+    test_processor,
+    file_name,
+    desired_train_pairs=10000,
+    desired_test_pairs=10000,
+    train_epochs=4,
+):
     random_seed = 42
     # split the dataset roughly proportionally to the desired train/test split
     test_frac = desired_test_pairs / (desired_train_pairs + desired_test_pairs)
@@ -224,23 +133,22 @@ def do_prep(paths, processor, file_name, desired_train_pairs=10000, desired_test
 
     trainf = open(OUT_DIR / f"{file_name}-train-{desired_train_pairs}.jsonl", mode="w")
     testf = open(OUT_DIR / f"{file_name}-test-{desired_test_pairs}.jsonl", mode="w")
-    restf = open(OUT_DIR / f"{file_name}-rest.jsonl", mode="w")
 
     for d in tqdm.tqdm(paths_train):
-        pairs = processor(d)
+        pairs = train_processor(d)
         train.extend((d, pair) for pair in pairs)
 
     for d in tqdm.tqdm(paths_test):
-        pairs = processor(d)
+        pairs = test_processor(d)
         test.extend((d, pair) for pair in pairs)
 
     # randomly sample desired number of train/test pairs from disjoint instances
     # then write the rest to restf
     train = sklearn.utils.shuffle(train, random_state=random_seed)
     test = sklearn.utils.shuffle(test, random_state=random_seed)
-    train_samples, train_rest = train[:desired_train_pairs], train[desired_train_pairs:]
-    test_samples, test_rest = test[:desired_test_pairs], test[desired_test_pairs:]
-    rest = train_rest + test_rest
+    train_samples = train[:desired_train_pairs]
+    test_samples = test[:desired_test_pairs]
+    n_discarded = len(train) - desired_train_pairs + len(test) - desired_test_pairs
 
     train_insts = set()
     train_chars = 0
@@ -254,14 +162,14 @@ def do_prep(paths, processor, file_name, desired_train_pairs=10000, desired_test
         writeline(testf, pair)
         test_insts.add(inst)
 
-    for inst, pair in rest:
-        writeline(restf, pair)
+    trainf.close()
+    testf.close()
 
     print(
         f"Wrote {file_name} data:\n"
         f"{desired_train_pairs} training pairs from {len(train_insts)} instances\n"
         f"{desired_test_pairs} testing pairs from {len(test_insts)} instances\n"
-        f"{len(rest)} other pairs"
+        f"{n_discarded} pairs discarded"
     )
     train_tokens = train_chars / 4
     davinci_ft_price = 0.03 / 1000
@@ -272,8 +180,24 @@ def do_prep(paths, processor, file_name, desired_train_pairs=10000, desired_test
 
 
 def main(paths: list[pathlib.Path]):
-    do_prep(paths, process_utt_cmd, "ft-utt-cmd", desired_train_pairs=10000, desired_test_pairs=1000, train_epochs=2)
-    do_prep(paths, process_sta_nar, "ft-sta-nar", desired_train_pairs=15000, desired_test_pairs=1000, train_epochs=1)
+    do_prep(
+        paths,
+        process_utt_cmd_train,
+        process_utt_cmd_test,
+        "ft-utt-cmd",
+        desired_train_pairs=10000,
+        desired_test_pairs=1000,
+        train_epochs=2,
+    )
+    do_prep(
+        paths,
+        process_sta_nar_train,
+        process_sta_nar_test,
+        "ft-sta-nar",
+        desired_train_pairs=15000,
+        desired_test_pairs=1000,
+        train_epochs=1,
+    )
 
 
 if __name__ == "__main__":

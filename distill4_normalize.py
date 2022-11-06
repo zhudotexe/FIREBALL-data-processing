@@ -33,7 +33,7 @@ from heuristics.utils import Instance, MessageGroup
 sys.path.append(os.path.join(os.path.abspath(os.path.dirname(__file__)), "avrae"))
 from avrae.utils.argparser import argsplit
 from avrae.cogs5e.models.character import Character
-from avrae.cogs5e.initiative import Combat, Combatant, MonsterCombatant, PlayerCombatant
+from avrae.cogs5e.initiative import Combat, Combatant, CombatantGroup, MonsterCombatant, PlayerCombatant
 from avrae.cogs5e.initiative.combat import deserialize_combatant_sync
 from gamedata import Monster  # this import is wonky because of namespace weirdness
 
@@ -126,7 +126,7 @@ class Distill4Inst(Instance):
         name = combatant.name
         effects = ", ".join(e.name for e in combatant.get_effects())
         attacks = ", ".join(a.name for a in combatant.attacks)
-        spells = ", ".join(s.name for s in combatant.spellbook.spells if s.prepared)
+        spells = ", ".join(set(s.name for s in combatant.spellbook.spells if s.prepared))
 
         race = None
         class_ = None
@@ -139,6 +139,8 @@ class Distill4Inst(Instance):
             actions = ", ".join(set(a.name for a in combatant.character.actions))
         elif isinstance(combatant, MonsterCombatant):
             race = combatant.monster_name
+        elif isinstance(combatant, CombatantGroup):
+            race = "Group"
 
         return {
             "name": name,
@@ -150,6 +152,7 @@ class Distill4Inst(Instance):
             "actions": actions,  # nullable, can be empty
             "effects": effects,  # can be empty
             "description": description,  # nullable
+            "controller_id": str(combatant.controller_id),  # TODO make this not use discord ID
         }
 
     def stringify_automation_run(self, event):
@@ -266,6 +269,7 @@ class Distill4Inst(Instance):
         after = triple["after"]
 
         # normalize utterances
+        speaker_id = str(commands[0]["author_id"])  # TODO make this not use discord ID
         before_utterances = [msg["content"] for msg in before]
         after_utterances = [msg["content"] for msg in after]
 
@@ -281,14 +285,15 @@ class Distill4Inst(Instance):
 
         # state before
         self.extract_characters_forward(commands[0])
-        combat_before = Combat.from_dict_sync(copy.deepcopy(self.combat_state_at_event(commands[0])), ctx)
+        combat_state_before = self.combat_state_at_event(commands[0])
+        combat_before = Combat.from_dict_sync(copy.deepcopy(combat_state_before), ctx)
         actor_list_before = [
             self.normalize_actor(actor, combat_before) for actor in combat_before.get_combatants(groups=False)
         ]
 
         # current turn
-        current_actor = combat_before.current_combatant
-        current_turn = current_actor.name if current_actor is not None else None
+        current = combat_before.current_combatant
+        current_actor = self.normalize_actor(current, combat_before) if current is not None else None
 
         # caster
         for e in commands_inst.find_all_of_type("automation_run"):
@@ -329,9 +334,10 @@ class Distill4Inst(Instance):
         ]
 
         return {
+            "speaker_id": speaker_id,
             "before_utterances": before_utterances,
             "combat_state_before": actor_list_before,  # list of actors
-            "current_turn": current_turn,
+            "current_actor": current_actor,  # actor, nullable
             "commands_norm": commands_norm,
             "automation_results": automation_norm,  # list of str
             "caster_after": caster_norm,  # actor
