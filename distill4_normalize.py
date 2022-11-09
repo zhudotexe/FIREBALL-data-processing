@@ -26,7 +26,6 @@ import glob
 import logging
 import os.path
 import pathlib
-import re
 import sys
 
 import tqdm.contrib.concurrent
@@ -241,22 +240,33 @@ class Distill4Inst(Instance):
         return stringify(event["automation_result"])
 
     # ==== normalizers =====
-    TUPPER_REGEX = re.compile(r"\w{,10}[:.;]")  # e.g. N:text or DM;text or Name.text
-
     def normalize_message(self, msg: Event) -> str:
         content = msg["content"]
-        # remove any Tupper prefixes
-        has_tupper = self.TUPPER_REGEX.match(content)
-        if has_tupper:
-            msg_idx = self.events.index(msg)
-            for e in self.events[msg_idx + 1 : msg_idx + 16]:  # search the next 15 events for a tupper message
-                if e["event_type"] == "message" and e["author_id"] != msg["author_id"] and e["content"] in content:
-                    new_content = e["content"]
-                    log.info(f"Replaced message content with tupper content:\n{content!r}\n---\n{new_content!r}")
-                    content = new_content
-                    break
+        msg_idx = self.events.index(msg)
+        # remove any Tupper markers
+        similar_message = self.find(
+            lambda e: e["event_type"] == "message"
+            and e["author_id"] != msg["author_id"]
+            and e["content"] in content
+            and e["content"]
+            and e.get("author_bot", True),
+            after=msg_idx,
+            before=msg_idx + 16,
+        )
+        if similar_message is not None:
+            similar_content = similar_message["content"]
+            # the new content must be at least 80% of the old
+            len_ratio = len(similar_content) / len(content)
+            if 0.7 < len_ratio < 1:
+                log.info(
+                    f"GREEDY: Replaced message content:\n{content!r}\n---\n{similar_content!r}\n"
+                )
+                content = similar_content
             else:
-                log.warning(f"Could not find tupper content for tupper message {content!r}")
+                log.info(
+                    f"GREEDY: Found similar message but ratio is weird ({len_ratio * 100:.2f}):\n{content!r}\n"
+                    f"---\n{similar_content!r}\n"
+                )
         return content
 
     def normalize_command_group(self, group: MessageGroup) -> str | None:
