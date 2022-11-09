@@ -292,6 +292,7 @@ class Distill4Inst(Instance):
         # state before
         self.extract_characters_forward(commands[0])
         combat_state_before = self.combat_state_at_event(commands[0])
+        before_state_index = self.events.index(combat_state_before)
         combat_before = Combat.from_dict_sync(copy.deepcopy(combat_state_before), ctx)
         actor_list_before = [
             self.normalize_actor(actor, combat_before) for actor in combat_before.get_combatants(groups=False)
@@ -334,6 +335,7 @@ class Distill4Inst(Instance):
                 return
         else:
             last_combat_update = update_in_commands[-1]["data"]
+        after_state_idx = self.events.index(last_combat_update)
         combat_after = Combat.from_dict_sync(copy.deepcopy(last_combat_update), ctx)
         actor_list_after = [
             self.normalize_actor(actor, combat_after) for actor in combat_after.get_combatants(groups=False)
@@ -352,7 +354,9 @@ class Distill4Inst(Instance):
             "after_utterances": after_utterances,
             # triple
             "before_idxs": [self.events.index(b) for b in before],
+            "before_state_idx": before_state_index,
             "command_idxs": [self.events.index(b) for b in commands],
+            "after_state_idx": after_state_idx,
             "after_idxs": [self.events.index(b) for b in after],
         }
 
