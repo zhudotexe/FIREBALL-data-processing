@@ -124,13 +124,28 @@ class Instance:
         """Returns a list of MessageGroups such that the_filter(group.message) is True."""
         return filter(lambda mgroup: the_filter(mgroup.message), self.message_groups)
 
-    def find(self, query: Callable[[Event], bool]) -> Optional[Event]:
-        """Returns the first event such that query(event) holds, or None if no such event exists."""
-        return next(filter(query, self.events), None)
+    def _get_search_window(self, after=None, before=None):
+        window = self.events
+        if isinstance(before, Event):
+            window = window[: self.events.index(before)]
+        elif isinstance(before, int):
+            window = window[:before]
+        if isinstance(after, Event):
+            window = window[self.events.index(after) + 1 :]
+        elif isinstance(after, int):
+            window = window[after + 1 :]
+        return window
 
-    def find_all(self, query: Callable[[Event], bool]) -> Iterable[Event]:
+    def find(self, query: Callable[[Event], bool], after=None, before=None) -> Optional[Event]:
+        """
+        Returns the first event such that query(event) holds, or None if no such event exists.
+        *before* and *after* can either be events or indices specifying the window to search.
+        """
+        return next(filter(query, self._get_search_window(after, before)), None)
+
+    def find_all(self, query: Callable[[Event], bool], after=None, before=None) -> Iterable[Event]:
         """Returns a list of events such that query(event) holds."""
-        return filter(query, self.events)
+        return filter(query, self._get_search_window(after, before))
 
     def find_all_of_type(self, event_type: str):
         return [e for e in self.events if e["event_type"] == event_type]
