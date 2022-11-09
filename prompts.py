@@ -49,8 +49,9 @@ def stringify_actor(actor: dict):
 
     return {"short": " ".join(short_parts), "long": "\n".join(long_parts), "description": description}
 
-
-def utt_cmd_prompt(data, include_sep=True) -> str | None:
+# parts for ablation: actors, current actor, and their constituent parts
+# possible ablations = ["actors","current"]
+def utt_cmd_prompt(data, include_sep=True, ablations = []) -> str | None:
     before = data["before_utterances"]
     state_before = data["combat_state_before"]
     current = data["current_actor"]
@@ -82,13 +83,13 @@ def utt_cmd_prompt(data, include_sep=True) -> str | None:
     prompt_parts = []
     actors = [f"- {stringify_actor(a)['short']}" for a in state_before]
     actors_prompt = f"Actors:\n" + "\n".join(actors)
-    if actors:
+    if actors and "actors" not in ablations:
         prompt_parts.append(actors_prompt)
-
-    if current is not None:
-        prompt_parts.append(f"Current:\n{stringify_actor(current)['long']}")
-    else:
-        prompt_parts.append("Current:\nNone")
+    if "current" not in ablations:
+        if current is not None:
+            prompt_parts.append(f"Current:\n{stringify_actor(current)['long']}")
+        else:
+            prompt_parts.append("Current:\nNone")
 
     rp = "\n".join(before)
     prompt_parts.append(rp)
@@ -102,8 +103,8 @@ def utt_cmd_completion(data, include_sep=True, command_sep=COMMAND_SEP) -> str |
     commands = data["commands_norm"]
     return command_sep.join(commands) + (STOP_SEQ if include_sep else "")
 
-
-def sta_nar_prompt(data, include_sep=True) -> str | None:
+# ablations: actors, targets, caster
+def sta_nar_prompt(data, include_sep=True, ablations = []) -> str | None:
     state_after = data["combat_state_after"]
     caster = data["caster_after"]
     targets = data["targets_after"]
@@ -137,19 +138,21 @@ def sta_nar_prompt(data, include_sep=True) -> str | None:
     # <|aeot|>
 
     prompt_parts = []
+    if "actors" not in ablations:
+        actors = [f"- {stringify_actor(a)['short']}" for a in state_after]
+        actors_prompt = f"Actors:\n" + "\n".join(actors)
+        if actors:
+            prompt_parts.append(actors_prompt)
 
-    actors = [f"- {stringify_actor(a)['short']}" for a in state_after]
-    actors_prompt = f"Actors:\n" + "\n".join(actors)
-    if actors:
-        prompt_parts.append(actors_prompt)
+    if "targets" not in ablations:
+        targets_str = [f"- {stringify_actor(a)['short']}" for a in targets]
+        targets_prompt = f"Targets:\n" + "\n".join(targets_str)
+        if targets:
+            prompt_parts.append(targets_prompt)
 
-    targets_str = [f"- {stringify_actor(a)['short']}" for a in targets]
-    targets_prompt = f"Targets:\n" + "\n".join(targets_str)
-    if targets:
-        prompt_parts.append(targets_prompt)
-
-    caster_strs = stringify_actor(caster)
-    prompt_parts.append(f"{caster_strs['description']}{caster_strs['long']}")
+    if "caster" not in ablations:
+        caster_strs = stringify_actor(caster)
+        prompt_parts.append(f"{caster_strs['description']}{caster_strs['long']}")
 
     prompt_parts.append("\n".join(automation_results))
 
@@ -169,3 +172,4 @@ def sta_nar_completion(data, include_sep=True) -> str | None:
     # after
     # <|aeot|>
     return "\n".join(after) + (STOP_SEQ if include_sep else "")
+
