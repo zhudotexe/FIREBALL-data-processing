@@ -1,4 +1,5 @@
 import csv
+import io
 import logging
 import os
 import pathlib
@@ -8,68 +9,20 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 
-import utils
+import dataset.utils
+from dataset.dataset import Dataset
 
 log = logging.getLogger("explorer_server")
 
 # ===== config =====
 DATA_DIR = pathlib.Path(os.getenv("DATA_DIR", "data/"))
 HEURISTIC_DIR = pathlib.Path(os.getenv("HEURISTIC_DIR", "heuristic_results/"))
-
-
-class State:
-    def __init__(self, data_dir_path: pathlib.Path, result_dir_path: pathlib.Path):
-        self.data_dir_path = data_dir_path
-        self.result_dir_path = result_dir_path
-        self.dataset_checksum = None
-        self.instance_ids = []
-        self.heuristic_ids = []
-        self.heuristics_by_instance = {}
-
-    def init(self):
-        log.info("Computing dataset checksum...")
-        self.dataset_checksum = utils.dataset_checksum(self.data_dir_path)
-        self.instance_ids = [instance_path.stem for instance_path in utils.get_combat_dirs(self.data_dir_path)]
-
-        # load the computed heuristic results into memory, validating the checksum
-        log.info("Loading heuristic results...")
-        num_heuristics_attempted_loaded = 0
-        self.heuristics_by_instance = {instance_id: {} for instance_id in self.instance_ids}
-        for heuristic_result in self.result_dir_path.glob("*.csv"):
-            num_heuristics_attempted_loaded += 1
-            heuristic_name = heuristic_result.stem
-            log.debug(f"loading {heuristic_name=}")
-            with open(heuristic_result, newline="") as f:
-                reader = csv.reader(f)
-                _, checksum = next(reader)
-                if checksum != self.dataset_checksum:
-                    log.warning(f"Heuristic {heuristic_name!r} has an invalid checksum, skipping...")
-                    continue
-                # consume the rest of the iterator of (instance id, score) pairs and construct a mapping
-                for instance_id, score in reader:
-                    self.heuristics_by_instance[instance_id][heuristic_name] = float(score)
-            self.heuristic_ids.append(heuristic_name)
-            log.debug(f"finished {heuristic_name=}")
-
-        # log warnings if user needs to recompute heuristics
-        if len(self.heuristic_ids) < num_heuristics_attempted_loaded:
-            log.warning(
-                f"{num_heuristics_attempted_loaded} heuristics found in results but only"
-                f" {len(self.heuristic_ids)} loaded successfully!\n"
-                "You may need to run `python heuristic_worker.py` to recompute heuristics after a dataset update."
-            )
-        elif num_heuristics_attempted_loaded == 0:
-            log.warning(
-                "No heuristics loaded! Make sure you have defined heuristics in `heuristics/__init__.py` and computed"
-                " them by running `python heuristic_worker.py`."
-            )
-
-        log.info(f"State init complete ({len(self.heuristic_ids)} heuristics over {len(self.instance_ids)} instances)!")
-
+RP_EXTRACT_DIR = pathlib.Path("extract/rp/")
+NARRATION_EXTRACT_DIR = pathlib.Path("extract/narration/")
 
 # ===== app =====
 app = FastAPI()
-state = State(DATA_DIR, HEURISTIC_DIR)
+state = Dataset(DATA_DIR, HEURISTIC_DIR)
 
 app.add_middleware(
     CORSMiddleware,
@@ -100,9 +53,28 @@ async def index():
 
 
 @app.get("/heuristics")
-async def heuristics() -> dict[str, dict[str, float]]:
+async def instance_heuristics() -> dict[str, dict[str, float]]:
     """Returns all of the computed heuristics. (instance id -> (heuristic id -> score))"""
     return state.heuristics_by_instance
+
+
+@app.get("/heuristics/csv")
+async def get_heuristics_table():
+    """Returns all of the computed heuristics in a CSV table."""
+    csvbuf = io.StringIO()
+
+    writer = csv.DictWriter(csvbuf, fieldnames=("instance_id", *state.heuristic_ids))
+    writer.writeheader()
+    for instance_id, row in state.heuristics_by_instance.items():
+        writer.writerow({"instance_id": instance_id, **row})
+
+    csvbuf.seek(0)
+    response = StreamingResponse(
+        csvbuf,
+        media_type="text/csv",
+        headers={"Content-Disposition": "attachment; filename=export.csv"},
+    )
+    return response
 
 
 @app.get("/events/{instance_id}")
@@ -112,8 +84,36 @@ def get_instance_events(instance_id: str):
         raise HTTPException(status_code=404, detail="instance does not exist")
     # stream the response in order to reduce memory usage (big instances can be 250MB+, don't consume entire iterator)
     return StreamingResponse(
-        utils.combat_dir_iterator_raw(state.data_dir_path / instance_id), media_type="application/jsonl+json"
+        dataset.utils.combat_dir_iterator_raw(state.data_dir_path / instance_id), media_type="application/jsonl+json"
     )
+
+
+def get_distilled_instance(basepath: pathlib.Path, instance_id: str):
+    if instance_id not in state.instance_ids:
+        raise HTTPException(status_code=404, detail="instance does not exist")
+    distill_path = basepath / f"{instance_id}.jsonl.gz"
+    if not distill_path.exists():
+        raise HTTPException(status_code=404, detail="instance is not distilled")
+    return StreamingResponse(dataset.utils.read_gzipped_file_raw(distill_path), media_type="application/jsonl+json")
+
+
+# @app.get("/distill/rp/{instance_id}")
+# def get_instance_rp_distill(instance_id: str):
+#     """Returns a streaming response of {"utterances": [message...], "commands": [events...]} dicts."""
+#     return get_distilled_instance(RP_EXTRACT_DIR, instance_id)
+#
+#
+# @app.get("/distill/narration/{instance_id}")
+# def get_instance_narration_distill(instance_id: str):
+#     """Returns a streaming response of {"state": [events...], "utterances": [message...]} dicts."""
+#     return get_distilled_instance(NARRATION_EXTRACT_DIR, instance_id)
+#
+
+
+@app.get("/distill/experiment1/{instance_id}")
+def get_instance_experiment1_distill(instance_id: str):
+    """Returns a streaming response of {"before": [message...], "commands": [event...], "after": [message...]} dicts."""
+    return get_distilled_instance(pathlib.Path("extract/experiment1/"), instance_id)
 
 
 # todo endpoints to save notes and -2 to +2 scores for each instance

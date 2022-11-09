@@ -88,7 +88,7 @@ Building the explorer app locally is optional - the prebuilt files can be downlo
 To build the explorer web app locally, Node.js 16+ is required.
 
 The explorer app uses some [modern web technologies](https://caniuse.com/mdn-api_textdecoderstream) that are not yet
-supported by all browsers; Chrome 71+, Edge 79+, Safari 14.1+, or Opera 58+ is required (Firefox and IE are not
+supported by all browsers; Chrome 71+, Firefox 105+, Edge 79+, Safari 14.1+, or Opera 58+ is required (IE is not
 supported).
 
 ```bash
@@ -105,8 +105,11 @@ $ npm install
 
 The explorer app is a Vue app that lives in `explorer/`. To build it, run `npm run build` from the explorer directory.
 
-Alternatively, you can download a prebuilt distribution from TODO. To use the prebuilt distribution, create
-the `explorer/dist` directory and extract it to that directory. The project file structure should look like this:
+Alternatively, you can download an automatically built prebuilt distribution from 
+[this repo's CI pipeline](https://github.com/zhudotexe/aws-kinesis-dataset-exploration-tool/actions?query=branch%3Amain+is%3Asuccess)
+(click on the latest run and download the `explorer-dist` artifact).
+To use the prebuilt distribution, create the `explorer/dist` directory and extract it to that directory. The project 
+file structure should look like this:
 
 ```text
 aws-kinesis-dataset-exploration-tool/
