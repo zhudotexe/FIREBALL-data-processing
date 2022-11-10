@@ -205,7 +205,7 @@ class Distill4Inst(Instance):
                     return f"{base}\n{children}"
                 case {"type": "save", "ability": ability, "did_save": success}:
                     children = stringify_many(result_node["children"])
-                    base = f"{current_target} rolled a {ability} save " + (
+                    base = f"{current_target} rolled a {ability[:-4].title()} save " + (
                         "and succeeded." if success else "but failed."
                     )
                     return f"{base}\n{children}"
