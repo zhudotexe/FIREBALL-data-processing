@@ -26,6 +26,7 @@ import glob
 import logging
 import os.path
 import pathlib
+import re
 import sys
 
 import tqdm.contrib.concurrent
@@ -258,15 +259,19 @@ class Distill4Inst(Instance):
             # the new content must be at least 80% of the old
             len_ratio = len(similar_content) / len(content)
             if 0.7 < len_ratio < 1:
-                log.info(
-                    f"GREEDY: Replaced message content:\n{content!r}\n---\n{similar_content!r}\n"
-                )
+                log.info(f"GREEDY: Replaced message content:\n{content!r}\n---\n{similar_content!r}\n")
                 content = similar_content
             else:
                 log.info(
                     f"GREEDY: Found similar message but ratio is weird ({len_ratio * 100:.2f}):\n{content!r}\n"
                     f"---\n{similar_content!r}\n"
                 )
+
+        # remove user, role, channel mentions
+        content = re.sub(r"<(@[!&]?|#)\d{17,20}>", "", content)
+
+        # replace custom emoji with just their name
+        content = re.sub(r"<a?(:\w+?:)\d{17,20}>", r"\1", content)
         return content
 
     def normalize_command_group(self, group: MessageGroup) -> str | None:
