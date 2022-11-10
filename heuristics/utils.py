@@ -150,20 +150,20 @@ class Instance:
     def find_all_of_type(self, event_type: str):
         return [e for e in self.events if e["event_type"] == event_type]
 
-    def combat_state_at_event(self, event: Event) -> dict:
-        """Returns the combat state at a current event."""
+    def combat_state_at_event(self, event: Event) -> Event:
+        """Returns the last combat state update event before a given event."""
         if event not in self.events:
             raise ValueError("passed event is not in this instance")
         idx = self.events.index(event)
         for event in self.events[idx::-1]:
             if event["event_type"] == "combat_state_update":
-                return event["data"]
+                return event
 
-    def combat_state_after_event(self, event: Event) -> dict:
-        """Returns the next combat state after a certain event."""
+    def combat_state_after_event(self, event: Event) -> Event:
+        """Returns the next combat state after a given event."""
         if event not in self.events:
             raise ValueError("passed event is not in this instance")
         idx = self.events.index(event)
         for event in self.events[idx:]:
             if event["event_type"] == "combat_state_update":
-                return event["data"]
+                return event

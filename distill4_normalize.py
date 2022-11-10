@@ -322,7 +322,7 @@ class Distill4Inst(Instance):
         self.extract_characters_forward(commands[0])
         combat_state_before = self.combat_state_at_event(commands[0])
         before_state_index = self.events.index(combat_state_before)
-        combat_before = Combat.from_dict_sync(copy.deepcopy(combat_state_before), ctx)
+        combat_before = Combat.from_dict_sync(copy.deepcopy(combat_state_before["data"]), ctx)
         actor_list_before = [
             self.normalize_actor(actor, combat_before) for actor in combat_before.get_combatants(groups=False)
         ]
@@ -363,9 +363,9 @@ class Distill4Inst(Instance):
                 log.info("Could not find final combat state update")
                 return
         else:
-            last_combat_update = update_in_commands[-1]["data"]
+            last_combat_update = update_in_commands[-1]
         after_state_idx = self.events.index(last_combat_update)
-        combat_after = Combat.from_dict_sync(copy.deepcopy(last_combat_update), ctx)
+        combat_after = Combat.from_dict_sync(copy.deepcopy(last_combat_update["data"]), ctx)
         actor_list_after = [
             self.normalize_actor(actor, combat_after) for actor in combat_after.get_combatants(groups=False)
         ]
