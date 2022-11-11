@@ -10,8 +10,8 @@ import pathlib
 import tqdm.contrib.concurrent
 import tqdm.contrib.logging
 
+import dataset.utils
 import heuristics.utils
-import utils
 from dev_constants import DEV_DIRS
 from heuristics.utils import Instance
 
@@ -156,7 +156,7 @@ class Runner:
 
 
 def extract_narration(combat_dir: pathlib.Path):
-    runner = Runner(utils.combat_dir_iterator(combat_dir))
+    runner = Runner(dataset.utils.combat_dir_iterator(combat_dir))
     out = runner.run()
 
     # discard if we have nothing
@@ -164,13 +164,13 @@ def extract_narration(combat_dir: pathlib.Path):
         return
 
     # see what we get
-    utils.write_jsonl(OUT_DIR / f"{combat_dir.stem}.jsonl.gz", out)
+    dataset.utils.write_jsonl(OUT_DIR / f"{combat_dir.stem}.jsonl.gz", out)
 
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
     OUT_DIR.mkdir(parents=True, exist_ok=True)
-    dirs_to_distill = utils.get_combat_dirs(DATA_DIR) if not USE_DEV_DIRS else DEV_DIRS
+    dirs_to_distill = dataset.utils.get_combat_dirs(DATA_DIR) if not USE_DEV_DIRS else DEV_DIRS
     with tqdm.contrib.logging.logging_redirect_tqdm():
         if RUN_PARALLEL:
             tqdm.contrib.concurrent.process_map(extract_narration, dirs_to_distill, chunksize=10)

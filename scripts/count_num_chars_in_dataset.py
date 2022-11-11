@@ -10,7 +10,7 @@ import tqdm.contrib.concurrent
 
 sys.path.append("..")
 
-import utils
+import dataset.utils
 
 DATA_DIR = pathlib.Path(os.path.dirname(__file__), "../data")
 MODEL_COSTS = (

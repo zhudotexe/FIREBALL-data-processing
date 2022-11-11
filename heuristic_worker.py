@@ -10,7 +10,7 @@ import tqdm.contrib.concurrent
 import tqdm.contrib.logging
 
 import heuristics
-from utils import combat_dir_iterator, dataset_checksum, get_combat_dirs
+from dataset.utils import combat_dir_iterator, dataset_checksum, get_combat_dirs
 
 # ===== argparsing =====
 parser = argparse.ArgumentParser(description="Applies defined heuristics to a dataset.", add_help=False)
