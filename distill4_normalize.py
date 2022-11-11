@@ -26,13 +26,14 @@ import glob
 import logging
 import os.path
 import pathlib
+import re
 import sys
 
 import tqdm.contrib.concurrent
 import tqdm.contrib.logging
 
 from dataset.utils import combat_dir_iterator, read_gzipped_file, write_jsonl
-from heuristics.utils import Instance, MessageGroup
+from heuristics.utils import Event, Instance, MessageGroup
 
 # hack to add avrae submodule to pypath
 # if this errors, pip install -r avrae/requirements.txt
@@ -205,7 +206,7 @@ class Distill4Inst(Instance):
                     return f"{base}\n{children}"
                 case {"type": "save", "ability": ability, "did_save": success}:
                     children = stringify_many(result_node["children"])
-                    base = f"{current_target} rolled a {ability} save " + (
+                    base = f"{current_target} rolled a {ability[:-4].title()} save " + (
                         "and succeeded." if success else "but failed."
                     )
                     return f"{base}\n{children}"
@@ -240,6 +241,39 @@ class Distill4Inst(Instance):
         return stringify(event["automation_result"])
 
     # ==== normalizers =====
+    def normalize_message(self, msg: Event) -> str:
+        content = msg["content"]
+        msg_idx = self.events.index(msg)
+        # remove any Tupper markers
+        similar_message = self.find(
+            lambda e: e["event_type"] == "message"
+            and e["author_id"] != msg["author_id"]
+            and e["content"] in content
+            and e["content"]
+            and e.get("author_bot", True),
+            after=msg_idx,
+            before=msg_idx + 16,
+        )
+        if similar_message is not None:
+            similar_content = similar_message["content"]
+            # the new content must be at least 80% of the old
+            len_ratio = len(similar_content) / len(content)
+            if 0.7 < len_ratio < 1:
+                log.info(f"GREEDY: Replaced message content:\n{content!r}\n---\n{similar_content!r}\n")
+                content = similar_content
+            else:
+                log.info(
+                    f"GREEDY: Found similar message but ratio is weird ({len_ratio * 100:.2f}):\n{content!r}\n"
+                    f"---\n{similar_content!r}\n"
+                )
+
+        # remove user, role, channel mentions
+        content = re.sub(r"<(@[!&]?|#)\d{17,20}>", "", content)
+
+        # replace custom emoji with just their name
+        content = re.sub(r"<a?(:\w+?:)\d{17,20}>", r"\1", content)
+        return content
+
     def normalize_command_group(self, group: MessageGroup) -> str | None:
         command = group.find_event_of_type("command")
         if command is None:
@@ -276,8 +310,8 @@ class Distill4Inst(Instance):
 
         # normalize utterances
         speaker_id = str(commands[0]["author_id"])  # TODO make this not use discord ID
-        before_utterances = [msg["content"] for msg in before]
-        after_utterances = [msg["content"] for msg in after]
+        before_utterances = [self.normalize_message(msg) for msg in before]
+        after_utterances = [self.normalize_message(msg) for msg in after]
 
         # normalize commands
         commands_inst = Instance(commands)
@@ -293,7 +327,7 @@ class Distill4Inst(Instance):
         self.extract_characters_forward(commands[0])
         combat_state_before = self.combat_state_at_event(commands[0])
         before_state_index = self.events.index(combat_state_before)
-        combat_before = Combat.from_dict_sync(copy.deepcopy(combat_state_before), ctx)
+        combat_before = Combat.from_dict_sync(copy.deepcopy(combat_state_before["data"]), ctx)
         actor_list_before = [
             self.normalize_actor(actor, combat_before) for actor in combat_before.get_combatants(groups=False)
         ]
@@ -334,9 +368,9 @@ class Distill4Inst(Instance):
                 log.info("Could not find final combat state update")
                 return
         else:
-            last_combat_update = update_in_commands[-1]["data"]
+            last_combat_update = update_in_commands[-1]
         after_state_idx = self.events.index(last_combat_update)
-        combat_after = Combat.from_dict_sync(copy.deepcopy(last_combat_update), ctx)
+        combat_after = Combat.from_dict_sync(copy.deepcopy(last_combat_update["data"]), ctx)
         actor_list_after = [
             self.normalize_actor(actor, combat_after) for actor in combat_after.get_combatants(groups=False)
         ]

@@ -56,7 +56,7 @@ def process_utt_cmd_train(fp: pathlib.Path, ablations=[]):
 def process_utt_cmd_test(fp: pathlib.Path):
     """
     Extracts the available keys for this task from the normalized datum.
-    X: ("before_utterances", "combat_state_before", "current_actor", "before_idxs")
+    X: ("before_utterances", "combat_state_before", "current_actor", "before_idxs", "before_state_idx")
     y: ("commands_norm",)
     """
     return _map_to_instance(
@@ -64,7 +64,14 @@ def process_utt_cmd_test(fp: pathlib.Path):
         lambda data: _extract_dict_keys(
             data,
             required_keys=("before_utterances",),
-            keys=("combat_state_before", "current_actor", "commands_norm", "speaker_id", "before_idxs"),
+            keys=(
+                "combat_state_before",
+                "current_actor",
+                "commands_norm",
+                "speaker_id",
+                "before_idxs",
+                "before_state_idx",
+            ),
             instance_id=fp.stem,
         ),
     )
@@ -86,8 +93,8 @@ def process_sta_nar_train(fp: pathlib.Path, ablations = []):
 def process_sta_nar_test(fp: pathlib.Path):
     """
     Extracts the available keys for this task from the normalized datum.
-    X: ("combat_state_after", "caster_after", "targets_after", "automation_results", "before_idxs", "command_idxs",
-        "after_idxs")
+    X: ("combat_state_after", "caster_after", "targets_after", "automation_results", "before_idxs", "before_state_idx",
+        "command_idxs", "after_state_idx", "after_idxs")
     y: ("after_utterances",)
     """
     return _map_to_instance(
@@ -101,7 +108,9 @@ def process_sta_nar_test(fp: pathlib.Path):
                 "targets_after",
                 "speaker_id",
                 "before_idxs",
+                "before_state_idx",
                 "command_idxs",
+                "after_state_idx",
                 "after_idxs",
             ),
             instance_id=fp.stem,
