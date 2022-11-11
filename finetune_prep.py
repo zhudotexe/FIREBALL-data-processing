@@ -44,12 +44,12 @@ def _extract_dict_keys(data, required_keys, keys, **add_data) -> dict | None:
     return out
 
 
-def process_utt_cmd_train(fp: pathlib.Path):
+def process_utt_cmd_train(fp: pathlib.Path, ablations=[]):
     """
-    Transforms each normalized datum into a GPT-3 prompt (see prompts.py for the prompt).
+    Transforms each normalized datum into a GPT-3 prompt and completion (see prompts.py for the prompt).
     """
     return _map_to_instance(
-        fp, lambda data: _prompt_and_completion(data, prompts.utt_cmd_prompt, prompts.utt_cmd_completion)
+        fp, lambda data: _prompt_and_completion(data, lambda data: prompts.utt_cmd_prompt(data, ablations=ablations), prompts.utt_cmd_completion)
     )
 
 
@@ -76,10 +76,17 @@ def process_utt_cmd_test(fp: pathlib.Path):
         ),
     )
 
-
-def process_sta_nar_train(fp: pathlib.Path):
+def process_utt_cmd_test_prompt(fp: pathlib.Path, ablations=[]):
+    """
+    Transforms each normalized datum into a GPT-3 prompt (see prompts.py for the prompt). 
+    """
     return _map_to_instance(
-        fp, lambda data: _prompt_and_completion(data, prompts.sta_nar_prompt, prompts.sta_nar_completion)
+        fp, lambda data: {"prompt": prompts.utt_cmd_prompt(data, ablations=ablations)}
+    )
+
+def process_sta_nar_train(fp: pathlib.Path, ablations = []):
+    return _map_to_instance(
+        fp, lambda data: _prompt_and_completion(data, lambda data: prompts.sta_nar_prompt(data, ablations=ablations), prompts.sta_nar_completion)
     )
 
 
@@ -108,6 +115,14 @@ def process_sta_nar_test(fp: pathlib.Path):
             ),
             instance_id=fp.stem,
         ),
+    )
+
+def process_sta_nar_test_prompt(fp: pathlib.Path, ablations=[]):
+    """
+    Transforms each normalized datum into a GPT-3 prompt (see prompts.py for the prompt). 
+    """
+    return _map_to_instance(
+        fp, lambda data: {"prompt": prompts.sta_nar_prompt(data, ablations=ablations)}
     )
 
 
@@ -182,7 +197,10 @@ def do_prep(
         f" ${train_tokens * davinci_ft_price * train_epochs:.2f}"
     )
 
-
+# Ablations: 
+# - remove state
+# - partial states
+# - few-shot
 def main(paths: list[pathlib.Path]):
     do_prep(
         paths,
@@ -198,6 +216,24 @@ def main(paths: list[pathlib.Path]):
         process_sta_nar_train,
         process_sta_nar_test,
         "ft-sta-nar",
+        desired_train_pairs=15000,
+        desired_test_pairs=1000,
+        train_epochs=1,
+    )
+    do_prep(
+        paths,
+        lambda fp: process_utt_cmd_train(fp, ablations=["actors","current"]),
+        lambda fp: process_utt_cmd_test_prompt(fp, ablations=["actors","current"]),
+        "ft-utt-cmd-ablations",
+        desired_train_pairs=10000,
+        desired_test_pairs=1000,
+        train_epochs=2,
+    )
+    do_prep(
+        paths,
+        lambda fp: process_sta_nar_train(fp, ablations=["actors","targets","caster"]),
+        lambda fp: process_sta_nar_test_prompt(fp, ablations=["actors","targets","caster"]),
+        "ft-sta-nar-ablations",
         desired_train_pairs=15000,
         desired_test_pairs=1000,
         train_epochs=1,
