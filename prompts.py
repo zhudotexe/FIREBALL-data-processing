@@ -62,7 +62,7 @@ def utt_cmd_prompt(data, include_sep=True, ablations = []) -> str | None:
 
     # prompt:
     # Actors:
-    # - Name (Race/creature type; class if available) <X/Y HP> [Effects]
+    # - Name (Race/creature type; class if available) <X/Y HP; Healthiness>> [Effects]
     # - ...
     #
     # Current:
@@ -112,11 +112,11 @@ def sta_nar_prompt(data, include_sep=True, ablations = []) -> str | None:
 
     # prompt:
     # Actors: (state after)
-    # - Name (Race/creature type; class if available) <X/Y HP> [Effects]
+    # - Name (Race/creature type; class if available) <X/Y HP; Healthiness> [Effects]
     # - ...
     #
     # Targets: (pulled from after)
-    # - Name (Race/creature type; class if available) <X/Y HP>
+    # - Name (Race/creature type; class if available) <X/Y HP; Healthiness>>
     # - ...
     #
     # Description: ... (pulled from after)

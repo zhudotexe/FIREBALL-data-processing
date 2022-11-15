@@ -149,9 +149,35 @@ class Distill4Inst(Instance):
         elif isinstance(combatant, CombatantGroup):
             race = "Group"
 
+        hp = ""
+        # numeric HP
+        if combatant.max_hp is not None and combatant.hp is not None:
+            hp = f"{combatant.hp}/{combatant.max_hp} HP"
+            if combatant.max_hp > 0:
+                ratio = combatant.hp / combatant.max_hp
+                if ratio >= 1:
+                    hp += "; Healthy"
+                elif 0.5 < ratio < 1:
+                    hp += "; Injured"
+                elif 0.15 < ratio <= 0.5:
+                    hp += "; Bloodied"
+                elif 0 < ratio <= 0.15:
+                    hp += "; Critical"
+                elif ratio <= 0:
+                    hp += "; Dead"
+        elif combatant.hp is not None:
+            hp = f"{combatant.hp} HP"
+
+        # temp HP and formatting
+        if hp:
+            hp = f"<{hp}>"
+
+        if combatant.temp_hp and combatant.temp_hp > 0:
+            hp += f" (+{combatant.temp_hp} temp)"
+
         return {
             "name": name,
-            "hp": combatant.hp_str(True),
+            "hp": hp,
             "class": class_,  # nullable
             "race": race,  # nullable
             "attacks": attacks,  # can be empty
