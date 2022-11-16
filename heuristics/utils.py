@@ -67,8 +67,8 @@ class MessageGroup:
     def has_event_of_type(self, event_type: str):
         return any(e["event_type"] == event_type for e in self.events)
 
-    def find_event_of_type(self, event_type: str):
-        return next((e for e in self.events if e["event_type"] == event_type), None)
+    def find_event_of_type(self, event_type: str, default=None):
+        return next((e for e in self.events if e["event_type"] == event_type), default)
 
     def find_all_of_type(self, event_type: str):
         return [e for e in self.events if e["event_type"] == event_type]

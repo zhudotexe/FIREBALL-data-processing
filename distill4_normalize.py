@@ -269,20 +269,31 @@ class Distill4Inst(Instance):
                     )
                     return f"{base}\n{children}"
 
+        automation_str = stringify(event["automation_result"])
+
         # embed finding
         message_group = self.message_groups_by_id[event["interaction_id"]]
+        embed_title = ""
         embed_event = self.find(
             lambda e: e["event_type"] == "message"
             and e["author_id"] == AVRAE_ID
             and e["content"] == ""
-            and len(e["embeds"]) == 1,
-            after=message_group.events[0],
-            before=message_group.events[-1],
+            and len(e["embeds"]) == 1
+            and "title" in e["embeds"][0]
+            and "fields" in e["embeds"][0]
+            and (
+                caster in e["embeds"][0]["title"]
+                or set(f["name"] for f in e["embeds"][0]["fields"]).issuperset(targets)
+            ),
+            after=message_group.message,
+            # before=message_group.find_event_of_type("command", default=message_group.events[-1]),
         )
         if embed_event is None:
             log.warning(f"Could not find embed for automation run")
+        else:
+            embed_title = embed_event["embeds"][0]["title"] + "\n"
 
-        return stringify(event["automation_result"]), embed_event
+        return embed_title + automation_str, embed_event
 
     # ==== normalizers =====
     def normalize_message(self, msg: Event) -> str:
@@ -404,7 +415,7 @@ class Distill4Inst(Instance):
         for e in commands_inst.find_all_of_type("automation_run"):
             run_result_str, embed_event = self.stringify_automation_run(e)
             automation_norm.append(run_result_str)
-            embed_idxs.append(self.events.index(embed_event))
+            embed_idxs.append(self.events.index(embed_event) if embed_event is not None else None)
 
         # state after
         self.extract_characters_backward(commands[-1])
@@ -440,7 +451,7 @@ class Distill4Inst(Instance):
             "after_state_idx": after_state_idx,
             "after_idxs": [self.events.index(b) for b in after],
             # other useful message idxs
-            "embed_idxs": embed_idxs,
+            "embed_idxs": embed_idxs,  # list of int|none, zippable with automation_results
         }
 
 
