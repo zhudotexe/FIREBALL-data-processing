@@ -112,6 +112,7 @@ def process_sta_nar_test(fp: pathlib.Path):
                 "command_idxs",
                 "after_state_idx",
                 "after_idxs",
+                "embed_idxs",
             ),
             instance_id=fp.stem,
         ),

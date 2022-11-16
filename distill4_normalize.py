@@ -33,7 +33,7 @@ import tqdm.contrib.concurrent
 import tqdm.contrib.logging
 
 from dataset.utils import combat_dir_iterator, read_gzipped_file, write_jsonl
-from heuristics.utils import Event, Instance, MessageGroup
+from heuristics.utils import AVRAE_ID, Event, Instance, MessageGroup
 
 # hack to add avrae submodule to pypath
 # if this errors, pip install -r avrae/requirements.txt
@@ -149,9 +149,35 @@ class Distill4Inst(Instance):
         elif isinstance(combatant, CombatantGroup):
             race = "Group"
 
+        hp = ""
+        # numeric HP
+        if combatant.max_hp is not None and combatant.hp is not None:
+            hp = f"{combatant.hp}/{combatant.max_hp} HP"
+            if combatant.max_hp > 0:
+                ratio = combatant.hp / combatant.max_hp
+                if ratio >= 1:
+                    hp += "; Healthy"
+                elif 0.5 < ratio < 1:
+                    hp += "; Injured"
+                elif 0.15 < ratio <= 0.5:
+                    hp += "; Bloodied"
+                elif 0 < ratio <= 0.15:
+                    hp += "; Critical"
+                elif ratio <= 0:
+                    hp += "; Dead"
+        elif combatant.hp is not None:
+            hp = f"{combatant.hp} HP"
+
+        # temp HP and formatting
+        if hp:
+            hp = f"<{hp}>"
+
+        if combatant.temp_hp and combatant.temp_hp > 0:
+            hp += f" (+{combatant.temp_hp} temp)"
+
         return {
             "name": name,
-            "hp": combatant.hp_str(True),
+            "hp": hp,
             "class": class_,  # nullable
             "race": race,  # nullable
             "attacks": attacks,  # can be empty
@@ -162,7 +188,12 @@ class Distill4Inst(Instance):
             "controller_id": str(combatant.controller_id),  # TODO make this not use discord ID
         }
 
-    def stringify_automation_run(self, event):
+    def stringify_automation_run(self, event: Event) -> tuple[str, Event]:
+        """
+        Given an automation run event, returns a string representation of that event and the corresponding Message event
+        from Avrae with the result embed.
+        """
+        # stringification
         caster = event["caster"]["name"]
         targets = [(t["name"] if not isinstance(t, str) else t) for t in event["targets"]]
 
@@ -238,7 +269,31 @@ class Distill4Inst(Instance):
                     )
                     return f"{base}\n{children}"
 
-        return stringify(event["automation_result"])
+        automation_str = stringify(event["automation_result"])
+
+        # embed finding
+        message_group = self.message_groups_by_id[event["interaction_id"]]
+        embed_title = ""
+        embed_event = self.find(
+            lambda e: e["event_type"] == "message"
+            and e["author_id"] == AVRAE_ID
+            and e["content"] == ""
+            and len(e["embeds"]) == 1
+            and "title" in e["embeds"][0]
+            and "fields" in e["embeds"][0]
+            and (
+                caster in e["embeds"][0]["title"]
+                or set(f["name"] for f in e["embeds"][0]["fields"]).issuperset(targets)
+            ),
+            after=message_group.message,
+            # before=message_group.find_event_of_type("command", default=message_group.events[-1]),
+        )
+        if embed_event is None:
+            log.warning(f"Could not find embed for automation run")
+        else:
+            embed_title = embed_event["embeds"][0]["title"] + "\n"
+
+        return embed_title + automation_str, embed_event
 
     # ==== normalizers =====
     def normalize_message(self, msg: Event) -> str:
@@ -356,8 +411,11 @@ class Distill4Inst(Instance):
 
         # stringify automation run
         automation_norm = []
+        embed_idxs = []
         for e in commands_inst.find_all_of_type("automation_run"):
-            automation_norm.append(self.stringify_automation_run(e))
+            run_result_str, embed_event = self.stringify_automation_run(e)
+            automation_norm.append(run_result_str)
+            embed_idxs.append(self.events.index(embed_event) if embed_event is not None else None)
 
         # state after
         self.extract_characters_backward(commands[-1])
@@ -392,6 +450,8 @@ class Distill4Inst(Instance):
             "command_idxs": [self.events.index(b) for b in commands],
             "after_state_idx": after_state_idx,
             "after_idxs": [self.events.index(b) for b in after],
+            # other useful message idxs
+            "embed_idxs": embed_idxs,  # list of int|none, zippable with automation_results
         }
 
 
