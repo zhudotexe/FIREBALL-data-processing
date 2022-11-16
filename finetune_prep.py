@@ -78,7 +78,7 @@ def process_utt_cmd_test(fp: pathlib.Path):
 
 def process_utt_cmd_test_prompt(fp: pathlib.Path, ablations=[]):
     """
-    Transforms each normalized datum into a GPT-3 prompt (see prompts.py for the prompt). 
+    Transforms each normalized datum into a GPT-3 prompt (see prompts.py for the prompt).
     """
     return _map_to_instance(
         fp, lambda data: {"prompt": prompts.utt_cmd_prompt(data, ablations=ablations)}
@@ -112,6 +112,7 @@ def process_sta_nar_test(fp: pathlib.Path):
                 "command_idxs",
                 "after_state_idx",
                 "after_idxs",
+                "embed_idxs",
             ),
             instance_id=fp.stem,
         ),
@@ -119,7 +120,7 @@ def process_sta_nar_test(fp: pathlib.Path):
 
 def process_sta_nar_test_prompt(fp: pathlib.Path, ablations=[]):
     """
-    Transforms each normalized datum into a GPT-3 prompt (see prompts.py for the prompt). 
+    Transforms each normalized datum into a GPT-3 prompt (see prompts.py for the prompt).
     """
     return _map_to_instance(
         fp, lambda data: {"prompt": prompts.sta_nar_prompt(data, ablations=ablations)}
@@ -197,7 +198,7 @@ def do_prep(
         f" ${train_tokens * davinci_ft_price * train_epochs:.2f}"
     )
 
-# Ablations: 
+# Ablations:
 # - remove state
 # - partial states
 # - few-shot
