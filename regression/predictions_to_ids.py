@@ -4,7 +4,7 @@ import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument('predictions', type=str, help='Path to predictions csv')
-parser.add_argument('--output', type=str, help='name of output file')
+parser.add_argument('--output', type=str, help='name of output file', default='preds.csv')
 
 def main(args):
     df = pd.read_csv(args.predictions, header=0, index_col=0)
