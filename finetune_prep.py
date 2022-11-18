@@ -46,12 +46,19 @@ def _extract_dict_keys(data, required_keys, keys, **add_data) -> dict | None:
     return out
 
 
-def process_utt_cmd_train(fp: pathlib.Path, ablations=[]):
+def process_utt_cmd_train(fp: pathlib.Path, ablations=None):
     """
     Transforms each normalized datum into a GPT-3 prompt and completion (see prompts.py for the prompt).
     """
+    if ablations is None:
+        ablations = []
     return _map_to_instance(
-        fp, lambda data: _prompt_and_completion(data, lambda data: prompts.utt_cmd_prompt(data, ablations=ablations), prompts.utt_cmd_completion)
+        fp,
+        lambda data: _prompt_and_completion(
+            data,
+            prompter=lambda data: prompts.utt_cmd_prompt(data, ablations=ablations),
+            completer=prompts.utt_cmd_completion,
+        ),
     )
 
 
@@ -78,17 +85,17 @@ def process_utt_cmd_test(fp: pathlib.Path):
         ),
     )
 
-def process_utt_cmd_test_prompt(fp: pathlib.Path, ablations=[]):
-    """
-    Transforms each normalized datum into a GPT-3 prompt (see prompts.py for the prompt).
-    """
-    return _map_to_instance(
-        fp, lambda data: {"prompt": prompts.utt_cmd_prompt(data, ablations=ablations)}
-    )
 
-def process_sta_nar_train(fp: pathlib.Path, ablations = []):
+def process_sta_nar_train(fp: pathlib.Path, ablations=None):
+    if ablations is None:
+        ablations = []
     return _map_to_instance(
-        fp, lambda data: _prompt_and_completion(data, lambda data: prompts.sta_nar_prompt(data, ablations=ablations), prompts.sta_nar_completion)
+        fp,
+        lambda data: _prompt_and_completion(
+            data,
+            prompter=lambda data: prompts.sta_nar_prompt(data, ablations=ablations),
+            completer=prompts.sta_nar_completion,
+        ),
     )
 
 
@@ -120,14 +127,6 @@ def process_sta_nar_test(fp: pathlib.Path):
         ),
     )
 
-def process_sta_nar_test_prompt(fp: pathlib.Path, ablations=[]):
-    """
-    Transforms each normalized datum into a GPT-3 prompt (see prompts.py for the prompt).
-    """
-    return _map_to_instance(
-        fp, lambda data: {"prompt": prompts.sta_nar_prompt(data, ablations=ablations)}
-    )
-
 
 def writeline(f, d):
     f.write(json.dumps(d))
@@ -142,6 +141,7 @@ def do_prep(
     desired_train_pairs=10000,
     desired_test_pairs=10000,
     train_epochs=4,
+    write_test_file=True,
 ):
     random_seed = 42
     # split the dataset roughly proportionally to the desired train/test split
@@ -152,9 +152,6 @@ def do_prep(
 
     train = []
     test = []
-
-    trainf = open(OUT_DIR / f"{file_name}-train-{desired_train_pairs}.jsonl", mode="w")
-    testf = open(OUT_DIR / f"{file_name}-test-{desired_test_pairs}.jsonl", mode="w")
 
     for d in tqdm.tqdm(paths_train):
         pairs = train_processor(d)
@@ -172,20 +169,24 @@ def do_prep(
     test_samples = test[:desired_test_pairs]
     n_discarded = len(train) - desired_train_pairs + len(test) - desired_test_pairs
 
+    trainf = open(OUT_DIR / f"{file_name}-train-{desired_train_pairs}.jsonl", mode="w")
     train_insts = set()
     train_chars = 0
     for inst, pair in train_samples:
         writeline(trainf, pair)
         train_insts.add(inst)
         train_chars += len(pair["prompt"]) + len(pair["completion"])
-
-    test_insts = set()
-    for inst, pair in test_samples:
-        writeline(testf, pair)
-        test_insts.add(inst)
-
     trainf.close()
-    testf.close()
+
+    if write_test_file:
+        testf = open(OUT_DIR / f"{file_name}-test-{desired_test_pairs}.jsonl", mode="w")
+        test_insts = set()
+        for inst, pair in test_samples:
+            writeline(testf, pair)
+            test_insts.add(inst)
+        testf.close()
+    else:
+        test_insts = []
 
     print(
         f"Wrote {file_name} data:\n"
@@ -200,6 +201,7 @@ def do_prep(
         f" ${train_tokens * davinci_ft_price * train_epochs:.2f}"
     )
 
+
 # Ablations:
 # - remove state
 # - partial states
@@ -210,36 +212,39 @@ def main(paths: list[pathlib.Path]):
         process_utt_cmd_train,
         process_utt_cmd_test,
         "ft-utt-cmd",
-        desired_train_pairs=10000,
+        desired_train_pairs=30000,
         desired_test_pairs=1000,
-        train_epochs=2,
+        train_epochs=1,
     )
+    do_prep(
+        paths,
+        lambda fp: process_utt_cmd_train(fp, ablations=["actors", "current"]),
+        process_utt_cmd_test,
+        "ft-utt-cmd-ablations",
+        desired_train_pairs=30000,
+        desired_test_pairs=1000,
+        train_epochs=1,
+        write_test_file=False,
+    )
+
     do_prep(
         paths,
         process_sta_nar_train,
         process_sta_nar_test,
         "ft-sta-nar",
-        desired_train_pairs=15000,
+        desired_train_pairs=20000,
         desired_test_pairs=1000,
         train_epochs=1,
     )
     do_prep(
         paths,
-        lambda fp: process_utt_cmd_train(fp, ablations=["actors","current"]),
-        lambda fp: process_utt_cmd_test_prompt(fp, ablations=["actors","current"]),
-        "ft-utt-cmd-ablations",
-        desired_train_pairs=10000,
-        desired_test_pairs=1000,
-        train_epochs=2,
-    )
-    do_prep(
-        paths,
-        lambda fp: process_sta_nar_train(fp, ablations=["actors","targets","caster"]),
-        lambda fp: process_sta_nar_test_prompt(fp, ablations=["actors","targets","caster"]),
+        lambda fp: process_sta_nar_train(fp, ablations=["actors", "targets", "caster"]),
+        process_sta_nar_test,
         "ft-sta-nar-ablations",
-        desired_train_pairs=15000,
+        desired_train_pairs=20000,
         desired_test_pairs=1000,
         train_epochs=1,
+        write_test_file=False,
     )
 
 
