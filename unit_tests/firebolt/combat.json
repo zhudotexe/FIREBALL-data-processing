@@ -1,0 +1,877 @@
+{
+  "channel": "1042890065543712879",
+  "summary": 1042898212870172744,
+  "dm": 187421759484592128,
+  "options": {},
+  "combatants": [
+    {
+      "name": "Reef",
+      "attacks": [],
+      "resistances": {
+        "resist": [],
+        "immune": [],
+        "vuln": [],
+        "neutral": []
+      },
+      "ac": null,
+      "max_hp": null,
+      "creature_type": null,
+      "controller_id": 1011869550557548625,
+      "init": 18,
+      "private": null,
+      "index": 0,
+      "notes": null,
+      "effects": [],
+      "group_id": null,
+      "type": "player",
+      "id": "b6b25ccb-cfe5-4b71-84b1-6b4cee17605e",
+      "character_id": "beyond-87299060",
+      "character_owner": "1011869550557548625"
+    },
+    {
+      "name": "WE1",
+      "stats": {
+        "prof_bonus": 3,
+        "strength": 18,
+        "dexterity": 14,
+        "constitution": 18,
+        "intelligence": 5,
+        "wisdom": 10,
+        "charisma": 8
+      },
+      "levels": {
+        "total_level": 5.0,
+        "classes": {
+          "Monster": 5.0
+        }
+      },
+      "attacks": [
+        {
+          "name": "Slam",
+          "automation": [
+            {
+              "type": "target",
+              "target": "each",
+              "effects": [
+                {
+                  "type": "attack",
+                  "hit": [
+                    {
+                      "type": "damage",
+                      "damage": "2d8 + 4 [bludgeoning]",
+                      "overheal": false
+                    }
+                  ],
+                  "miss": [],
+                  "attackBonus": "7"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "*Melee Weapon Attack:* +7 to hit, reach 5 ft., one target. *Hit:* 13 (2d8 + 4) bludgeoning damage."
+            }
+          ],
+          "_v": 2
+        },
+        {
+          "name": "Whelm",
+          "automation": [
+            {
+              "type": "roll",
+              "dice": "2d8 + 4 [bludgeoning]",
+              "name": "damage",
+              "hidden": false
+            },
+            {
+              "type": "target",
+              "target": "each",
+              "effects": [
+                {
+                  "type": "save",
+                  "stat": "str",
+                  "fail": [
+                    {
+                      "type": "damage",
+                      "damage": "{damage}",
+                      "overheal": false
+                    },
+                    {
+                      "type": "ieffect",
+                      "name": "Restrained (Grappled)",
+                      "duration": -1,
+                      "effects": "dis -sdis dex",
+                      "end": false,
+                      "conc": false,
+                      "desc": "Grappled by {{caster.name}}\n - Escape DC 14",
+                      "stacking": false,
+                      "save_as": null,
+                      "parent": null
+                    }
+                  ],
+                  "success": [],
+                  "dc": "15"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "Each creature in the elemental's space must make a DC 15 Strength saving throw. On a failure, a target takes 13 (2d8 + 4) bludgeoning damage. If it is Large or smaller, it is also grappled (escape DC 14). Until this grapple ends, the target is restrained and unable to breathe unless it can breathe water. If the saving throw is successful, the target is pushed out of the elemental's space.\nThe elemental can grapple one Large creature or up to two Medium or smaller creatures at one time."
+            }
+          ],
+          "_v": 2,
+          "proper": true,
+          "verb": "attempts to"
+        },
+        {
+          "name": "Overwhelm",
+          "automation": [
+            {
+              "type": "target",
+              "target": "each",
+              "effects": [
+                {
+                  "type": "damage",
+                  "damage": "2d8 + 4 [bludgeoning]",
+                  "overheal": false
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "At the start of each of the elemental's turns, each target grappled by it takes 13 (2d8 + 4) bludgeoning damage. A creature within 5 feet of the elemental can pull a creature or object out of it by taking an action to make a DC 14 Strength check and succeeding."
+            }
+          ],
+          "_v": 2,
+          "proper": true,
+          "verb": "begins to"
+        }
+      ],
+      "skills": {
+        "acrobatics": {
+          "value": 2
+        },
+        "animalHandling": {
+          "value": 0
+        },
+        "arcana": {
+          "value": -3
+        },
+        "athletics": {
+          "value": 4
+        },
+        "deception": {
+          "value": -1
+        },
+        "history": {
+          "value": -3
+        },
+        "initiative": {
+          "value": 2
+        },
+        "insight": {
+          "value": 0
+        },
+        "intimidation": {
+          "value": -1
+        },
+        "investigation": {
+          "value": -3
+        },
+        "medicine": {
+          "value": 0
+        },
+        "nature": {
+          "value": -3
+        },
+        "perception": {
+          "value": 0
+        },
+        "performance": {
+          "value": -1
+        },
+        "persuasion": {
+          "value": -1
+        },
+        "religion": {
+          "value": -3
+        },
+        "sleightOfHand": {
+          "value": 2
+        },
+        "stealth": {
+          "value": 2
+        },
+        "survival": {
+          "value": 0
+        },
+        "strength": {
+          "value": 4
+        },
+        "dexterity": {
+          "value": 2
+        },
+        "constitution": {
+          "value": 4
+        },
+        "intelligence": {
+          "value": -3
+        },
+        "wisdom": {
+          "value": 0
+        },
+        "charisma": {
+          "value": -1
+        }
+      },
+      "resistances": {
+        "resist": [
+          {
+            "dtype": "acid"
+          },
+          {
+            "dtype": "bludgeoning",
+            "unless": [
+              "magical"
+            ]
+          },
+          {
+            "dtype": "piercing",
+            "unless": [
+              "magical"
+            ]
+          },
+          {
+            "dtype": "slashing",
+            "unless": [
+              "magical"
+            ]
+          }
+        ],
+        "immune": [
+          {
+            "dtype": "poison"
+          }
+        ],
+        "vuln": [],
+        "neutral": []
+      },
+      "saves": {
+        "strengthSave": {
+          "value": 4
+        },
+        "dexteritySave": {
+          "value": 2
+        },
+        "constitutionSave": {
+          "value": 4
+        },
+        "intelligenceSave": {
+          "value": -3
+        },
+        "wisdomSave": {
+          "value": 0
+        },
+        "charismaSave": {
+          "value": -1
+        }
+      },
+      "ac": 14,
+      "max_hp": 114,
+      "hp": 93,
+      "temp_hp": 0,
+      "spellbook": {
+        "slots": {},
+        "max_slots": {},
+        "spells": [],
+        "dc": null,
+        "sab": null,
+        "caster_level": 0,
+        "spell_mod": null,
+        "pact_slot_level": null,
+        "num_pact_slots": null,
+        "max_pact_slots": null,
+        "at_will": [],
+        "daily": {},
+        "daily_max": {}
+      },
+      "creature_type": "elemental",
+      "controller_id": 187421759484592128,
+      "init": 17,
+      "private": true,
+      "index": 1,
+      "notes": null,
+      "effects": [],
+      "group_id": null,
+      "type": "monster",
+      "id": "8b1f7037-4985-4d28-9796-a79f367c9655",
+      "monster_name": "Water Elemental",
+      "monster_id": 17051
+    },
+    {
+      "name": "GO1",
+      "stats": {
+        "prof_bonus": 2,
+        "strength": 8,
+        "dexterity": 14,
+        "constitution": 10,
+        "intelligence": 10,
+        "wisdom": 8,
+        "charisma": 8
+      },
+      "levels": {
+        "total_level": 0.25,
+        "classes": {
+          "Monster": 0.25
+        }
+      },
+      "attacks": [
+        {
+          "name": "Scimitar",
+          "automation": [
+            {
+              "type": "target",
+              "target": "each",
+              "effects": [
+                {
+                  "type": "attack",
+                  "hit": [
+                    {
+                      "type": "damage",
+                      "damage": "1d6 + 2 [slashing]",
+                      "overheal": false
+                    }
+                  ],
+                  "miss": [],
+                  "attackBonus": "4"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "*Melee Weapon Attack:* +4 to hit, reach 5 ft., one target. *Hit:* 5 (1d6 + 2) slashing damage."
+            }
+          ],
+          "_v": 2
+        },
+        {
+          "name": "Shortbow",
+          "automation": [
+            {
+              "type": "target",
+              "target": "each",
+              "effects": [
+                {
+                  "type": "attack",
+                  "hit": [
+                    {
+                      "type": "damage",
+                      "damage": "1d6 + 2 [piercing]",
+                      "overheal": false
+                    }
+                  ],
+                  "miss": [],
+                  "attackBonus": "4"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "*Ranged Weapon Attack:* +4 to hit, range 80/320 ft., one target. *Hit:* 5 (1d6 + 2) piercing damage."
+            }
+          ],
+          "_v": 2
+        }
+      ],
+      "skills": {
+        "acrobatics": {
+          "value": 2
+        },
+        "animalHandling": {
+          "value": -1
+        },
+        "arcana": {
+          "value": 0
+        },
+        "athletics": {
+          "value": -1
+        },
+        "deception": {
+          "value": -1
+        },
+        "history": {
+          "value": 0
+        },
+        "initiative": {
+          "value": 2
+        },
+        "insight": {
+          "value": -1
+        },
+        "intimidation": {
+          "value": -1
+        },
+        "investigation": {
+          "value": 0
+        },
+        "medicine": {
+          "value": -1
+        },
+        "nature": {
+          "value": 0
+        },
+        "perception": {
+          "value": -1
+        },
+        "performance": {
+          "value": -1
+        },
+        "persuasion": {
+          "value": -1
+        },
+        "religion": {
+          "value": 0
+        },
+        "sleightOfHand": {
+          "value": 2
+        },
+        "stealth": {
+          "value": 6,
+          "prof": 1,
+          "bonus": 2
+        },
+        "survival": {
+          "value": -1
+        },
+        "strength": {
+          "value": -1
+        },
+        "dexterity": {
+          "value": 2
+        },
+        "constitution": {
+          "value": 0
+        },
+        "intelligence": {
+          "value": 0
+        },
+        "wisdom": {
+          "value": -1
+        },
+        "charisma": {
+          "value": -1
+        }
+      },
+      "resistances": {
+        "resist": [],
+        "immune": [],
+        "vuln": [],
+        "neutral": []
+      },
+      "saves": {
+        "strengthSave": {
+          "value": -1
+        },
+        "dexteritySave": {
+          "value": 2
+        },
+        "constitutionSave": {
+          "value": 0
+        },
+        "intelligenceSave": {
+          "value": 0
+        },
+        "wisdomSave": {
+          "value": -1
+        },
+        "charismaSave": {
+          "value": -1
+        }
+      },
+      "ac": 15,
+      "max_hp": 7,
+      "hp": 7,
+      "temp_hp": 0,
+      "spellbook": {
+        "slots": {},
+        "max_slots": {},
+        "spells": [],
+        "dc": null,
+        "sab": null,
+        "caster_level": 0,
+        "spell_mod": null,
+        "pact_slot_level": null,
+        "num_pact_slots": null,
+        "max_pact_slots": null,
+        "at_will": [],
+        "daily": {},
+        "daily_max": {}
+      },
+      "creature_type": "humanoid (goblinoid)",
+      "controller_id": 187421759484592128,
+      "init": 16,
+      "private": true,
+      "index": 2,
+      "notes": null,
+      "effects": [],
+      "group_id": null,
+      "type": "monster",
+      "id": "59a6736e-580b-4475-ab3c-eff73438bf30",
+      "monster_name": "Goblin",
+      "monster_id": 16907
+    },
+    {
+      "name": "SM1",
+      "stats": {
+        "prof_bonus": 3,
+        "strength": 18,
+        "dexterity": 8,
+        "constitution": 16,
+        "intelligence": 5,
+        "wisdom": 10,
+        "charisma": 5
+      },
+      "levels": {
+        "total_level": 5.0,
+        "classes": {
+          "Monster": 5.0
+        }
+      },
+      "attacks": [
+        {
+          "name": "Slam",
+          "automation": [
+            {
+              "type": "target",
+              "target": "each",
+              "effects": [
+                {
+                  "type": "attack",
+                  "hit": [
+                    {
+                      "type": "damage",
+                      "damage": "2d8 + 4 [bludgeoning]",
+                      "overheal": false
+                    }
+                  ],
+                  "miss": [],
+                  "attackBonus": "7"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "*Melee Weapon Attack:* +7 to hit, reach 5 ft., one target. *Hit:* 13 (2d8 + 4) bludgeoning damage."
+            }
+          ],
+          "_v": 2
+        },
+        {
+          "name": "Engulf",
+          "automation": [
+            {
+              "type": "target",
+              "target": "each",
+              "effects": [
+                {
+                  "type": "ieffect",
+                  "name": "Blinded, Restrained (Engulfed)",
+                  "duration": -1,
+                  "effects": "dis -sdis dex",
+                  "end": false,
+                  "conc": false,
+                  "desc": null,
+                  "stacking": false,
+                  "save_as": null,
+                  "parent": null
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "The shambling mound engulfs a Medium or smaller creature grappled by it. The engulfed target is blinded, restrained, and unable to breathe, and it must succeed on a DC 14 Constitution saving throw at the start of each of the mound's turns or take 13 (2d8 + 4) bludgeoning damage. If the mound moves, the engulfed target moves with it. The mound can have only one creature engulfed at a time."
+            }
+          ],
+          "_v": 2,
+          "proper": true,
+          "verb": "attempts to"
+        },
+        {
+          "name": "Digest",
+          "automation": [
+            {
+              "type": "roll",
+              "dice": "2d8 + 4 [bludgeoning]",
+              "name": "damage",
+              "hidden": false
+            },
+            {
+              "type": "target",
+              "target": "each",
+              "effects": [
+                {
+                  "type": "save",
+                  "stat": "con",
+                  "fail": [
+                    {
+                      "type": "damage",
+                      "damage": "{damage}",
+                      "overheal": false
+                    }
+                  ],
+                  "success": [],
+                  "dc": "14"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "The shambling mound engulfs a Medium or smaller creature grappled by it. The engulfed target is blinded, restrained, and unable to breathe, and it must succeed on a DC 14 Constitution saving throw at the start of each of the mound's turns or take 13 (2d8 + 4) bludgeoning damage. If the mound moves, the engulfed target moves with it. The mound can have only one creature engulfed at a time."
+            }
+          ],
+          "_v": 2,
+          "proper": true,
+          "verb": "begins to"
+        }
+      ],
+      "skills": {
+        "acrobatics": {
+          "value": -1
+        },
+        "animalHandling": {
+          "value": 0
+        },
+        "arcana": {
+          "value": -3
+        },
+        "athletics": {
+          "value": 4
+        },
+        "deception": {
+          "value": -3
+        },
+        "history": {
+          "value": -3
+        },
+        "initiative": {
+          "value": -1
+        },
+        "insight": {
+          "value": 0
+        },
+        "intimidation": {
+          "value": -3
+        },
+        "investigation": {
+          "value": -3
+        },
+        "medicine": {
+          "value": 0
+        },
+        "nature": {
+          "value": -3
+        },
+        "perception": {
+          "value": 0
+        },
+        "performance": {
+          "value": -3
+        },
+        "persuasion": {
+          "value": -3
+        },
+        "religion": {
+          "value": -3
+        },
+        "sleightOfHand": {
+          "value": -1
+        },
+        "stealth": {
+          "value": 2,
+          "prof": 1
+        },
+        "survival": {
+          "value": 0
+        },
+        "strength": {
+          "value": 4
+        },
+        "dexterity": {
+          "value": -1
+        },
+        "constitution": {
+          "value": 3
+        },
+        "intelligence": {
+          "value": -3
+        },
+        "wisdom": {
+          "value": 0
+        },
+        "charisma": {
+          "value": -3
+        }
+      },
+      "resistances": {
+        "resist": [
+          {
+            "dtype": "cold"
+          },
+          {
+            "dtype": "fire"
+          }
+        ],
+        "immune": [
+          {
+            "dtype": "lightning"
+          }
+        ],
+        "vuln": [],
+        "neutral": []
+      },
+      "saves": {
+        "strengthSave": {
+          "value": 4
+        },
+        "dexteritySave": {
+          "value": -1
+        },
+        "constitutionSave": {
+          "value": 3
+        },
+        "intelligenceSave": {
+          "value": -3
+        },
+        "wisdomSave": {
+          "value": 0
+        },
+        "charismaSave": {
+          "value": -3
+        }
+      },
+      "ac": 15,
+      "max_hp": 136,
+      "hp": 123,
+      "temp_hp": 0,
+      "spellbook": {
+        "slots": {},
+        "max_slots": {},
+        "spells": [],
+        "dc": null,
+        "sab": null,
+        "caster_level": 0,
+        "spell_mod": null,
+        "pact_slot_level": null,
+        "num_pact_slots": null,
+        "max_pact_slots": null,
+        "at_will": [],
+        "daily": {},
+        "daily_max": {}
+      },
+      "creature_type": "plant",
+      "controller_id": 187421759484592128,
+      "init": 11,
+      "private": true,
+      "index": 3,
+      "notes": null,
+      "effects": [],
+      "group_id": null,
+      "type": "monster",
+      "id": "9850029d-8483-4675-879a-5210fd9c7423",
+      "monster_name": "Shambling Mound",
+      "monster_id": 17011
+    },
+    {
+      "name": "Noxxis Blazehammer",
+      "attacks": [],
+      "resistances": {
+        "resist": [
+          {
+            "dtype": "poison"
+          }
+        ],
+        "immune": [
+          {
+            "dtype": "hits",
+            "only": [
+              "critical"
+            ]
+          }
+        ],
+        "vuln": [],
+        "neutral": []
+      },
+      "ac": null,
+      "max_hp": null,
+      "creature_type": null,
+      "controller_id": 137677824810156032,
+      "init": 9,
+      "private": null,
+      "index": 4,
+      "notes": null,
+      "effects": [],
+      "group_id": null,
+      "type": "player",
+      "id": "48d81651-143c-4dcd-ba25-f4079d228537",
+      "character_id": "beyond-67062593",
+      "character_owner": "137677824810156032"
+    },
+    {
+      "name": "Rahotur",
+      "attacks": [],
+      "resistances": {
+        "resist": [
+          {
+            "dtype": "poison"
+          }
+        ],
+        "immune": [],
+        "vuln": [],
+        "neutral": []
+      },
+      "ac": null,
+      "max_hp": null,
+      "creature_type": null,
+      "controller_id": 164249546073964544,
+      "init": 8,
+      "private": null,
+      "index": 5,
+      "notes": null,
+      "effects": [],
+      "group_id": null,
+      "type": "player",
+      "id": "5be8e08f-82ac-4769-a4e2-ced0c1c4f670",
+      "character_id": "beyond-87044825",
+      "character_owner": "164249546073964544"
+    },
+    {
+      "name": "Calti Xihooda",
+      "attacks": [],
+      "resistances": {
+        "resist": [],
+        "immune": [],
+        "vuln": [],
+        "neutral": []
+      },
+      "ac": null,
+      "max_hp": null,
+      "creature_type": null,
+      "controller_id": 187421759484592128,
+      "init": 4,
+      "private": null,
+      "index": 6,
+      "notes": null,
+      "effects": [],
+      "group_id": null,
+      "type": "player",
+      "id": "cc818ecb-c8c9-4f78-925d-f6fcedeb7891",
+      "character_id": "beyond-13342511",
+      "character_owner": "187421759484592128"
+    }
+  ],
+  "turn": 18,
+  "round": 0,
+  "current": 0,
+  "metadata": {},
+  "nlp_record_session_id": null
+}

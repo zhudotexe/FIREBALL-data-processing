@@ -1,0 +1,806 @@
+{
+  "channel": "1042890065543712879",
+  "summary": 1042904510378545282,
+  "dm": 187421759484592128,
+  "options": {},
+  "combatants": [
+    {
+      "name": "DR1",
+      "stats": {
+        "prof_bonus": 2,
+        "strength": 10,
+        "dexterity": 12,
+        "constitution": 13,
+        "intelligence": 12,
+        "wisdom": 15,
+        "charisma": 11
+      },
+      "levels": {
+        "total_level": 2.0,
+        "classes": {
+          "Monster": 2.0
+        }
+      },
+      "attacks": [
+        {
+          "name": "Quarterstaff (1H)",
+          "automation": [
+            {
+              "type": "target",
+              "target": "each",
+              "effects": [
+                {
+                  "type": "attack",
+                  "hit": [
+                    {
+                      "type": "damage",
+                      "damage": "1d6 [bludgeoning]",
+                      "overheal": false
+                    }
+                  ],
+                  "miss": [],
+                  "attackBonus": "2"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "*Melee Weapon Attack:* +2 to hit (+4 to hit with shillelagh), reach 5 ft., one target. *Hit:* 3 (1d6) bludgeoning damage, or 6 (1d8 + 2) bludgeoning damage with shillelagh or if wielded with two hands."
+            }
+          ],
+          "_v": 2
+        },
+        {
+          "name": "Quarterstaff (2H)",
+          "automation": [
+            {
+              "type": "target",
+              "target": "each",
+              "effects": [
+                {
+                  "type": "attack",
+                  "hit": [
+                    {
+                      "type": "damage",
+                      "damage": "1d6 + 2 [bludgeoning]",
+                      "overheal": false
+                    }
+                  ],
+                  "miss": [],
+                  "attackBonus": "4"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "*Melee Weapon Attack:* +2 to hit (+4 to hit with shillelagh), reach 5 ft., one target. *Hit:* 3 (1d6) bludgeoning damage, or 6 (1d8 + 2) bludgeoning damage with shillelagh or if wielded with two hands."
+            }
+          ],
+          "_v": 2
+        }
+      ],
+      "skills": {
+        "acrobatics": {
+          "value": 1
+        },
+        "animalHandling": {
+          "value": 2
+        },
+        "arcana": {
+          "value": 1
+        },
+        "athletics": {
+          "value": 0
+        },
+        "deception": {
+          "value": 0
+        },
+        "history": {
+          "value": 1
+        },
+        "initiative": {
+          "value": 1
+        },
+        "insight": {
+          "value": 2
+        },
+        "intimidation": {
+          "value": 0
+        },
+        "investigation": {
+          "value": 1
+        },
+        "medicine": {
+          "value": 4,
+          "prof": 1
+        },
+        "nature": {
+          "value": 3,
+          "prof": 1
+        },
+        "perception": {
+          "value": 4,
+          "prof": 1
+        },
+        "performance": {
+          "value": 0
+        },
+        "persuasion": {
+          "value": 0
+        },
+        "religion": {
+          "value": 1
+        },
+        "sleightOfHand": {
+          "value": 1
+        },
+        "stealth": {
+          "value": 1
+        },
+        "survival": {
+          "value": 2
+        },
+        "strength": {
+          "value": 0
+        },
+        "dexterity": {
+          "value": 1
+        },
+        "constitution": {
+          "value": 1
+        },
+        "intelligence": {
+          "value": 1
+        },
+        "wisdom": {
+          "value": 2
+        },
+        "charisma": {
+          "value": 0
+        }
+      },
+      "resistances": {
+        "resist": [],
+        "immune": [],
+        "vuln": [],
+        "neutral": []
+      },
+      "saves": {
+        "strengthSave": {
+          "value": 0
+        },
+        "dexteritySave": {
+          "value": 1
+        },
+        "constitutionSave": {
+          "value": 1
+        },
+        "intelligenceSave": {
+          "value": 1
+        },
+        "wisdomSave": {
+          "value": 2
+        },
+        "charismaSave": {
+          "value": 0
+        }
+      },
+      "ac": 11,
+      "max_hp": 27,
+      "hp": 12,
+      "temp_hp": 0,
+      "spellbook": {
+        "slots": {
+          "1": 4,
+          "2": 3,
+          "3": 0,
+          "4": 0,
+          "5": 0,
+          "6": 0,
+          "7": 0,
+          "8": 0,
+          "9": 0
+        },
+        "max_slots": {
+          "1": 4,
+          "2": 3,
+          "3": 0,
+          "4": 0,
+          "5": 0,
+          "6": 0,
+          "7": 0,
+          "8": 0,
+          "9": 0
+        },
+        "spells": [
+          {
+            "name": "Druidcraft",
+            "strict": true,
+            "prepared": true
+          },
+          {
+            "name": "Produce Flame",
+            "strict": true,
+            "prepared": true
+          },
+          {
+            "name": "Shillelagh",
+            "strict": true,
+            "prepared": true
+          },
+          {
+            "name": "Entangle",
+            "strict": true,
+            "prepared": true
+          },
+          {
+            "name": "Longstrider",
+            "strict": true,
+            "prepared": true
+          },
+          {
+            "name": "Speak with Animals",
+            "strict": true,
+            "prepared": true
+          },
+          {
+            "name": "Thunderwave",
+            "strict": true,
+            "prepared": true
+          },
+          {
+            "name": "Animal Messenger",
+            "strict": true,
+            "prepared": true
+          },
+          {
+            "name": "Barkskin",
+            "strict": true,
+            "prepared": true
+          }
+        ],
+        "dc": 12,
+        "sab": 4,
+        "caster_level": 4,
+        "spell_mod": 2,
+        "pact_slot_level": null,
+        "num_pact_slots": null,
+        "max_pact_slots": null,
+        "at_will": [],
+        "daily": {},
+        "daily_max": {}
+      },
+      "creature_type": "humanoid (any race)",
+      "controller_id": 187421759484592128,
+      "init": 19,
+      "private": true,
+      "index": 0,
+      "notes": null,
+      "effects": [],
+      "group_id": null,
+      "type": "monster",
+      "id": "ee17a422-19e0-4d35-866e-76cc32bb5597",
+      "monster_name": "Druid",
+      "monster_id": 16848
+    },
+    {
+      "name": "Ophizenya",
+      "attacks": [],
+      "resistances": {
+        "resist": [],
+        "immune": [],
+        "vuln": [],
+        "neutral": []
+      },
+      "ac": null,
+      "max_hp": null,
+      "creature_type": null,
+      "controller_id": 164249546073964544,
+      "init": 18,
+      "private": null,
+      "index": 1,
+      "notes": null,
+      "effects": [],
+      "group_id": null,
+      "type": "player",
+      "id": "69254670-ef14-415a-8a79-a82cdc52b21d",
+      "character_id": "beyond-86758859",
+      "character_owner": "164249546073964544"
+    },
+    {
+      "name": "PB1",
+      "stats": {
+        "prof_bonus": 2,
+        "strength": 20,
+        "dexterity": 10,
+        "constitution": 16,
+        "intelligence": 2,
+        "wisdom": 13,
+        "charisma": 7
+      },
+      "levels": {
+        "total_level": 2.0,
+        "classes": {
+          "Monster": 2.0
+        }
+      },
+      "attacks": [
+        {
+          "name": "Bite",
+          "automation": [
+            {
+              "type": "target",
+              "target": "each",
+              "effects": [
+                {
+                  "type": "attack",
+                  "hit": [
+                    {
+                      "type": "damage",
+                      "damage": "1d8 + 5 [piercing]",
+                      "overheal": false
+                    }
+                  ],
+                  "miss": [],
+                  "attackBonus": "7"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "*Melee Weapon Attack:* +7 to hit, reach 5 ft., one target. *Hit:* 9 (1d8 + 5) piercing damage."
+            }
+          ],
+          "_v": 2
+        },
+        {
+          "name": "Claws",
+          "automation": [
+            {
+              "type": "target",
+              "target": "each",
+              "effects": [
+                {
+                  "type": "attack",
+                  "hit": [
+                    {
+                      "type": "damage",
+                      "damage": "2d6 + 5 [slashing]",
+                      "overheal": false
+                    }
+                  ],
+                  "miss": [],
+                  "attackBonus": "7"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "*Melee Weapon Attack:* +7 to hit, reach 5 ft., one target. *Hit:* 12 (2d6 + 5) slashing damage."
+            }
+          ],
+          "_v": 2,
+          "proper": true
+        }
+      ],
+      "skills": {
+        "acrobatics": {
+          "value": 0
+        },
+        "animalHandling": {
+          "value": 1
+        },
+        "arcana": {
+          "value": -4
+        },
+        "athletics": {
+          "value": 5
+        },
+        "deception": {
+          "value": -2
+        },
+        "history": {
+          "value": -4
+        },
+        "initiative": {
+          "value": 0
+        },
+        "insight": {
+          "value": 1
+        },
+        "intimidation": {
+          "value": -2
+        },
+        "investigation": {
+          "value": -4
+        },
+        "medicine": {
+          "value": 1
+        },
+        "nature": {
+          "value": -4
+        },
+        "perception": {
+          "value": 3,
+          "prof": 1
+        },
+        "performance": {
+          "value": -2
+        },
+        "persuasion": {
+          "value": -2
+        },
+        "religion": {
+          "value": -4
+        },
+        "sleightOfHand": {
+          "value": 0
+        },
+        "stealth": {
+          "value": 0
+        },
+        "survival": {
+          "value": 1
+        },
+        "strength": {
+          "value": 5
+        },
+        "dexterity": {
+          "value": 0
+        },
+        "constitution": {
+          "value": 3
+        },
+        "intelligence": {
+          "value": -4
+        },
+        "wisdom": {
+          "value": 1
+        },
+        "charisma": {
+          "value": -2
+        }
+      },
+      "resistances": {
+        "resist": [],
+        "immune": [],
+        "vuln": [],
+        "neutral": []
+      },
+      "saves": {
+        "strengthSave": {
+          "value": 5
+        },
+        "dexteritySave": {
+          "value": 0
+        },
+        "constitutionSave": {
+          "value": 3
+        },
+        "intelligenceSave": {
+          "value": -4
+        },
+        "wisdomSave": {
+          "value": 1
+        },
+        "charismaSave": {
+          "value": -2
+        }
+      },
+      "ac": 12,
+      "max_hp": 42,
+      "hp": 38,
+      "temp_hp": 0,
+      "spellbook": {
+        "slots": {},
+        "max_slots": {},
+        "spells": [],
+        "dc": null,
+        "sab": null,
+        "caster_level": 0,
+        "spell_mod": null,
+        "pact_slot_level": null,
+        "num_pact_slots": null,
+        "max_pact_slots": null,
+        "at_will": [],
+        "daily": {},
+        "daily_max": {}
+      },
+      "creature_type": "beast",
+      "controller_id": 187421759484592128,
+      "init": 18,
+      "private": true,
+      "index": 2,
+      "notes": null,
+      "effects": [],
+      "group_id": null,
+      "type": "monster",
+      "id": "6fdb3769-5e27-4e97-a8f7-f3cc4f2ac944",
+      "monster_name": "Polar Bear",
+      "monster_id": 16983
+    },
+    {
+      "name": "Calti Xihooda",
+      "attacks": [],
+      "resistances": {
+        "resist": [],
+        "immune": [],
+        "vuln": [],
+        "neutral": []
+      },
+      "ac": null,
+      "max_hp": null,
+      "creature_type": null,
+      "controller_id": 187421759484592128,
+      "init": 17,
+      "private": null,
+      "index": 3,
+      "notes": null,
+      "effects": [],
+      "group_id": null,
+      "type": "player",
+      "id": "4f92b622-d65e-428c-9f50-d109b56e8d24",
+      "character_id": "beyond-13342511",
+      "character_owner": "187421759484592128"
+    },
+    {
+      "name": "Noxxis Blazehammer",
+      "attacks": [],
+      "resistances": {
+        "resist": [
+          {
+            "dtype": "poison"
+          }
+        ],
+        "immune": [
+          {
+            "dtype": "hits",
+            "only": [
+              "critical"
+            ]
+          }
+        ],
+        "vuln": [],
+        "neutral": []
+      },
+      "ac": null,
+      "max_hp": null,
+      "creature_type": null,
+      "controller_id": 137677824810156032,
+      "init": 16,
+      "private": null,
+      "index": 4,
+      "notes": null,
+      "effects": [],
+      "group_id": null,
+      "type": "player",
+      "id": "d6dd3bec-1022-4a63-8a1c-3052ec8ac164",
+      "character_id": "beyond-67062593",
+      "character_owner": "137677824810156032"
+    },
+    {
+      "name": "Reef",
+      "attacks": [],
+      "resistances": {
+        "resist": [],
+        "immune": [],
+        "vuln": [],
+        "neutral": []
+      },
+      "ac": null,
+      "max_hp": null,
+      "creature_type": null,
+      "controller_id": 1011869550557548625,
+      "init": 14,
+      "private": null,
+      "index": 5,
+      "notes": null,
+      "effects": [],
+      "group_id": null,
+      "type": "player",
+      "id": "cec94420-1f4d-433c-acac-9af68fc07880",
+      "character_id": "beyond-87299060",
+      "character_owner": "1011869550557548625"
+    },
+    {
+      "name": "GC1",
+      "stats": {
+        "prof_bonus": 2,
+        "strength": 5,
+        "dexterity": 14,
+        "constitution": 12,
+        "intelligence": 1,
+        "wisdom": 7,
+        "charisma": 3
+      },
+      "levels": {
+        "total_level": 0.25,
+        "classes": {
+          "Monster": 0.25
+        }
+      },
+      "attacks": [
+        {
+          "name": "Bite",
+          "automation": [
+            {
+              "type": "target",
+              "target": "each",
+              "effects": [
+                {
+                  "type": "attack",
+                  "hit": [
+                    {
+                      "type": "damage",
+                      "damage": "1d4 + 2 [piercing]",
+                      "overheal": false
+                    },
+                    {
+                      "type": "save",
+                      "stat": "con",
+                      "fail": [
+                        {
+                          "type": "damage",
+                          "damage": "3d6 [poison]",
+                          "overheal": false
+                        }
+                      ],
+                      "success": [],
+                      "dc": "11"
+                    }
+                  ],
+                  "miss": [],
+                  "attackBonus": "4"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "*Melee Weapon Attack:* +4 to hit, reach 5 ft., one creature. *Hit:* 4 (1d4 + 2) piercing damage, and the target must succeed on a DC 11 Constitution saving throw or take 10 (3d6) poison damage. If the poison damage reduces the target to 0 hit points, the target is stable but poisoned for 1 hour, even after regaining hit points, and is paralyzed while poisoned in this way."
+            }
+          ],
+          "_v": 2
+        }
+      ],
+      "skills": {
+        "acrobatics": {
+          "value": 2
+        },
+        "animalHandling": {
+          "value": -2
+        },
+        "arcana": {
+          "value": -5
+        },
+        "athletics": {
+          "value": -3
+        },
+        "deception": {
+          "value": -4
+        },
+        "history": {
+          "value": -5
+        },
+        "initiative": {
+          "value": 2
+        },
+        "insight": {
+          "value": -2
+        },
+        "intimidation": {
+          "value": -4
+        },
+        "investigation": {
+          "value": -5
+        },
+        "medicine": {
+          "value": -2
+        },
+        "nature": {
+          "value": -5
+        },
+        "perception": {
+          "value": -2
+        },
+        "performance": {
+          "value": -4
+        },
+        "persuasion": {
+          "value": -4
+        },
+        "religion": {
+          "value": -5
+        },
+        "sleightOfHand": {
+          "value": 2
+        },
+        "stealth": {
+          "value": 2
+        },
+        "survival": {
+          "value": -2
+        },
+        "strength": {
+          "value": -3
+        },
+        "dexterity": {
+          "value": 2
+        },
+        "constitution": {
+          "value": 1
+        },
+        "intelligence": {
+          "value": -5
+        },
+        "wisdom": {
+          "value": -2
+        },
+        "charisma": {
+          "value": -4
+        }
+      },
+      "resistances": {
+        "resist": [],
+        "immune": [],
+        "vuln": [],
+        "neutral": []
+      },
+      "saves": {
+        "strengthSave": {
+          "value": -3
+        },
+        "dexteritySave": {
+          "value": 2
+        },
+        "constitutionSave": {
+          "value": 1
+        },
+        "intelligenceSave": {
+          "value": -5
+        },
+        "wisdomSave": {
+          "value": -2
+        },
+        "charismaSave": {
+          "value": -4
+        }
+      },
+      "ac": 13,
+      "max_hp": 4,
+      "hp": 0,
+      "temp_hp": 0,
+      "spellbook": {
+        "slots": {},
+        "max_slots": {},
+        "spells": [],
+        "dc": null,
+        "sab": null,
+        "caster_level": 0,
+        "spell_mod": null,
+        "pact_slot_level": null,
+        "num_pact_slots": null,
+        "max_pact_slots": null,
+        "at_will": [],
+        "daily": {},
+        "daily_max": {}
+      },
+      "creature_type": "beast",
+      "controller_id": 187421759484592128,
+      "init": 7,
+      "private": true,
+      "index": 6,
+      "notes": null,
+      "effects": [],
+      "group_id": null,
+      "type": "monster",
+      "id": "3f821e89-5c7e-4dcf-a85e-34659360932d",
+      "monster_name": "Giant Centipede",
+      "monster_id": 16877
+    }
+  ],
+  "turn": 16,
+  "round": 0,
+  "current": 4,
+  "metadata": {},
+  "nlp_record_session_id": null
+}

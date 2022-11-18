@@ -1,0 +1,3003 @@
+[
+  {
+    "name": "Ophizenya",
+    "stats": {
+      "prof_bonus": 2,
+      "strength": 16,
+      "dexterity": 14,
+      "constitution": 14,
+      "intelligence": 8,
+      "wisdom": 12,
+      "charisma": 12
+    },
+    "levels": {
+      "total_level": 4,
+      "classes": {
+        "Fighter": 4
+      }
+    },
+    "attacks": [
+      {
+        "name": "Crossbow, heavy",
+        "automation": [
+          {
+            "type": "target",
+            "target": "each",
+            "effects": [
+              {
+                "type": "attack",
+                "hit": [
+                  {
+                    "type": "damage",
+                    "damage": "1d10+2 [piercing]",
+                    "overheal": false
+                  }
+                ],
+                "miss": [],
+                "attackBonus": "4"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "Proficiency with a heavy crossbow allows you to add your proficiency bonus to the attack roll for any attack you make with it."
+          }
+        ],
+        "_v": 2
+      },
+      {
+        "name": "Glaive",
+        "automation": [
+          {
+            "type": "target",
+            "target": "each",
+            "effects": [
+              {
+                "type": "attack",
+                "hit": [
+                  {
+                    "type": "damage",
+                    "damage": "1d10+3 [slashing]",
+                    "overheal": false
+                  }
+                ],
+                "miss": [],
+                "attackBonus": "5"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "Proficiency with a glaive allows you to add your proficiency bonus to the attack roll for any attack you make with it."
+          }
+        ],
+        "_v": 2
+      },
+      {
+        "name": "Handaxe",
+        "automation": [
+          {
+            "type": "target",
+            "target": "each",
+            "effects": [
+              {
+                "type": "attack",
+                "hit": [
+                  {
+                    "type": "damage",
+                    "damage": "1d6+3 [slashing]",
+                    "overheal": false
+                  }
+                ],
+                "miss": [],
+                "attackBonus": "5"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "Proficiency with a handaxe allows you to add your proficiency bonus to the attack roll for any attack you make with it."
+          }
+        ],
+        "_v": 2
+      },
+      {
+        "name": "Unarmed Strike",
+        "automation": [
+          {
+            "type": "target",
+            "target": "each",
+            "effects": [
+              {
+                "type": "attack",
+                "hit": [
+                  {
+                    "type": "damage",
+                    "damage": "4 [bludgeoning]",
+                    "overheal": false
+                  }
+                ],
+                "miss": [],
+                "attackBonus": "5"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "You can punch, kick, head-butt, or use a similar forceful blow and deal bludgeoning damage equal to 1 + STR modifier"
+          }
+        ],
+        "_v": 2
+      },
+      {
+        "name": "Horns",
+        "automation": [
+          {
+            "type": "target",
+            "target": "each",
+            "effects": [
+              {
+                "type": "attack",
+                "hit": [
+                  {
+                    "type": "damage",
+                    "damage": "1d6+3 [piercing]",
+                    "overheal": false
+                  }
+                ],
+                "miss": [],
+                "attackBonus": "5"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "You have horns that you can use to make unarmed strikes. When you hit with them, you deal **1d6**+3 piercing damage."
+          }
+        ],
+        "_v": 2
+      },
+      {
+        "name": "Goring Rush",
+        "automation": [
+          {
+            "type": "target",
+            "target": "each",
+            "effects": [
+              {
+                "type": "attack",
+                "hit": [
+                  {
+                    "type": "damage",
+                    "damage": "1d6+3 [piercing]",
+                    "overheal": false
+                  }
+                ],
+                "miss": [],
+                "attackBonus": "5"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "If you take the Dash action on your turn and move at least 20 ft., you can immediately make one melee attack with your horns as a bonus action."
+          }
+        ],
+        "_v": 2
+      },
+      {
+        "name": "Polearm Master - Opportunity Attack",
+        "automation": [
+          {
+            "type": "target",
+            "target": "each",
+            "effects": [
+              {
+                "type": "attack",
+                "hit": [
+                  {
+                    "type": "damage",
+                    "damage": "0",
+                    "overheal": false
+                  }
+                ],
+                "miss": [],
+                "attackBonus": "5"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "While you are wielding a glaive, halberd, pike, quarterstaff, or spear, other creatures provoke an opportunity attack from you when they enter your reach."
+          }
+        ],
+        "_v": 2
+      }
+    ],
+    "skills": {
+      "acrobatics": {
+        "value": 2
+      },
+      "animalHandling": {
+        "value": 3,
+        "prof": 1
+      },
+      "arcana": {
+        "value": -1
+      },
+      "athletics": {
+        "value": 5,
+        "prof": 1
+      },
+      "deception": {
+        "value": 1
+      },
+      "history": {
+        "value": -1
+      },
+      "initiative": {
+        "value": 2
+      },
+      "insight": {
+        "value": 1
+      },
+      "intimidation": {
+        "value": 1
+      },
+      "investigation": {
+        "value": -1
+      },
+      "medicine": {
+        "value": 1
+      },
+      "nature": {
+        "value": -1
+      },
+      "perception": {
+        "value": 3,
+        "prof": 1
+      },
+      "performance": {
+        "value": 1
+      },
+      "persuasion": {
+        "value": 1
+      },
+      "religion": {
+        "value": -1
+      },
+      "sleightOfHand": {
+        "value": 2
+      },
+      "stealth": {
+        "value": 2
+      },
+      "survival": {
+        "value": 3,
+        "prof": 1
+      },
+      "strength": {
+        "value": 3
+      },
+      "dexterity": {
+        "value": 2
+      },
+      "constitution": {
+        "value": 2
+      },
+      "intelligence": {
+        "value": -1
+      },
+      "wisdom": {
+        "value": 1
+      },
+      "charisma": {
+        "value": 1
+      }
+    },
+    "resistances": {
+      "resist": [],
+      "immune": [],
+      "vuln": [],
+      "neutral": []
+    },
+    "saves": {
+      "strengthSave": {
+        "value": 5,
+        "prof": 1
+      },
+      "dexteritySave": {
+        "value": 2
+      },
+      "constitutionSave": {
+        "value": 4,
+        "prof": 1
+      },
+      "intelligenceSave": {
+        "value": -1
+      },
+      "wisdomSave": {
+        "value": 1
+      },
+      "charismaSave": {
+        "value": 1
+      }
+    },
+    "ac": 16,
+    "max_hp": 44,
+    "hp": 44,
+    "temp_hp": 0,
+    "spellbook": {
+      "slots": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0
+      },
+      "max_slots": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0
+      },
+      "spells": [],
+      "dc": null,
+      "sab": null,
+      "caster_level": 4,
+      "spell_mod": null,
+      "pact_slot_level": null,
+      "num_pact_slots": null,
+      "max_pact_slots": null
+    },
+    "creature_type": null,
+    "owner": "164249546073964544",
+    "upstream": "beyond-86758859",
+    "active": true,
+    "sheet_type": "beyond",
+    "import_version": 19,
+    "description": null,
+    "image": "https://www.dndbeyond.com/avatars/25837/92/637883859668701769.jpeg?width=150&height=150&fit=crop&quality=95&auto=webp",
+    "cvars": {},
+    "overrides": {
+      "desc": null,
+      "image": null,
+      "attacks": [],
+      "spells": []
+    },
+    "consumables": [
+      {
+        "name": "Superiority Dice",
+        "value": 4,
+        "minv": "0",
+        "maxv": "4",
+        "reset": "short",
+        "display_type": "bubble",
+        "live_id": "1023-222216831",
+        "reset_to": null,
+        "reset_by": null,
+        "title": null,
+        "desc": "You learn maneuvers that are fueled by superiority dice. Maneuvers enhance an attack in some way. You have 4d8 superiority dice per short rest.",
+        "ddb_source_feature_type": 12168134,
+        "ddb_source_feature_id": 209
+      },
+      {
+        "name": "Second Wind",
+        "value": 1,
+        "minv": "0",
+        "maxv": "1",
+        "reset": "short",
+        "display_type": "bubble",
+        "live_id": "1091-222216831",
+        "reset_to": null,
+        "reset_by": null,
+        "title": null,
+        "desc": "Once per short rest, you can use a bonus action to regain 1d10 + 4 HP.",
+        "ddb_source_feature_type": 12168134,
+        "ddb_source_feature_id": 192
+      },
+      {
+        "name": "Action Surge",
+        "value": 1,
+        "minv": "0",
+        "maxv": "1",
+        "reset": "short",
+        "display_type": "bubble",
+        "live_id": "1021-222216831",
+        "reset_to": null,
+        "reset_by": null,
+        "title": null,
+        "desc": "You can take one additional action on your turn. This can be used 1 times per short rest.",
+        "ddb_source_feature_type": 12168134,
+        "ddb_source_feature_id": 193
+      }
+    ],
+    "death_saves": {
+      "successes": 0,
+      "fails": 0
+    },
+    "live": "beyond",
+    "race": "Minotaur",
+    "background": "Wildspacer",
+    "ddb_campaign_id": null,
+    "actions": [
+      {
+        "name": "Hammering Horns",
+        "uid": "4b27a4f9-e893-451d-a62c-a06809e09dc1",
+        "id": 5119119,
+        "type_id": 222216831,
+        "activation_type": 3,
+        "snippet": "After you hit a creature with a melee attack as part of the Attack action, you can immediately use a bonus action to attempt to push a target within 5 ft. of you and no more than one size larger than you. It must succeed on a STR saving throw (DC 13) or be pushed up to 10 ft. away from you."
+      },
+      {
+        "name": "Superiority Dice",
+        "uid": null,
+        "id": 1023,
+        "type_id": 222216831,
+        "activation_type": 1,
+        "snippet": "You learn maneuvers that are fueled by superiority dice. Maneuvers enhance an attack in some way. You have 4d8 superiority dice per short rest."
+      },
+      {
+        "name": "Maneuvers: Precision Attack",
+        "uid": "58af66bf-c62e-4367-a022-5746fb7e83d8",
+        "id": 53565,
+        "type_id": 222216831,
+        "activation_type": 8,
+        "snippet": "When you make a weapon attack roll, you can expend one superiority die to add it to the roll before or after the roll but before any effects are applied."
+      },
+      {
+        "name": "Maneuvers: Trip Attack",
+        "uid": "61b06446-b2b3-4748-b763-d83db6966911",
+        "id": 53570,
+        "type_id": 222216831,
+        "activation_type": 8,
+        "snippet": "When you hit with a weapon attack, you can expend one superiority die to add the total to the damage roll, and if the target is Large or smaller, it must make a STR saving throw (DC 13). On failure, you knock the target prone."
+      },
+      {
+        "name": "Maneuvers: Disarming Attack",
+        "uid": "970f47ea-ce34-49af-9c13-ea0a6885a63d",
+        "id": 53556,
+        "type_id": 222216831,
+        "activation_type": 8,
+        "snippet": "When you hit with a weapon attack, you can expend one superiority die to add it to the damage and to disarm the target if it fails a STR saving throw (DC 13)."
+      },
+      {
+        "name": "Fighting Style: Interception",
+        "uid": "75c02d15-95ed-404a-b88e-4daddb8d8b29",
+        "id": 2426984,
+        "type_id": 222216831,
+        "activation_type": 4,
+        "snippet": "When a creature you can see hits a target, other than you, within 5 ft. of you with an attack, you can use your reaction to reduce the damage the target takes by **1d10**+2 (to a minimum of 0 damage). You must be wielding a shield or a simple or martial weapon to use this reaction."
+      },
+      {
+        "name": "Second Wind",
+        "uid": "e1f1c8f6-fa92-4998-84f3-15aef017d507",
+        "id": 1091,
+        "type_id": 222216831,
+        "activation_type": 3,
+        "snippet": "Once per short rest, you can use a bonus action to regain 1d10 + 4 HP."
+      },
+      {
+        "name": "Action Surge",
+        "uid": "eab26ed0-3d33-4d86-a259-54bae58dd328",
+        "id": 1021,
+        "type_id": 222216831,
+        "activation_type": 8,
+        "snippet": "You can take one additional action on your turn. This can be used 1 times per short rest."
+      },
+      {
+        "name": "Polearm Master - Bonus Attack",
+        "uid": "34cbc969-12b3-436a-9ef2-f572de2e4d6b",
+        "id": 53629,
+        "type_id": 222216831,
+        "activation_type": 3,
+        "snippet": "When you take the Attack action with a glaive, halberd, quarterstaff, or spear, you can use a bonus action to make a melee attack with the opposite end of the weapon that uses the same ability modifier as the primary attack and has a damage die of **d4** (bludgeoning)."
+      },
+      {
+        "name": "Polearm Master - Opportunity Attack",
+        "uid": null,
+        "id": 903603,
+        "type_id": 222216831,
+        "activation_type": 4,
+        "snippet": "While you are wielding a glaive, halberd, pike, quarterstaff, or spear, other creatures provoke an opportunity attack from you when they enter your reach."
+      }
+    ],
+    "active_guilds": [],
+    "options_v2": {
+      "color": null,
+      "embed_image": true,
+      "compact_coins": false,
+      "crit_on": 20,
+      "extra_crit_dice": 0,
+      "ignore_crit": false,
+      "reroll": null,
+      "talent": false,
+      "srslots": false,
+      "autoconvert_coins": 0,
+      "sync_outbound": true,
+      "sync_inbound": true
+    },
+    "coinpurse": {
+      "pp": 0,
+      "gp": 10,
+      "ep": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  {
+    "name": "Calti Xihooda",
+    "stats": {
+      "prof_bonus": 3,
+      "strength": 8,
+      "dexterity": 16,
+      "constitution": 14,
+      "intelligence": 12,
+      "wisdom": 16,
+      "charisma": 10
+    },
+    "levels": {
+      "total_level": 6,
+      "classes": {
+        "Druid": 6
+      }
+    },
+    "attacks": [
+      {
+        "name": "Scimitar",
+        "automation": [
+          {
+            "type": "target",
+            "target": "each",
+            "effects": [
+              {
+                "type": "attack",
+                "hit": [
+                  {
+                    "type": "damage",
+                    "damage": "1d6+3 [slashing]",
+                    "overheal": false
+                  }
+                ],
+                "miss": [],
+                "attackBonus": "6"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "Proficiency with a scimitar allows you to add your proficiency bonus to the attack roll for any attack you make with it."
+          }
+        ],
+        "_v": 2
+      },
+      {
+        "name": "Unarmed Strike",
+        "automation": [
+          {
+            "type": "target",
+            "target": "each",
+            "effects": [
+              {
+                "type": "attack",
+                "hit": [
+                  {
+                    "type": "damage",
+                    "damage": "0 [bludgeoning]",
+                    "overheal": false
+                  }
+                ],
+                "miss": [],
+                "attackBonus": "2"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "You can punch, kick, head-butt, or use a similar forceful blow and deal bludgeoning damage equal to 1 + STR modifier"
+          }
+        ],
+        "_v": 2
+      },
+      {
+        "name": "Bite",
+        "automation": [
+          {
+            "type": "target",
+            "target": "each",
+            "effects": [
+              {
+                "type": "attack",
+                "hit": [
+                  {
+                    "type": "damage",
+                    "damage": "1d6-1 [piercing]",
+                    "overheal": false
+                  }
+                ],
+                "miss": [],
+                "attackBonus": "2"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "You have a bite attack for 1d6 -1 piercing damage that can be used instead of the normal damage for an unarmed strike."
+          }
+        ],
+        "_v": 2
+      }
+    ],
+    "skills": {
+      "acrobatics": {
+        "value": 3
+      },
+      "animalHandling": {
+        "value": 6,
+        "prof": 1
+      },
+      "arcana": {
+        "value": 1
+      },
+      "athletics": {
+        "value": 2,
+        "prof": 1
+      },
+      "deception": {
+        "value": 0
+      },
+      "history": {
+        "value": 1
+      },
+      "initiative": {
+        "value": 3
+      },
+      "insight": {
+        "value": 3
+      },
+      "intimidation": {
+        "value": 0
+      },
+      "investigation": {
+        "value": 1
+      },
+      "medicine": {
+        "value": 3
+      },
+      "nature": {
+        "value": 4,
+        "prof": 1
+      },
+      "perception": {
+        "value": 6,
+        "prof": 1
+      },
+      "performance": {
+        "value": 0
+      },
+      "persuasion": {
+        "value": 0
+      },
+      "religion": {
+        "value": 1
+      },
+      "sleightOfHand": {
+        "value": 3
+      },
+      "stealth": {
+        "value": 6,
+        "prof": 1
+      },
+      "survival": {
+        "value": 6,
+        "prof": 1
+      },
+      "strength": {
+        "value": -1
+      },
+      "dexterity": {
+        "value": 3
+      },
+      "constitution": {
+        "value": 2
+      },
+      "intelligence": {
+        "value": 1
+      },
+      "wisdom": {
+        "value": 3
+      },
+      "charisma": {
+        "value": 0
+      }
+    },
+    "resistances": {
+      "resist": [],
+      "immune": [],
+      "vuln": [],
+      "neutral": []
+    },
+    "saves": {
+      "strengthSave": {
+        "value": -1
+      },
+      "dexteritySave": {
+        "value": 3
+      },
+      "constitutionSave": {
+        "value": 2
+      },
+      "intelligenceSave": {
+        "value": 4,
+        "prof": 1
+      },
+      "wisdomSave": {
+        "value": 6,
+        "prof": 1
+      },
+      "charismaSave": {
+        "value": 0
+      }
+    },
+    "ac": 18,
+    "max_hp": 45,
+    "hp": 30,
+    "temp_hp": 0,
+    "spellbook": {
+      "slots": {
+        "1": 4,
+        "2": 3,
+        "3": 3,
+        "4": 0,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0
+      },
+      "max_slots": {
+        "1": 4,
+        "2": 3,
+        "3": 3,
+        "4": 0,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0
+      },
+      "spells": [
+        {
+          "name": "Druidcraft",
+          "strict": true,
+          "level": 0,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": true
+        },
+        {
+          "name": "Produce Flame",
+          "strict": true,
+          "level": 0,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": true
+        },
+        {
+          "name": "Thorn Whip",
+          "strict": true,
+          "level": 0,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": true
+        },
+        {
+          "name": "Absorb Elements",
+          "strict": true,
+          "level": 1,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Animal Friendship",
+          "strict": true,
+          "level": 1,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Beast Bond",
+          "strict": true,
+          "level": 1,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Charm Person",
+          "strict": true,
+          "level": 1,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Create or Destroy Water",
+          "strict": true,
+          "level": 1,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Cure Wounds",
+          "strict": true,
+          "level": 1,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Detect Magic",
+          "strict": true,
+          "level": 1,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Detect Poison and Disease",
+          "strict": true,
+          "level": 1,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Earth Tremor",
+          "strict": true,
+          "level": 1,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Entangle",
+          "strict": true,
+          "level": 1,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Faerie Fire",
+          "strict": true,
+          "level": 1,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": true
+        },
+        {
+          "name": "Fog Cloud",
+          "strict": true,
+          "level": 1,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Goodberry",
+          "strict": true,
+          "level": 1,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Healing Word",
+          "strict": true,
+          "level": 1,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": true
+        },
+        {
+          "name": "Ice Knife",
+          "strict": true,
+          "level": 1,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Jump",
+          "strict": true,
+          "level": 1,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Longstrider",
+          "strict": true,
+          "level": 1,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Purify Food and Drink",
+          "strict": true,
+          "level": 1,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Speak with Animals",
+          "strict": true,
+          "level": 1,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Thunderwave",
+          "strict": true,
+          "level": 1,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Animal Messenger",
+          "strict": true,
+          "level": 2,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Barkskin",
+          "strict": true,
+          "level": 2,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Darkvision",
+          "strict": true,
+          "level": 2,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Dust Devil",
+          "strict": true,
+          "level": 2,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Earthbind",
+          "strict": true,
+          "level": 2,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Enhance Ability",
+          "strict": true,
+          "level": 2,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": true
+        },
+        {
+          "name": "Find Traps",
+          "strict": true,
+          "level": 2,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Flame Blade",
+          "strict": true,
+          "level": 2,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Flaming Sphere",
+          "strict": true,
+          "level": 2,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Gust of Wind",
+          "strict": true,
+          "level": 2,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Heat Metal",
+          "strict": true,
+          "level": 2,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Hold Person",
+          "strict": true,
+          "level": 2,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Lesser Restoration",
+          "strict": true,
+          "level": 2,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Locate Animals or Plants",
+          "strict": true,
+          "level": 2,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Locate Object",
+          "strict": true,
+          "level": 2,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Moonbeam",
+          "strict": true,
+          "level": 2,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": true
+        },
+        {
+          "name": "Pass without Trace",
+          "strict": true,
+          "level": 2,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Protection from Poison",
+          "strict": true,
+          "level": 2,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Skywrite",
+          "strict": true,
+          "level": 2,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Spike Growth",
+          "strict": true,
+          "level": 2,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": true
+        },
+        {
+          "name": "Warding Wind",
+          "strict": true,
+          "level": 2,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Call Lightning",
+          "strict": true,
+          "level": 3,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Conjure Animals",
+          "strict": true,
+          "level": 3,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Daylight",
+          "strict": true,
+          "level": 3,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": true
+        },
+        {
+          "name": "Dispel Magic",
+          "strict": true,
+          "level": 3,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": true
+        },
+        {
+          "name": "Erupting Earth",
+          "strict": true,
+          "level": 3,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": true
+        },
+        {
+          "name": "Flame Arrows",
+          "strict": true,
+          "level": 3,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Freedom of the Waves",
+          "strict": true,
+          "level": 3,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Meld into Stone",
+          "strict": true,
+          "level": 3,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Plant Growth",
+          "strict": true,
+          "level": 3,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Protection from Energy",
+          "strict": true,
+          "level": 3,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Sleet Storm",
+          "strict": true,
+          "level": 3,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Speak with Plants",
+          "strict": true,
+          "level": 3,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Tidal Wave",
+          "strict": true,
+          "level": 3,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Wall of Water",
+          "strict": true,
+          "level": 3,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Water Breathing",
+          "strict": true,
+          "level": 3,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Water Walk",
+          "strict": true,
+          "level": 3,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        },
+        {
+          "name": "Wind Wall",
+          "strict": true,
+          "level": 3,
+          "dc": 14,
+          "sab": 6,
+          "mod": 3,
+          "prepared": false
+        }
+      ],
+      "dc": 14,
+      "sab": 6,
+      "caster_level": 6,
+      "spell_mod": 3,
+      "pact_slot_level": null,
+      "num_pact_slots": null,
+      "max_pact_slots": null
+    },
+    "creature_type": null,
+    "owner": "187421759484592128",
+    "upstream": "beyond-13342511",
+    "active": true,
+    "sheet_type": "beyond",
+    "import_version": 19,
+    "description": null,
+    "image": "https://www.dndbeyond.com/avatars/6492/724/636981575508913165.jpeg?width=150&height=150&fit=crop&quality=95&auto=webp",
+    "cvars": {},
+    "overrides": {
+      "desc": null,
+      "image": null,
+      "attacks": [],
+      "spells": []
+    },
+    "consumables": [
+      {
+        "name": "Hungry Jaws",
+        "value": 1,
+        "minv": "0",
+        "maxv": "1",
+        "reset": "short",
+        "display_type": "bubble",
+        "live_id": "1055-222216831",
+        "reset_to": null,
+        "reset_by": null,
+        "title": null,
+        "desc": "Once per short rest as a bonus action, you can make a bite attack. If it hits, you gain 2 temporary HP.",
+        "ddb_source_feature_type": 1960452172,
+        "ddb_source_feature_id": 203
+      },
+      {
+        "name": "Wild Shape",
+        "value": 2,
+        "minv": "0",
+        "maxv": "2",
+        "reset": "short",
+        "display_type": "bubble",
+        "live_id": "1019-222216831",
+        "reset_to": null,
+        "reset_by": null,
+        "title": null,
+        "desc": "As an action, you can magically assume the shape of a beast that you have seen before twice per short rest. [2nd] Max CR 1/4 (no flying or swimming speed) [4th] Max CR 1/2 (no flying speed) [8th] Max CR 1\r\n\r\nYou can stay in beast shape for 3 hours before reverting back to your normal form (or as a bonus action earlier or if you fall unconscious, drop to 0 hit points, or die).",
+        "ddb_source_feature_type": 12168134,
+        "ddb_source_feature_id": 167
+      }
+    ],
+    "death_saves": {
+      "successes": 0,
+      "fails": 0
+    },
+    "live": "beyond",
+    "race": "Lizardfolk",
+    "background": "Outlander",
+    "ddb_campaign_id": null,
+    "actions": [
+      {
+        "name": "Hungry Jaws",
+        "uid": "17d93742-6127-4add-b486-64474aff317d",
+        "id": 1055,
+        "type_id": 222216831,
+        "activation_type": 3,
+        "snippet": "Once per short rest as a bonus action, you can make a bite attack. If it hits, you gain 2 temporary HP."
+      },
+      {
+        "name": "Combat Wild Shape",
+        "uid": "111474f9-e42b-4490-b414-58b4a9438cfb",
+        "id": 53355,
+        "type_id": 222216831,
+        "activation_type": 3,
+        "snippet": "You can use Wild Shape as a bonus action and you can use a bonus action to expend one spell slot to regain 1d8 HP per level of the spell slot expended."
+      },
+      {
+        "name": "Wild Shape",
+        "uid": "0c40b422-7aa0-4b44-a1b7-b82be29dc2f9",
+        "id": 1019,
+        "type_id": 222216831,
+        "activation_type": 1,
+        "snippet": "As an action, you can magically assume the shape of a beast that you have seen before twice per short rest. [2nd] Max CR 1/4 (no flying or swimming speed) [4th] Max CR 1/2 (no flying speed) [8th] Max CR 1\r\n\r\nYou can stay in beast shape for 3 hours before reverting back to your normal form (or as a bonus action earlier or if you fall unconscious, drop to 0 hit points, or die)."
+      }
+    ],
+    "active_guilds": [],
+    "options_v2": {
+      "color": null,
+      "embed_image": true,
+      "compact_coins": false,
+      "crit_on": 20,
+      "extra_crit_dice": 0,
+      "ignore_crit": false,
+      "reroll": null,
+      "talent": false,
+      "srslots": false,
+      "autoconvert_coins": 0,
+      "sync_outbound": true,
+      "sync_inbound": true
+    },
+    "coinpurse": {
+      "pp": 0,
+      "gp": 14,
+      "ep": 0,
+      "sp": 5,
+      "cp": 0
+    }
+  },
+  {
+    "name": "Noxxis Blazehammer",
+    "stats": {
+      "prof_bonus": 3,
+      "strength": 16,
+      "dexterity": 14,
+      "constitution": 15,
+      "intelligence": 11,
+      "wisdom": 19,
+      "charisma": 11
+    },
+    "levels": {
+      "total_level": 7,
+      "classes": {
+        "Cleric": 7
+      }
+    },
+    "attacks": [
+      {
+        "name": "Warhammer",
+        "automation": [
+          {
+            "type": "target",
+            "target": "each",
+            "effects": [
+              {
+                "type": "attack",
+                "hit": [
+                  {
+                    "type": "damage",
+                    "damage": "1d8+3 [bludgeoning]",
+                    "overheal": false
+                  }
+                ],
+                "miss": [],
+                "attackBonus": "6"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "Proficiency with a warhammer allows you to add your proficiency bonus to the attack roll for any attack you make with it."
+          }
+        ],
+        "_v": 2
+      },
+      {
+        "name": "2-Handed Warhammer",
+        "automation": [
+          {
+            "type": "target",
+            "target": "each",
+            "effects": [
+              {
+                "type": "attack",
+                "hit": [
+                  {
+                    "type": "damage",
+                    "damage": "1d10+3 [bludgeoning]",
+                    "overheal": false
+                  }
+                ],
+                "miss": [],
+                "attackBonus": "6"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "Proficiency with a warhammer allows you to add your proficiency bonus to the attack roll for any attack you make with it."
+          }
+        ],
+        "_v": 2
+      },
+      {
+        "name": "Unarmed Strike",
+        "automation": [
+          {
+            "type": "target",
+            "target": "each",
+            "effects": [
+              {
+                "type": "attack",
+                "hit": [
+                  {
+                    "type": "damage",
+                    "damage": "4 [bludgeoning]",
+                    "overheal": false
+                  }
+                ],
+                "miss": [],
+                "attackBonus": "6"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "You can punch, kick, head-butt, or use a similar forceful blow and deal bludgeoning damage equal to 1 + STR modifier"
+          }
+        ],
+        "_v": 2
+      }
+    ],
+    "skills": {
+      "acrobatics": {
+        "value": 2
+      },
+      "animalHandling": {
+        "value": 4
+      },
+      "arcana": {
+        "value": 0
+      },
+      "athletics": {
+        "value": 3
+      },
+      "deception": {
+        "value": 0
+      },
+      "history": {
+        "value": 3,
+        "prof": 1
+      },
+      "initiative": {
+        "value": 2
+      },
+      "insight": {
+        "value": 7,
+        "prof": 1
+      },
+      "intimidation": {
+        "value": 0
+      },
+      "investigation": {
+        "value": 0
+      },
+      "medicine": {
+        "value": 7,
+        "prof": 1
+      },
+      "nature": {
+        "value": 0
+      },
+      "perception": {
+        "value": 4
+      },
+      "performance": {
+        "value": 0
+      },
+      "persuasion": {
+        "value": 0
+      },
+      "religion": {
+        "value": 3,
+        "prof": 1
+      },
+      "sleightOfHand": {
+        "value": 2
+      },
+      "stealth": {
+        "value": 2
+      },
+      "survival": {
+        "value": 4
+      },
+      "strength": {
+        "value": 3
+      },
+      "dexterity": {
+        "value": 2
+      },
+      "constitution": {
+        "value": 2
+      },
+      "intelligence": {
+        "value": 0
+      },
+      "wisdom": {
+        "value": 4
+      },
+      "charisma": {
+        "value": 0
+      }
+    },
+    "resistances": {
+      "resist": [
+        {
+          "dtype": "poison"
+        }
+      ],
+      "immune": [
+        {
+          "dtype": "hits",
+          "only": [
+            "critical"
+          ]
+        }
+      ],
+      "vuln": [],
+      "neutral": []
+    },
+    "saves": {
+      "strengthSave": {
+        "value": 3
+      },
+      "dexteritySave": {
+        "value": 2
+      },
+      "constitutionSave": {
+        "value": 2
+      },
+      "intelligenceSave": {
+        "value": 0
+      },
+      "wisdomSave": {
+        "value": 7,
+        "prof": 1
+      },
+      "charismaSave": {
+        "value": 3,
+        "prof": 1
+      }
+    },
+    "ac": 19,
+    "max_hp": 59,
+    "hp": 59,
+    "temp_hp": 0,
+    "spellbook": {
+      "slots": {
+        "1": 4,
+        "2": 3,
+        "3": 3,
+        "4": 1,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0
+      },
+      "max_slots": {
+        "1": 4,
+        "2": 3,
+        "3": 3,
+        "4": 1,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0
+      },
+      "spells": [
+        {
+          "name": "Guidance",
+          "strict": true,
+          "level": 0,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": true
+        },
+        {
+          "name": "Sacred Flame",
+          "strict": true,
+          "level": 0,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": true
+        },
+        {
+          "name": "Thaumaturgy",
+          "strict": true,
+          "level": 0,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": true
+        },
+        {
+          "name": "Word of Radiance",
+          "strict": true,
+          "level": 0,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": true
+        },
+        {
+          "name": "Bane",
+          "strict": true,
+          "level": 1,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": false
+        },
+        {
+          "name": "Bless",
+          "strict": true,
+          "level": 1,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": true
+        },
+        {
+          "name": "Burning Hands",
+          "strict": true,
+          "level": 1,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": true
+        },
+        {
+          "name": "Command",
+          "strict": true,
+          "level": 1,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": false
+        },
+        {
+          "name": "Create or Destroy Water",
+          "strict": true,
+          "level": 1,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": false
+        },
+        {
+          "name": "Cure Wounds",
+          "strict": true,
+          "level": 1,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": true
+        },
+        {
+          "name": "Detect Evil and Good",
+          "strict": true,
+          "level": 1,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": false
+        },
+        {
+          "name": "Detect Magic",
+          "strict": true,
+          "level": 1,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": false
+        },
+        {
+          "name": "Detect Poison and Disease",
+          "strict": true,
+          "level": 1,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": false
+        },
+        {
+          "name": "Faerie Fire",
+          "strict": true,
+          "level": 1,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": true
+        },
+        {
+          "name": "Guiding Bolt",
+          "strict": true,
+          "level": 1,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": true
+        },
+        {
+          "name": "Healing Word",
+          "strict": true,
+          "level": 1,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": true
+        },
+        {
+          "name": "Inflict Wounds",
+          "strict": true,
+          "level": 1,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": false
+        },
+        {
+          "name": "Protection from Evil and Good",
+          "strict": true,
+          "level": 1,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": true
+        },
+        {
+          "name": "Purify Food and Drink",
+          "strict": true,
+          "level": 1,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": false
+        },
+        {
+          "name": "Sanctuary",
+          "strict": true,
+          "level": 1,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": false
+        },
+        {
+          "name": "Shield of Faith",
+          "strict": true,
+          "level": 1,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": false
+        },
+        {
+          "name": "Aid",
+          "strict": true,
+          "level": 2,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": false
+        },
+        {
+          "name": "Augury",
+          "strict": true,
+          "level": 2,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": true
+        },
+        {
+          "name": "Blindness/Deafness",
+          "strict": true,
+          "level": 2,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": false
+        },
+        {
+          "name": "Calm Emotions",
+          "strict": true,
+          "level": 2,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": false
+        },
+        {
+          "name": "Continual Flame",
+          "strict": true,
+          "level": 2,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": false
+        },
+        {
+          "name": "Enhance Ability",
+          "strict": true,
+          "level": 2,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": false
+        },
+        {
+          "name": "Find Traps",
+          "strict": true,
+          "level": 2,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": false
+        },
+        {
+          "name": "Flaming Sphere",
+          "strict": true,
+          "level": 2,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": true
+        },
+        {
+          "name": "Gentle Repose",
+          "strict": true,
+          "level": 2,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": false
+        },
+        {
+          "name": "Hold Person",
+          "strict": true,
+          "level": 2,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": true
+        },
+        {
+          "name": "Lesser Restoration",
+          "strict": true,
+          "level": 2,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": false
+        },
+        {
+          "name": "Locate Object",
+          "strict": true,
+          "level": 2,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": false
+        },
+        {
+          "name": "Prayer of Healing",
+          "strict": true,
+          "level": 2,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": false
+        },
+        {
+          "name": "Protection from Poison",
+          "strict": true,
+          "level": 2,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": false
+        },
+        {
+          "name": "Scorching Ray",
+          "strict": true,
+          "level": 2,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": true
+        },
+        {
+          "name": "Silence",
+          "strict": true,
+          "level": 2,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": false
+        },
+        {
+          "name": "Spiritual Weapon",
+          "strict": true,
+          "level": 2,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": true
+        },
+        {
+          "name": "Warding Bond",
+          "strict": true,
+          "level": 2,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": false
+        },
+        {
+          "name": "Zone of Truth",
+          "strict": true,
+          "level": 2,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": false
+        },
+        {
+          "name": "Animate Dead",
+          "strict": true,
+          "level": 3,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": false
+        },
+        {
+          "name": "Beacon of Hope",
+          "strict": true,
+          "level": 3,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": false
+        },
+        {
+          "name": "Bestow Curse",
+          "strict": true,
+          "level": 3,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": false
+        },
+        {
+          "name": "Clairvoyance",
+          "strict": true,
+          "level": 3,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": false
+        },
+        {
+          "name": "Create Food and Water",
+          "strict": true,
+          "level": 3,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": false
+        },
+        {
+          "name": "Daylight",
+          "strict": true,
+          "level": 3,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": true
+        },
+        {
+          "name": "Dispel Magic",
+          "strict": true,
+          "level": 3,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": false
+        },
+        {
+          "name": "Fireball",
+          "strict": true,
+          "level": 3,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": true
+        },
+        {
+          "name": "Glyph of Warding",
+          "strict": true,
+          "level": 3,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": false
+        },
+        {
+          "name": "Magic Circle",
+          "strict": true,
+          "level": 3,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": false
+        },
+        {
+          "name": "Mass Healing Word",
+          "strict": true,
+          "level": 3,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": false
+        },
+        {
+          "name": "Meld into Stone",
+          "strict": true,
+          "level": 3,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": false
+        },
+        {
+          "name": "Protection from Energy",
+          "strict": true,
+          "level": 3,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": false
+        },
+        {
+          "name": "Remove Curse",
+          "strict": true,
+          "level": 3,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": false
+        },
+        {
+          "name": "Revivify",
+          "strict": true,
+          "level": 3,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": true
+        },
+        {
+          "name": "Sending",
+          "strict": true,
+          "level": 3,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": false
+        },
+        {
+          "name": "Speak with Dead",
+          "strict": true,
+          "level": 3,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": false
+        },
+        {
+          "name": "Spirit Guardians",
+          "strict": true,
+          "level": 3,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": true
+        },
+        {
+          "name": "Tongues",
+          "strict": true,
+          "level": 3,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": false
+        },
+        {
+          "name": "Water Walk",
+          "strict": true,
+          "level": 3,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": false
+        },
+        {
+          "name": "Banishment",
+          "strict": true,
+          "level": 4,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": false
+        },
+        {
+          "name": "Control Water",
+          "strict": true,
+          "level": 4,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": false
+        },
+        {
+          "name": "Death Ward",
+          "strict": true,
+          "level": 4,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": true
+        },
+        {
+          "name": "Divination",
+          "strict": true,
+          "level": 4,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": false
+        },
+        {
+          "name": "Freedom of Movement",
+          "strict": true,
+          "level": 4,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": false
+        },
+        {
+          "name": "Guardian of Faith",
+          "strict": true,
+          "level": 4,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": true
+        },
+        {
+          "name": "Locate Creature",
+          "strict": true,
+          "level": 4,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": false
+        },
+        {
+          "name": "Stone Shape",
+          "strict": true,
+          "level": 4,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": false
+        },
+        {
+          "name": "Wall of Fire",
+          "strict": true,
+          "level": 4,
+          "dc": 15,
+          "sab": 7,
+          "mod": 4,
+          "prepared": true
+        },
+        {
+          "name": "Light",
+          "strict": true,
+          "level": 0,
+          "dc": 15,
+          "mod": 4,
+          "prepared": true
+        }
+      ],
+      "dc": 15,
+      "sab": 7,
+      "caster_level": 7,
+      "spell_mod": 4,
+      "pact_slot_level": null,
+      "num_pact_slots": null,
+      "max_pact_slots": null
+    },
+    "creature_type": null,
+    "owner": "137677824810156032",
+    "upstream": "beyond-67062593",
+    "active": true,
+    "sheet_type": "beyond",
+    "import_version": 19,
+    "description": null,
+    "image": "https://www.dndbeyond.com/avatars/23435/521/1581111423-67062593.jpeg?width=150&height=150&fit=crop&quality=95&auto=webp",
+    "cvars": {},
+    "overrides": {
+      "desc": null,
+      "image": null,
+      "attacks": [],
+      "spells": []
+    },
+    "consumables": [
+      {
+        "name": "Warding Flare",
+        "value": 4,
+        "minv": "0",
+        "maxv": "4",
+        "reset": "long",
+        "display_type": "bubble",
+        "live_id": "1049-222216831",
+        "reset_to": null,
+        "reset_by": null,
+        "title": null,
+        "desc": "When you are attacked by a creature (that can be blinded) within 30 ft. that you can see, you can use your reaction to impose disadvantage on the attack roll. You can use this feature 4 times per long rest.",
+        "ddb_source_feature_type": 12168134,
+        "ddb_source_feature_id": 137
+      },
+      {
+        "name": "Channel Divinity",
+        "value": 2,
+        "minv": "0",
+        "maxv": "2",
+        "reset": "short",
+        "display_type": "bubble",
+        "live_id": "1015-222216831",
+        "reset_to": null,
+        "reset_by": null,
+        "title": null,
+        "desc": "You can channel divine energy to fuel magical effects a number of times per short rest.",
+        "ddb_source_feature_type": 12168134,
+        "ddb_source_feature_id": 110
+      },
+      {
+        "name": "Harness Divine Power",
+        "value": 2,
+        "minv": "0",
+        "maxv": "2",
+        "reset": "long",
+        "display_type": "bubble",
+        "live_id": "2426099-222216831",
+        "reset_to": null,
+        "reset_by": null,
+        "title": null,
+        "desc": "You can expend a use of your *Channel Divinity* to fuel your spells. As a bonus action, you regain one expended spell slot of up to level 2.\r\nYou regain all expended uses when you finish a long rest.",
+        "ddb_source_feature_type": 12168134,
+        "ddb_source_feature_id": 3021050
+      }
+    ],
+    "death_saves": {
+      "successes": 0,
+      "fails": 0
+    },
+    "live": "beyond",
+    "race": "Hill Dwarf",
+    "background": "Acolyte",
+    "ddb_campaign_id": null,
+    "actions": [
+      {
+        "name": "Warding Flare",
+        "uid": "45934ce8-55b4-47b4-a37d-7c01a5edaacf",
+        "id": 1049,
+        "type_id": 222216831,
+        "activation_type": 4,
+        "snippet": "When you are attacked by a creature (that can be blinded) within 30 ft. that you can see, you can use your reaction to impose disadvantage on the attack roll. You can use this feature 4 times per long rest."
+      },
+      {
+        "name": "Channel Divinity: Radiance of the Dawn",
+        "uid": "cce92b06-b09d-403c-a916-6933e2726e17",
+        "id": 53344,
+        "type_id": 222216831,
+        "activation_type": 1,
+        "snippet": "As an action, you can use Channel Divinity and present your holy symbol to dispel any magical darkness within 30 ft. Additionally, each hostile creature within 30 ft. (that doesn't have total cover) must make a CON saving throw (DC 15) or take 2d10 +7 radiant damage (half damage on success)."
+      },
+      {
+        "name": "Channel Divinity",
+        "uid": null,
+        "id": 1015,
+        "type_id": 222216831,
+        "activation_type": 8,
+        "snippet": "You can channel divine energy to fuel magical effects a number of times per short rest."
+      },
+      {
+        "name": "Channel Divinity: Turn Undead",
+        "uid": "ff5c44ae-ba5e-480e-ac79-2ac7a3b5b9f9",
+        "id": 74143,
+        "type_id": 222216831,
+        "activation_type": 1,
+        "snippet": "As an action, you present your holy symbol and speak a prayer censuring the undead. Each undead that can see or hear you within 30 feet of you must make a WIS saving throw (DC 15). If the creature fails its saving throw, it is turned for 1 minute or until it takes any damage. A turned creature must spend its turns trying to move as far away from you as it can, and it can\u2019t willingly move to a space within 30 feet of you. It also can\u2019t take reactions. For its action, it can use only the Dash action or try to escape from an effect that prevents it from moving. If there\u2019s nowhere to move, the creature can use the Dodge action."
+      },
+      {
+        "name": "Destroy Undead",
+        "uid": null,
+        "id": 5965968,
+        "type_id": 222216831,
+        "activation_type": 8,
+        "snippet": "At 5th level, when an undead fails its saving throw against your Turn Undead feature, it is instantly destroyed if it is of CR \u00bd or lower.\r\n\r\nAt 8th level and higher, it is instead destroyed if it is of CR 1 or lower."
+      },
+      {
+        "name": "Harness Divine Power",
+        "uid": "0d49727f-9fba-449b-b9d1-0b2976c16c16",
+        "id": 2426099,
+        "type_id": 222216831,
+        "activation_type": 3,
+        "snippet": "You can expend a use of your *Channel Divinity* to fuel your spells. As a bonus action, you regain one expended spell slot of up to level 2.\r\nYou regain all expended uses when you finish a long rest."
+      },
+      {
+        "name": "War Caster",
+        "uid": null,
+        "id": 57394,
+        "type_id": 222216831,
+        "activation_type": 4,
+        "snippet": "You can use your reaction to make an opportunity attack to cast a spell that has a casting time of 1 action and targets only that creature."
+      }
+    ],
+    "active_guilds": [],
+    "options_v2": {
+      "color": null,
+      "embed_image": true,
+      "compact_coins": false,
+      "crit_on": 20,
+      "extra_crit_dice": 0,
+      "ignore_crit": false,
+      "reroll": null,
+      "talent": false,
+      "srslots": false,
+      "autoconvert_coins": 0,
+      "sync_outbound": true,
+      "sync_inbound": true
+    },
+    "coinpurse": {
+      "pp": 0,
+      "gp": 121,
+      "ep": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  {
+    "name": "Reef",
+    "stats": {
+      "prof_bonus": 2,
+      "strength": 8,
+      "dexterity": 16,
+      "constitution": 16,
+      "intelligence": 14,
+      "wisdom": 14,
+      "charisma": 19
+    },
+    "levels": {
+      "total_level": 3,
+      "classes": {
+        "Sorcerer": 1,
+        "Bard": 2
+      }
+    },
+    "attacks": [
+      {
+        "name": "Crossbow, light",
+        "automation": [
+          {
+            "type": "target",
+            "target": "each",
+            "effects": [
+              {
+                "type": "attack",
+                "hit": [
+                  {
+                    "type": "damage",
+                    "damage": "1d8+3 [piercing]",
+                    "overheal": false
+                  }
+                ],
+                "miss": [],
+                "attackBonus": "5"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "Proficiency with a light crossbow allows you to add your proficiency bonus to the attack roll for any attack you make with it."
+          }
+        ],
+        "_v": 2
+      },
+      {
+        "name": "Dagger",
+        "automation": [
+          {
+            "type": "target",
+            "target": "each",
+            "effects": [
+              {
+                "type": "attack",
+                "hit": [
+                  {
+                    "type": "damage",
+                    "damage": "1d4+3 [piercing]",
+                    "overheal": false
+                  }
+                ],
+                "miss": [],
+                "attackBonus": "5"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "Proficiency with a dagger allows you to add your proficiency bonus to the attack roll for any attack you make with it."
+          }
+        ],
+        "_v": 2
+      },
+      {
+        "name": "Unarmed Strike",
+        "automation": [
+          {
+            "type": "target",
+            "target": "each",
+            "effects": [
+              {
+                "type": "attack",
+                "hit": [
+                  {
+                    "type": "damage",
+                    "damage": "0 [bludgeoning]",
+                    "overheal": false
+                  }
+                ],
+                "miss": [],
+                "attackBonus": "1"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "You can punch, kick, head-butt, or use a similar forceful blow and deal bludgeoning damage equal to 1 + STR modifier"
+          }
+        ],
+        "_v": 2
+      }
+    ],
+    "skills": {
+      "acrobatics": {
+        "value": 4,
+        "prof": 0.5
+      },
+      "animalHandling": {
+        "value": 3,
+        "prof": 0.5
+      },
+      "arcana": {
+        "value": 4,
+        "prof": 1
+      },
+      "athletics": {
+        "value": 0,
+        "prof": 0.5
+      },
+      "deception": {
+        "value": 5,
+        "prof": 0.5
+      },
+      "history": {
+        "value": 3,
+        "prof": 0.5
+      },
+      "initiative": {
+        "value": 4
+      },
+      "insight": {
+        "value": 4,
+        "prof": 1
+      },
+      "intimidation": {
+        "value": 5,
+        "prof": 0.5
+      },
+      "investigation": {
+        "value": 3,
+        "prof": 0.5
+      },
+      "medicine": {
+        "value": 4,
+        "prof": 1
+      },
+      "nature": {
+        "value": 3,
+        "prof": 0.5
+      },
+      "perception": {
+        "value": 3,
+        "prof": 0.5
+      },
+      "performance": {
+        "value": 6,
+        "prof": 1
+      },
+      "persuasion": {
+        "value": 6,
+        "prof": 1
+      },
+      "religion": {
+        "value": 4,
+        "prof": 1
+      },
+      "sleightOfHand": {
+        "value": 4,
+        "prof": 0.5
+      },
+      "stealth": {
+        "value": 4,
+        "prof": 0.5
+      },
+      "survival": {
+        "value": 3,
+        "prof": 0.5
+      },
+      "strength": {
+        "value": 0,
+        "prof": 0.5
+      },
+      "dexterity": {
+        "value": 4,
+        "prof": 0.5
+      },
+      "constitution": {
+        "value": 4,
+        "prof": 0.5
+      },
+      "intelligence": {
+        "value": 3,
+        "prof": 0.5
+      },
+      "wisdom": {
+        "value": 3,
+        "prof": 0.5
+      },
+      "charisma": {
+        "value": 5,
+        "prof": 0.5
+      }
+    },
+    "resistances": {
+      "resist": [],
+      "immune": [],
+      "vuln": [],
+      "neutral": []
+    },
+    "saves": {
+      "strengthSave": {
+        "value": -1
+      },
+      "dexteritySave": {
+        "value": 3
+      },
+      "constitutionSave": {
+        "value": 5,
+        "prof": 1
+      },
+      "intelligenceSave": {
+        "value": 2
+      },
+      "wisdomSave": {
+        "value": 2
+      },
+      "charismaSave": {
+        "value": 6,
+        "prof": 1
+      }
+    },
+    "ac": 13,
+    "max_hp": 25,
+    "hp": 9,
+    "temp_hp": 0,
+    "spellbook": {
+      "slots": {
+        "1": 4,
+        "2": 2,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0
+      },
+      "max_slots": {
+        "1": 4,
+        "2": 2,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0
+      },
+      "spells": [
+        {
+          "name": "Fire Bolt",
+          "strict": true,
+          "level": 0,
+          "dc": 14,
+          "sab": 6,
+          "mod": 4,
+          "prepared": true
+        },
+        {
+          "name": "Prestidigitation",
+          "strict": true,
+          "level": 0,
+          "dc": 14,
+          "sab": 6,
+          "mod": 4,
+          "prepared": true
+        },
+        {
+          "name": "Spare the Dying",
+          "strict": true,
+          "level": 0,
+          "dc": 14,
+          "sab": 6,
+          "mod": 4,
+          "prepared": true
+        },
+        {
+          "name": "Toll the Dead",
+          "strict": true,
+          "level": 0,
+          "dc": 14,
+          "sab": 6,
+          "mod": 4,
+          "prepared": true
+        },
+        {
+          "name": "Absorb Elements",
+          "strict": true,
+          "level": 1,
+          "dc": 14,
+          "sab": 6,
+          "mod": 4,
+          "prepared": true
+        },
+        {
+          "name": "Shield",
+          "strict": true,
+          "level": 1,
+          "dc": 14,
+          "sab": 6,
+          "mod": 4,
+          "prepared": true
+        },
+        {
+          "name": "Mage Hand",
+          "strict": true,
+          "level": 0,
+          "dc": 14,
+          "sab": 6,
+          "mod": 4,
+          "prepared": true
+        },
+        {
+          "name": "Mending",
+          "strict": true,
+          "level": 0,
+          "dc": 14,
+          "sab": 6,
+          "mod": 4,
+          "prepared": true
+        },
+        {
+          "name": "Bane",
+          "strict": true,
+          "level": 1,
+          "dc": 14,
+          "sab": 6,
+          "mod": 4,
+          "prepared": true
+        },
+        {
+          "name": "Cure Wounds",
+          "strict": true,
+          "level": 1,
+          "dc": 14,
+          "sab": 6,
+          "mod": 4,
+          "prepared": true
+        },
+        {
+          "name": "Faerie Fire",
+          "strict": true,
+          "level": 1,
+          "dc": 14,
+          "sab": 6,
+          "mod": 4,
+          "prepared": true
+        },
+        {
+          "name": "Healing Word",
+          "strict": true,
+          "level": 1,
+          "dc": 14,
+          "sab": 6,
+          "mod": 4,
+          "prepared": true
+        },
+        {
+          "name": "Thunderwave",
+          "strict": true,
+          "level": 1,
+          "dc": 14,
+          "sab": 6,
+          "mod": 4,
+          "prepared": true
+        },
+        {
+          "name": "Inflict Wounds",
+          "strict": true,
+          "level": 1,
+          "sab": 6,
+          "mod": 4,
+          "prepared": true
+        }
+      ],
+      "dc": 14,
+      "sab": 6,
+      "caster_level": 3,
+      "spell_mod": 4,
+      "pact_slot_level": null,
+      "num_pact_slots": null,
+      "max_pact_slots": null
+    },
+    "creature_type": null,
+    "owner": "1011869550557548625",
+    "upstream": "beyond-87299060",
+    "active": true,
+    "sheet_type": "beyond",
+    "import_version": 19,
+    "description": null,
+    "image": "https://www.dndbeyond.com/avatars/30047/832/1581111423-87299060.jpeg?width=150&height=150&fit=crop&quality=95&auto=webp",
+    "cvars": {},
+    "overrides": {
+      "desc": null,
+      "image": null,
+      "attacks": [],
+      "spells": []
+    },
+    "consumables": [
+      {
+        "name": "Favored by the Gods",
+        "value": 1,
+        "minv": "0",
+        "maxv": "1",
+        "reset": "short",
+        "display_type": "bubble",
+        "live_id": "1126-222216831",
+        "reset_to": null,
+        "reset_by": null,
+        "title": null,
+        "desc": "Once per short rest, if you fail a saving throw or miss with an attack roll, you can roll 2d4 and add it to the total, possibly changing the outcome.",
+        "ddb_source_feature_type": 12168134,
+        "ddb_source_feature_id": 746
+      },
+      {
+        "name": "Bardic Inspiration",
+        "value": 4,
+        "minv": "0",
+        "maxv": "4",
+        "reset": "long",
+        "display_type": "bubble",
+        "live_id": "1011-222216831",
+        "reset_to": null,
+        "reset_by": null,
+        "title": null,
+        "desc": "As a bonus action, a creature (other than yourself) within 60 ft. that can hear you gains an inspiration die (1d6). For 10 minutes, the creature can add it to one ability check, attack roll, or saving throw. This can be added after seeing the roll, but before knowing the outcome.",
+        "ddb_source_feature_type": 12168134,
+        "ddb_source_feature_id": 75
+      },
+      {
+        "name": "Lucky",
+        "value": 3,
+        "minv": "0",
+        "maxv": "3",
+        "reset": "long",
+        "display_type": "bubble",
+        "live_id": "1061-222216831",
+        "reset_to": null,
+        "reset_by": null,
+        "title": null,
+        "desc": "You have 3 luck points per long rest. Whenever you make an attack roll, an ability check, or a saving throw (or when an attack roll is made against you), you can spend one to roll an additional d20 and you choose which die to use. You can choose to spend luck points after you roll the die, but before the outcome is determined.",
+        "ddb_source_feature_type": 1088085227,
+        "ddb_source_feature_id": 29
+      }
+    ],
+    "death_saves": {
+      "successes": 0,
+      "fails": 0
+    },
+    "live": null,
+    "race": "Variant Human",
+    "background": "Hermit",
+    "ddb_campaign_id": "3298728",
+    "actions": [
+      {
+        "name": "Favored by the Gods",
+        "uid": "8b1658a3-7b0c-4f45-bd76-beec93ad8d16",
+        "id": 1126,
+        "type_id": 222216831,
+        "activation_type": 8,
+        "snippet": "Once per short rest, if you fail a saving throw or miss with an attack roll, you can roll 2d4 and add it to the total, possibly changing the outcome."
+      },
+      {
+        "name": "Bardic Inspiration",
+        "uid": "221cc80c-37b9-4e92-be23-dac7328e8409",
+        "id": 1011,
+        "type_id": 222216831,
+        "activation_type": 3,
+        "snippet": "As a bonus action, a creature (other than yourself) within 60 ft. that can hear you gains an inspiration die (1d6). For 10 minutes, the creature can add it to one ability check, attack roll, or saving throw. This can be added after seeing the roll, but before knowing the outcome."
+      },
+      {
+        "name": "Lucky",
+        "uid": "8d2b1cbe-3b35-485b-84bb-07e494584bfc",
+        "id": 1061,
+        "type_id": 222216831,
+        "activation_type": 2,
+        "snippet": "You have 3 luck points per long rest. Whenever you make an attack roll, an ability check, or a saving throw (or when an attack roll is made against you), you can spend one to roll an additional d20 and you choose which die to use. You can choose to spend luck points after you roll the die, but before the outcome is determined."
+      },
+      {
+        "name": "Song of Rest",
+        "uid": "35d7ad91-1ccc-4436-bf2a-aee9787d9b70",
+        "id": 80,
+        "type_id": 12168134,
+        "activation_type": 8,
+        "snippet": "If you or any friendly creatures who can hear your performance regain hit points at the end of the short rest by spending one or more Hit Dice, each of those creatures regains an extra 1d6 hit points."
+      }
+    ],
+    "active_guilds": [],
+    "options_v2": {
+      "color": null,
+      "embed_image": true,
+      "compact_coins": false,
+      "crit_on": 20,
+      "extra_crit_dice": 0,
+      "ignore_crit": false,
+      "reroll": null,
+      "talent": false,
+      "srslots": false,
+      "autoconvert_coins": 0,
+      "sync_outbound": true,
+      "sync_inbound": true
+    },
+    "coinpurse": {
+      "pp": 0,
+      "gp": 35,
+      "ep": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  }
+]

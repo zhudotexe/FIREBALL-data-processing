@@ -1,0 +1,1387 @@
+{
+  "channel": "1042890065543712879",
+  "summary": 1042896469725827162,
+  "dm": 187421759484592128,
+  "options": {},
+  "combatants": [
+    {
+      "name": "OR2",
+      "stats": {
+        "prof_bonus": 2,
+        "strength": 16,
+        "dexterity": 12,
+        "constitution": 16,
+        "intelligence": 7,
+        "wisdom": 11,
+        "charisma": 10
+      },
+      "levels": {
+        "total_level": 0.5,
+        "classes": {
+          "Monster": 0.5
+        }
+      },
+      "attacks": [
+        {
+          "name": "Greataxe",
+          "automation": [
+            {
+              "type": "target",
+              "target": "each",
+              "effects": [
+                {
+                  "type": "attack",
+                  "hit": [
+                    {
+                      "type": "damage",
+                      "damage": "1d12 + 3 [slashing]",
+                      "overheal": false
+                    }
+                  ],
+                  "miss": [],
+                  "attackBonus": "5"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "*Melee Weapon Attack:* +5 to hit, reach 5 ft., one target. *Hit:* 9 (1d12 + 3) slashing damage."
+            }
+          ],
+          "_v": 2
+        },
+        {
+          "name": "Javelin",
+          "automation": [
+            {
+              "type": "target",
+              "target": "each",
+              "effects": [
+                {
+                  "type": "attack",
+                  "hit": [
+                    {
+                      "type": "damage",
+                      "damage": "1d6 + 3 [piercing]",
+                      "overheal": false
+                    }
+                  ],
+                  "miss": [],
+                  "attackBonus": "5"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "*Melee or Ranged Weapon Attack:* +5 to hit, reach 5 ft. or range 30/120 ft., one target. *Hit:* 6 (1d6 + 3) piercing damage."
+            }
+          ],
+          "_v": 2
+        }
+      ],
+      "skills": {
+        "acrobatics": {
+          "value": 1
+        },
+        "animalHandling": {
+          "value": 0
+        },
+        "arcana": {
+          "value": -2
+        },
+        "athletics": {
+          "value": 3
+        },
+        "deception": {
+          "value": 0
+        },
+        "history": {
+          "value": -2
+        },
+        "initiative": {
+          "value": 1
+        },
+        "insight": {
+          "value": 0
+        },
+        "intimidation": {
+          "value": 2,
+          "prof": 1
+        },
+        "investigation": {
+          "value": -2
+        },
+        "medicine": {
+          "value": 0
+        },
+        "nature": {
+          "value": -2
+        },
+        "perception": {
+          "value": 0
+        },
+        "performance": {
+          "value": 0
+        },
+        "persuasion": {
+          "value": 0
+        },
+        "religion": {
+          "value": -2
+        },
+        "sleightOfHand": {
+          "value": 1
+        },
+        "stealth": {
+          "value": 1
+        },
+        "survival": {
+          "value": 0
+        },
+        "strength": {
+          "value": 3
+        },
+        "dexterity": {
+          "value": 1
+        },
+        "constitution": {
+          "value": 3
+        },
+        "intelligence": {
+          "value": -2
+        },
+        "wisdom": {
+          "value": 0
+        },
+        "charisma": {
+          "value": 0
+        }
+      },
+      "resistances": {
+        "resist": [],
+        "immune": [],
+        "vuln": [],
+        "neutral": []
+      },
+      "saves": {
+        "strengthSave": {
+          "value": 3
+        },
+        "dexteritySave": {
+          "value": 1
+        },
+        "constitutionSave": {
+          "value": 3
+        },
+        "intelligenceSave": {
+          "value": -2
+        },
+        "wisdomSave": {
+          "value": 0
+        },
+        "charismaSave": {
+          "value": 0
+        }
+      },
+      "ac": 13,
+      "max_hp": 15,
+      "hp": 9,
+      "temp_hp": 0,
+      "spellbook": {
+        "slots": {},
+        "max_slots": {},
+        "spells": [],
+        "dc": null,
+        "sab": null,
+        "caster_level": 0,
+        "spell_mod": null,
+        "pact_slot_level": null,
+        "num_pact_slots": null,
+        "max_pact_slots": null,
+        "at_will": [],
+        "daily": {},
+        "daily_max": {}
+      },
+      "creature_type": "humanoid (orc)",
+      "controller_id": 187421759484592128,
+      "init": 17,
+      "private": true,
+      "index": 0,
+      "notes": null,
+      "effects": [],
+      "group_id": null,
+      "type": "monster",
+      "id": "23203626-45a4-458b-a196-f9276707449f",
+      "monster_name": "Orc",
+      "monster_id": 16972
+    },
+    {
+      "name": "Reef",
+      "attacks": [],
+      "resistances": {
+        "resist": [],
+        "immune": [],
+        "vuln": [],
+        "neutral": []
+      },
+      "ac": null,
+      "max_hp": null,
+      "creature_type": null,
+      "controller_id": 1011869550557548625,
+      "init": 15,
+      "private": null,
+      "index": 1,
+      "notes": null,
+      "effects": [],
+      "group_id": null,
+      "type": "player",
+      "id": "68a75dff-d27b-4109-bc01-a331a314606f",
+      "character_id": "beyond-87299060",
+      "character_owner": "1011869550557548625"
+    },
+    {
+      "name": "KO3",
+      "stats": {
+        "prof_bonus": 2,
+        "strength": 7,
+        "dexterity": 15,
+        "constitution": 9,
+        "intelligence": 8,
+        "wisdom": 7,
+        "charisma": 8
+      },
+      "levels": {
+        "total_level": 0.125,
+        "classes": {
+          "Monster": 0.125
+        }
+      },
+      "attacks": [
+        {
+          "name": "Dagger",
+          "automation": [
+            {
+              "type": "target",
+              "target": "each",
+              "effects": [
+                {
+                  "type": "attack",
+                  "hit": [
+                    {
+                      "type": "damage",
+                      "damage": "1d4 + 2 [piercing]",
+                      "overheal": false
+                    }
+                  ],
+                  "miss": [],
+                  "attackBonus": "4"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "*Melee Weapon Attack:* +4 to hit, reach 5 ft., one target. *Hit:* 4 (1d4 + 2) piercing damage."
+            }
+          ],
+          "_v": 2
+        },
+        {
+          "name": "Sling",
+          "automation": [
+            {
+              "type": "target",
+              "target": "each",
+              "effects": [
+                {
+                  "type": "attack",
+                  "hit": [
+                    {
+                      "type": "damage",
+                      "damage": "1d4 + 2 [bludgeoning]",
+                      "overheal": false
+                    }
+                  ],
+                  "miss": [],
+                  "attackBonus": "4"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "*Ranged Weapon Attack:* +4 to hit, range 30/120 ft., one target. *Hit:* 4 (1d4 + 2) bludgeoning damage."
+            }
+          ],
+          "_v": 2
+        }
+      ],
+      "skills": {
+        "acrobatics": {
+          "value": 2
+        },
+        "animalHandling": {
+          "value": -2
+        },
+        "arcana": {
+          "value": -1
+        },
+        "athletics": {
+          "value": -2
+        },
+        "deception": {
+          "value": -1
+        },
+        "history": {
+          "value": -1
+        },
+        "initiative": {
+          "value": 2
+        },
+        "insight": {
+          "value": -2
+        },
+        "intimidation": {
+          "value": -1
+        },
+        "investigation": {
+          "value": -1
+        },
+        "medicine": {
+          "value": -2
+        },
+        "nature": {
+          "value": -1
+        },
+        "perception": {
+          "value": -2
+        },
+        "performance": {
+          "value": -1
+        },
+        "persuasion": {
+          "value": -1
+        },
+        "religion": {
+          "value": -1
+        },
+        "sleightOfHand": {
+          "value": 2
+        },
+        "stealth": {
+          "value": 2
+        },
+        "survival": {
+          "value": -2
+        },
+        "strength": {
+          "value": -2
+        },
+        "dexterity": {
+          "value": 2
+        },
+        "constitution": {
+          "value": -1
+        },
+        "intelligence": {
+          "value": -1
+        },
+        "wisdom": {
+          "value": -2
+        },
+        "charisma": {
+          "value": -1
+        }
+      },
+      "resistances": {
+        "resist": [],
+        "immune": [],
+        "vuln": [],
+        "neutral": []
+      },
+      "saves": {
+        "strengthSave": {
+          "value": -2
+        },
+        "dexteritySave": {
+          "value": 2
+        },
+        "constitutionSave": {
+          "value": -1
+        },
+        "intelligenceSave": {
+          "value": -1
+        },
+        "wisdomSave": {
+          "value": -2
+        },
+        "charismaSave": {
+          "value": -1
+        }
+      },
+      "ac": 12,
+      "max_hp": 5,
+      "hp": 5,
+      "temp_hp": 0,
+      "spellbook": {
+        "slots": {},
+        "max_slots": {},
+        "spells": [],
+        "dc": null,
+        "sab": null,
+        "caster_level": 0,
+        "spell_mod": null,
+        "pact_slot_level": null,
+        "num_pact_slots": null,
+        "max_pact_slots": null,
+        "at_will": [],
+        "daily": {},
+        "daily_max": {}
+      },
+      "creature_type": "humanoid (kobold)",
+      "controller_id": 187421759484592128,
+      "init": 13,
+      "private": true,
+      "index": 2,
+      "notes": null,
+      "effects": [],
+      "group_id": null,
+      "type": "monster",
+      "id": "943358f1-de80-40d0-8b6a-68026f6ad784",
+      "monster_name": "Kobold",
+      "monster_id": 16939
+    },
+    {
+      "name": "Rahotur",
+      "attacks": [],
+      "resistances": {
+        "resist": [
+          {
+            "dtype": "poison"
+          }
+        ],
+        "immune": [],
+        "vuln": [],
+        "neutral": []
+      },
+      "ac": null,
+      "max_hp": null,
+      "creature_type": null,
+      "controller_id": 164249546073964544,
+      "init": 9,
+      "private": null,
+      "index": 3,
+      "notes": null,
+      "effects": [],
+      "group_id": null,
+      "type": "player",
+      "id": "ecbef6e1-16d3-4ca9-beae-43594f0b6744",
+      "character_id": "beyond-87044825",
+      "character_owner": "164249546073964544"
+    },
+    {
+      "name": "Calti Xihooda",
+      "attacks": [],
+      "resistances": {
+        "resist": [],
+        "immune": [],
+        "vuln": [],
+        "neutral": []
+      },
+      "ac": null,
+      "max_hp": null,
+      "creature_type": null,
+      "controller_id": 187421759484592128,
+      "init": 9,
+      "private": null,
+      "index": 4,
+      "notes": null,
+      "effects": [],
+      "group_id": null,
+      "type": "player",
+      "id": "df040ca8-0d03-49c8-a6f0-2e268c5ff944",
+      "character_id": "beyond-13342511",
+      "character_owner": "187421759484592128"
+    },
+    {
+      "name": "Noxxis Blazehammer",
+      "attacks": [],
+      "resistances": {
+        "resist": [
+          {
+            "dtype": "poison"
+          }
+        ],
+        "immune": [
+          {
+            "dtype": "hits",
+            "only": [
+              "critical"
+            ]
+          }
+        ],
+        "vuln": [],
+        "neutral": []
+      },
+      "ac": null,
+      "max_hp": null,
+      "creature_type": null,
+      "controller_id": 137677824810156032,
+      "init": 8,
+      "private": null,
+      "index": 5,
+      "notes": null,
+      "effects": [],
+      "group_id": null,
+      "type": "player",
+      "id": "8f9d631e-e8b8-42d7-b5e9-3608168e1600",
+      "character_id": "beyond-67062593",
+      "character_owner": "137677824810156032"
+    },
+    {
+      "name": "OR1",
+      "stats": {
+        "prof_bonus": 2,
+        "strength": 16,
+        "dexterity": 12,
+        "constitution": 16,
+        "intelligence": 7,
+        "wisdom": 11,
+        "charisma": 10
+      },
+      "levels": {
+        "total_level": 0.5,
+        "classes": {
+          "Monster": 0.5
+        }
+      },
+      "attacks": [
+        {
+          "name": "Greataxe",
+          "automation": [
+            {
+              "type": "target",
+              "target": "each",
+              "effects": [
+                {
+                  "type": "attack",
+                  "hit": [
+                    {
+                      "type": "damage",
+                      "damage": "1d12 + 3 [slashing]",
+                      "overheal": false
+                    }
+                  ],
+                  "miss": [],
+                  "attackBonus": "5"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "*Melee Weapon Attack:* +5 to hit, reach 5 ft., one target. *Hit:* 9 (1d12 + 3) slashing damage."
+            }
+          ],
+          "_v": 2
+        },
+        {
+          "name": "Javelin",
+          "automation": [
+            {
+              "type": "target",
+              "target": "each",
+              "effects": [
+                {
+                  "type": "attack",
+                  "hit": [
+                    {
+                      "type": "damage",
+                      "damage": "1d6 + 3 [piercing]",
+                      "overheal": false
+                    }
+                  ],
+                  "miss": [],
+                  "attackBonus": "5"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "*Melee or Ranged Weapon Attack:* +5 to hit, reach 5 ft. or range 30/120 ft., one target. *Hit:* 6 (1d6 + 3) piercing damage."
+            }
+          ],
+          "_v": 2
+        }
+      ],
+      "skills": {
+        "acrobatics": {
+          "value": 1
+        },
+        "animalHandling": {
+          "value": 0
+        },
+        "arcana": {
+          "value": -2
+        },
+        "athletics": {
+          "value": 3
+        },
+        "deception": {
+          "value": 0
+        },
+        "history": {
+          "value": -2
+        },
+        "initiative": {
+          "value": 1
+        },
+        "insight": {
+          "value": 0
+        },
+        "intimidation": {
+          "value": 2,
+          "prof": 1
+        },
+        "investigation": {
+          "value": -2
+        },
+        "medicine": {
+          "value": 0
+        },
+        "nature": {
+          "value": -2
+        },
+        "perception": {
+          "value": 0
+        },
+        "performance": {
+          "value": 0
+        },
+        "persuasion": {
+          "value": 0
+        },
+        "religion": {
+          "value": -2
+        },
+        "sleightOfHand": {
+          "value": 1
+        },
+        "stealth": {
+          "value": 1
+        },
+        "survival": {
+          "value": 0
+        },
+        "strength": {
+          "value": 3
+        },
+        "dexterity": {
+          "value": 1
+        },
+        "constitution": {
+          "value": 3
+        },
+        "intelligence": {
+          "value": -2
+        },
+        "wisdom": {
+          "value": 0
+        },
+        "charisma": {
+          "value": 0
+        }
+      },
+      "resistances": {
+        "resist": [],
+        "immune": [],
+        "vuln": [],
+        "neutral": []
+      },
+      "saves": {
+        "strengthSave": {
+          "value": 3
+        },
+        "dexteritySave": {
+          "value": 1
+        },
+        "constitutionSave": {
+          "value": 3
+        },
+        "intelligenceSave": {
+          "value": -2
+        },
+        "wisdomSave": {
+          "value": 0
+        },
+        "charismaSave": {
+          "value": 0
+        }
+      },
+      "ac": 13,
+      "max_hp": 15,
+      "hp": 13,
+      "temp_hp": 0,
+      "spellbook": {
+        "slots": {},
+        "max_slots": {},
+        "spells": [],
+        "dc": null,
+        "sab": null,
+        "caster_level": 0,
+        "spell_mod": null,
+        "pact_slot_level": null,
+        "num_pact_slots": null,
+        "max_pact_slots": null,
+        "at_will": [],
+        "daily": {},
+        "daily_max": {}
+      },
+      "creature_type": "humanoid (orc)",
+      "controller_id": 187421759484592128,
+      "init": 6,
+      "private": true,
+      "index": 6,
+      "notes": null,
+      "effects": [],
+      "group_id": null,
+      "type": "monster",
+      "id": "7612217f-18a0-4c16-b69f-e7de8eb9185b",
+      "monster_name": "Orc",
+      "monster_id": 16972
+    },
+    {
+      "name": "KO1",
+      "stats": {
+        "prof_bonus": 2,
+        "strength": 7,
+        "dexterity": 15,
+        "constitution": 9,
+        "intelligence": 8,
+        "wisdom": 7,
+        "charisma": 8
+      },
+      "levels": {
+        "total_level": 0.125,
+        "classes": {
+          "Monster": 0.125
+        }
+      },
+      "attacks": [
+        {
+          "name": "Dagger",
+          "automation": [
+            {
+              "type": "target",
+              "target": "each",
+              "effects": [
+                {
+                  "type": "attack",
+                  "hit": [
+                    {
+                      "type": "damage",
+                      "damage": "1d4 + 2 [piercing]",
+                      "overheal": false
+                    }
+                  ],
+                  "miss": [],
+                  "attackBonus": "4"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "*Melee Weapon Attack:* +4 to hit, reach 5 ft., one target. *Hit:* 4 (1d4 + 2) piercing damage."
+            }
+          ],
+          "_v": 2
+        },
+        {
+          "name": "Sling",
+          "automation": [
+            {
+              "type": "target",
+              "target": "each",
+              "effects": [
+                {
+                  "type": "attack",
+                  "hit": [
+                    {
+                      "type": "damage",
+                      "damage": "1d4 + 2 [bludgeoning]",
+                      "overheal": false
+                    }
+                  ],
+                  "miss": [],
+                  "attackBonus": "4"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "*Ranged Weapon Attack:* +4 to hit, range 30/120 ft., one target. *Hit:* 4 (1d4 + 2) bludgeoning damage."
+            }
+          ],
+          "_v": 2
+        }
+      ],
+      "skills": {
+        "acrobatics": {
+          "value": 2
+        },
+        "animalHandling": {
+          "value": -2
+        },
+        "arcana": {
+          "value": -1
+        },
+        "athletics": {
+          "value": -2
+        },
+        "deception": {
+          "value": -1
+        },
+        "history": {
+          "value": -1
+        },
+        "initiative": {
+          "value": 2
+        },
+        "insight": {
+          "value": -2
+        },
+        "intimidation": {
+          "value": -1
+        },
+        "investigation": {
+          "value": -1
+        },
+        "medicine": {
+          "value": -2
+        },
+        "nature": {
+          "value": -1
+        },
+        "perception": {
+          "value": -2
+        },
+        "performance": {
+          "value": -1
+        },
+        "persuasion": {
+          "value": -1
+        },
+        "religion": {
+          "value": -1
+        },
+        "sleightOfHand": {
+          "value": 2
+        },
+        "stealth": {
+          "value": 2
+        },
+        "survival": {
+          "value": -2
+        },
+        "strength": {
+          "value": -2
+        },
+        "dexterity": {
+          "value": 2
+        },
+        "constitution": {
+          "value": -1
+        },
+        "intelligence": {
+          "value": -1
+        },
+        "wisdom": {
+          "value": -2
+        },
+        "charisma": {
+          "value": -1
+        }
+      },
+      "resistances": {
+        "resist": [],
+        "immune": [],
+        "vuln": [],
+        "neutral": []
+      },
+      "saves": {
+        "strengthSave": {
+          "value": -2
+        },
+        "dexteritySave": {
+          "value": 2
+        },
+        "constitutionSave": {
+          "value": -1
+        },
+        "intelligenceSave": {
+          "value": -1
+        },
+        "wisdomSave": {
+          "value": -2
+        },
+        "charismaSave": {
+          "value": -1
+        }
+      },
+      "ac": 12,
+      "max_hp": 5,
+      "hp": 3,
+      "temp_hp": 0,
+      "spellbook": {
+        "slots": {},
+        "max_slots": {},
+        "spells": [],
+        "dc": null,
+        "sab": null,
+        "caster_level": 0,
+        "spell_mod": null,
+        "pact_slot_level": null,
+        "num_pact_slots": null,
+        "max_pact_slots": null,
+        "at_will": [],
+        "daily": {},
+        "daily_max": {}
+      },
+      "creature_type": "humanoid (kobold)",
+      "controller_id": 187421759484592128,
+      "init": 5,
+      "private": true,
+      "index": 7,
+      "notes": null,
+      "effects": [],
+      "group_id": null,
+      "type": "monster",
+      "id": "7cdef95d-d9ce-45da-94c0-53fb0003a115",
+      "monster_name": "Kobold",
+      "monster_id": 16939
+    },
+    {
+      "name": "KO2",
+      "stats": {
+        "prof_bonus": 2,
+        "strength": 7,
+        "dexterity": 15,
+        "constitution": 9,
+        "intelligence": 8,
+        "wisdom": 7,
+        "charisma": 8
+      },
+      "levels": {
+        "total_level": 0.125,
+        "classes": {
+          "Monster": 0.125
+        }
+      },
+      "attacks": [
+        {
+          "name": "Dagger",
+          "automation": [
+            {
+              "type": "target",
+              "target": "each",
+              "effects": [
+                {
+                  "type": "attack",
+                  "hit": [
+                    {
+                      "type": "damage",
+                      "damage": "1d4 + 2 [piercing]",
+                      "overheal": false
+                    }
+                  ],
+                  "miss": [],
+                  "attackBonus": "4"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "*Melee Weapon Attack:* +4 to hit, reach 5 ft., one target. *Hit:* 4 (1d4 + 2) piercing damage."
+            }
+          ],
+          "_v": 2
+        },
+        {
+          "name": "Sling",
+          "automation": [
+            {
+              "type": "target",
+              "target": "each",
+              "effects": [
+                {
+                  "type": "attack",
+                  "hit": [
+                    {
+                      "type": "damage",
+                      "damage": "1d4 + 2 [bludgeoning]",
+                      "overheal": false
+                    }
+                  ],
+                  "miss": [],
+                  "attackBonus": "4"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "*Ranged Weapon Attack:* +4 to hit, range 30/120 ft., one target. *Hit:* 4 (1d4 + 2) bludgeoning damage."
+            }
+          ],
+          "_v": 2
+        }
+      ],
+      "skills": {
+        "acrobatics": {
+          "value": 2
+        },
+        "animalHandling": {
+          "value": -2
+        },
+        "arcana": {
+          "value": -1
+        },
+        "athletics": {
+          "value": -2
+        },
+        "deception": {
+          "value": -1
+        },
+        "history": {
+          "value": -1
+        },
+        "initiative": {
+          "value": 2
+        },
+        "insight": {
+          "value": -2
+        },
+        "intimidation": {
+          "value": -1
+        },
+        "investigation": {
+          "value": -1
+        },
+        "medicine": {
+          "value": -2
+        },
+        "nature": {
+          "value": -1
+        },
+        "perception": {
+          "value": -2
+        },
+        "performance": {
+          "value": -1
+        },
+        "persuasion": {
+          "value": -1
+        },
+        "religion": {
+          "value": -1
+        },
+        "sleightOfHand": {
+          "value": 2
+        },
+        "stealth": {
+          "value": 2
+        },
+        "survival": {
+          "value": -2
+        },
+        "strength": {
+          "value": -2
+        },
+        "dexterity": {
+          "value": 2
+        },
+        "constitution": {
+          "value": -1
+        },
+        "intelligence": {
+          "value": -1
+        },
+        "wisdom": {
+          "value": -2
+        },
+        "charisma": {
+          "value": -1
+        }
+      },
+      "resistances": {
+        "resist": [],
+        "immune": [],
+        "vuln": [],
+        "neutral": []
+      },
+      "saves": {
+        "strengthSave": {
+          "value": -2
+        },
+        "dexteritySave": {
+          "value": 2
+        },
+        "constitutionSave": {
+          "value": -1
+        },
+        "intelligenceSave": {
+          "value": -1
+        },
+        "wisdomSave": {
+          "value": -2
+        },
+        "charismaSave": {
+          "value": -1
+        }
+      },
+      "ac": 12,
+      "max_hp": 5,
+      "hp": 5,
+      "temp_hp": 0,
+      "spellbook": {
+        "slots": {},
+        "max_slots": {},
+        "spells": [],
+        "dc": null,
+        "sab": null,
+        "caster_level": 0,
+        "spell_mod": null,
+        "pact_slot_level": null,
+        "num_pact_slots": null,
+        "max_pact_slots": null,
+        "at_will": [],
+        "daily": {},
+        "daily_max": {}
+      },
+      "creature_type": "humanoid (kobold)",
+      "controller_id": 187421759484592128,
+      "init": 3,
+      "private": true,
+      "index": 8,
+      "notes": null,
+      "effects": [],
+      "group_id": null,
+      "type": "monster",
+      "id": "7f877ff3-3635-48cc-8ec2-cef2acfdae16",
+      "monster_name": "Kobold",
+      "monster_id": 16939
+    },
+    {
+      "name": "OR3",
+      "stats": {
+        "prof_bonus": 2,
+        "strength": 16,
+        "dexterity": 12,
+        "constitution": 16,
+        "intelligence": 7,
+        "wisdom": 11,
+        "charisma": 10
+      },
+      "levels": {
+        "total_level": 0.5,
+        "classes": {
+          "Monster": 0.5
+        }
+      },
+      "attacks": [
+        {
+          "name": "Greataxe",
+          "automation": [
+            {
+              "type": "target",
+              "target": "each",
+              "effects": [
+                {
+                  "type": "attack",
+                  "hit": [
+                    {
+                      "type": "damage",
+                      "damage": "1d12 + 3 [slashing]",
+                      "overheal": false
+                    }
+                  ],
+                  "miss": [],
+                  "attackBonus": "5"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "*Melee Weapon Attack:* +5 to hit, reach 5 ft., one target. *Hit:* 9 (1d12 + 3) slashing damage."
+            }
+          ],
+          "_v": 2
+        },
+        {
+          "name": "Javelin",
+          "automation": [
+            {
+              "type": "target",
+              "target": "each",
+              "effects": [
+                {
+                  "type": "attack",
+                  "hit": [
+                    {
+                      "type": "damage",
+                      "damage": "1d6 + 3 [piercing]",
+                      "overheal": false
+                    }
+                  ],
+                  "miss": [],
+                  "attackBonus": "5"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "*Melee or Ranged Weapon Attack:* +5 to hit, reach 5 ft. or range 30/120 ft., one target. *Hit:* 6 (1d6 + 3) piercing damage."
+            }
+          ],
+          "_v": 2
+        }
+      ],
+      "skills": {
+        "acrobatics": {
+          "value": 1
+        },
+        "animalHandling": {
+          "value": 0
+        },
+        "arcana": {
+          "value": -2
+        },
+        "athletics": {
+          "value": 3
+        },
+        "deception": {
+          "value": 0
+        },
+        "history": {
+          "value": -2
+        },
+        "initiative": {
+          "value": 1
+        },
+        "insight": {
+          "value": 0
+        },
+        "intimidation": {
+          "value": 2,
+          "prof": 1
+        },
+        "investigation": {
+          "value": -2
+        },
+        "medicine": {
+          "value": 0
+        },
+        "nature": {
+          "value": -2
+        },
+        "perception": {
+          "value": 0
+        },
+        "performance": {
+          "value": 0
+        },
+        "persuasion": {
+          "value": 0
+        },
+        "religion": {
+          "value": -2
+        },
+        "sleightOfHand": {
+          "value": 1
+        },
+        "stealth": {
+          "value": 1
+        },
+        "survival": {
+          "value": 0
+        },
+        "strength": {
+          "value": 3
+        },
+        "dexterity": {
+          "value": 1
+        },
+        "constitution": {
+          "value": 3
+        },
+        "intelligence": {
+          "value": -2
+        },
+        "wisdom": {
+          "value": 0
+        },
+        "charisma": {
+          "value": 0
+        }
+      },
+      "resistances": {
+        "resist": [],
+        "immune": [],
+        "vuln": [],
+        "neutral": []
+      },
+      "saves": {
+        "strengthSave": {
+          "value": 3
+        },
+        "dexteritySave": {
+          "value": 1
+        },
+        "constitutionSave": {
+          "value": 3
+        },
+        "intelligenceSave": {
+          "value": -2
+        },
+        "wisdomSave": {
+          "value": 0
+        },
+        "charismaSave": {
+          "value": 0
+        }
+      },
+      "ac": 13,
+      "max_hp": 15,
+      "hp": 2,
+      "temp_hp": 0,
+      "spellbook": {
+        "slots": {},
+        "max_slots": {},
+        "spells": [],
+        "dc": null,
+        "sab": null,
+        "caster_level": 0,
+        "spell_mod": null,
+        "pact_slot_level": null,
+        "num_pact_slots": null,
+        "max_pact_slots": null,
+        "at_will": [],
+        "daily": {},
+        "daily_max": {}
+      },
+      "creature_type": "humanoid (orc)",
+      "controller_id": 187421759484592128,
+      "init": 2,
+      "private": true,
+      "index": 9,
+      "notes": null,
+      "effects": [],
+      "group_id": null,
+      "type": "monster",
+      "id": "d972ced7-fe97-4ba5-a4d7-ffbd3477915e",
+      "monster_name": "Orc",
+      "monster_id": 16972
+    }
+  ],
+  "turn": 8,
+  "round": 0,
+  "current": 5,
+  "metadata": {},
+  "nlp_record_session_id": null
+}
