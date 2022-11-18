@@ -1,0 +1,19 @@
+Actors:
+- Reef (Variant Human; Sorcerer 1/Bard 2) <14/25 HP; Injured>
+- AP1 (Ape) <19/19 HP; Healthy>
+- Ophizenya (Minotaur; Fighter 4) <18/44 HP; Bloodied>
+- Noxxis Blazehammer (Hill Dwarf; Cleric 7) <59/59 HP; Healthy>
+- Calti Xihooda (Lizardfolk; Druid 6) <41/45 HP; Injured>
+- GO1 (Gorgon) <114/114 HP; Healthy>
+- LI1 (Lizardfolk) <22/22 HP; Healthy>
+- SA1 (Satyr) <22/31 HP; Injured>
+
+Current:
+Name: Ophizenya
+Class: Fighter 4
+Race: Minotaur
+Attacks: Crossbow, heavy, Glaive, Handaxe, Unarmed Strike, Horns, Goring Rush, Polearm Master - Opportunity Attack
+Actions: Maneuvers: Disarming Attack, Maneuvers: Precision Attack, Hammering Horns, Maneuvers: Trip Attack, Action Surge, Second Wind, Superiority Dice, Polearm Master - Bonus Attack, Fighting Style: Interception, Polearm Master - Opportunity Attack
+
+*Pushing themselves off the ground, then Ophizenya spits out blood* "Is that all you've got?" *as they feel a second wind to finish the fight*
+<|asep|>

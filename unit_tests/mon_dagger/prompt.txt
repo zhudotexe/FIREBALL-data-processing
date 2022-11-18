@@ -1,0 +1,15 @@
+Actors:
+- Calti Xihooda (Lizardfolk; Druid 6) <40/45 HP; Injured>
+- TR1 (Troll) <78/84 HP; Injured>
+- KO3 (Kobold) <1/5 HP; Bloodied>
+- Noxxis Blazehammer (Hill Dwarf; Cleric 7) <55/59 HP; Injured>
+- KO1 (Kobold) <2/5 HP; Bloodied>
+- KO2 (Kobold) <5/5 HP; Healthy>
+
+Current:
+Name: KO2
+Race: Kobold
+Attacks: Dagger, Sling
+
+*Revealing the glint of a blade, the kobold lets out a war cry and runs towards the lizardfolk, intent on stabbing him!*
+<|asep|>

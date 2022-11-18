@@ -1,0 +1,19 @@
+Actors:
+- CE1 (Centaur) <32/45 HP; Injured>
+- Reef (Variant Human; Sorcerer 1/Bard 2) <13/25 HP; Injured>
+- AC1 (Acolyte) <3/9 HP; Bloodied>
+- Noxxis Blazehammer (Hill Dwarf; Cleric 7) <59/59 HP; Healthy>
+- Calti Xihooda (Lizardfolk; Druid 6) <32/45 HP; Injured>
+- Rahotur (Mountain Dwarf; Barbarian 6) <66/77 HP; Injured>
+- DH1 (Draft Horse) <19/19 HP; Healthy>
+- GFoY1 (Gnoll Fang of Yeenoghu) <53/65 HP; Injured>
+
+Current:
+Name: Rahotur
+Class: Barbarian 6
+Race: Mountain Dwarf
+Attacks: Greataxe, Handaxe, Javelin, Unarmed Strike
+Actions: Wild Surge - Wild Weapon, Wild Surge - Retribution, Magic Awareness, Bolstering Magic (Bonus), Wild Surge - Wild Teleportation, Wild Surge - Protective Shroud, Rage, Wild Surge - Vampiric Burst, Wild Surge - Light Burst, Wild Surge, Bolstering Magic (Spell Slot), Wild Surge - Explosive Fey, Wild Surge - Wild Growth
+
+*Seeing their enemies moving to flee, Rahotur takes a javelin and throws it at the centaur* "Oy! Get back here"
+<|asep|>

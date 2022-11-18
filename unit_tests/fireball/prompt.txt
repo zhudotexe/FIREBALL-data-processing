@@ -1,0 +1,22 @@
+Actors:
+- OR2 (Orc) <9/15 HP; Injured>
+- Reef (Variant Human; Sorcerer 1/Bard 2) <19/25 HP; Injured>
+- KO3 (Kobold) <5/5 HP; Healthy>
+- Rahotur (Mountain Dwarf; Barbarian 6) <77/77 HP; Healthy>
+- Calti Xihooda (Lizardfolk; Druid 6) <45/45 HP; Healthy>
+- Noxxis Blazehammer (Hill Dwarf; Cleric 7) <59/59 HP; Healthy>
+- OR1 (Orc) <13/15 HP; Injured>
+- KO1 (Kobold) <3/5 HP; Injured>
+- KO2 (Kobold) <5/5 HP; Healthy>
+- OR3 (Orc) <2/15 HP; Critical>
+
+Current:
+Name: Noxxis Blazehammer
+Class: Cleric 7
+Race: Hill Dwarf
+Attacks: Warhammer, 2-Handed Warhammer, Unarmed Strike
+Spells: Death Ward, Word of Radiance, Fireball, Hold Person, Spiritual Weapon, Revivify, Augury, Scorching Ray, Light, Healing Word, Spirit Guardians, Guidance, Burning Hands, Faerie Fire, Guiding Bolt, Flaming Sphere, Thaumaturgy, Cure Wounds, Bless, Protection from Evil and Good, Daylight, Wall of Fire, Sacred Flame, Guardian of Faith
+Actions: Channel Divinity, Warding Flare, Channel Divinity: Radiance of the Dawn, War Caster, Channel Divinity: Turn Undead, Destroy Undead, Harness Divine Power
+
+*Noxxis invokes divine anger of his deity, coalescing it into a gout of flame that he launches towards the ~~test subjects~~ orcs*
+<|asep|>

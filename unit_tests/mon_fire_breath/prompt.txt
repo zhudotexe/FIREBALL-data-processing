@@ -1,0 +1,15 @@
+Actors:
+- Noxxis Blazehammer (Hill Dwarf; Cleric 7) <49/59 HP; Injured>
+- Calti Xihooda (Lizardfolk; Druid 6) <45/45 HP; Healthy>
+- YRD1 (Young Red Dragon) <178/178 HP; Healthy>
+- BU1 (Bulette) <86/94 HP; Injured>
+- Reef (Variant Human; Sorcerer 1/Bard 2) <25/25 HP; Healthy>
+- CH1 (Chimera) <102/114 HP; Injured>
+
+Current:
+Name: YRD1
+Race: Young Red Dragon
+Attacks: Bite, Claw, Fire Breath
+
+*With a roar, the dragon swoops down, scouring the earth with a gout of flame from its maw. Calti and Reef are caught in the conflagration!*
+<|asep|>

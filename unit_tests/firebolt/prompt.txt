@@ -1,0 +1,19 @@
+Actors:
+- Reef (Variant Human; Sorcerer 1/Bard 2) <8/25 HP; Bloodied>
+- WE1 (Water Elemental) <93/114 HP; Injured>
+- GO1 (Goblin) <7/7 HP; Healthy>
+- SM1 (Shambling Mound) <123/136 HP; Injured>
+- Noxxis Blazehammer (Hill Dwarf; Cleric 7) <41/59 HP; Injured>
+- Rahotur (Mountain Dwarf; Barbarian 6) <64/77 HP; Injured>
+- Calti Xihooda (Lizardfolk; Druid 6) <45/45 HP; Healthy>
+
+Current:
+Name: Reef
+Class: Sorcerer 1/Bard 2
+Race: Variant Human
+Attacks: Crossbow, light, Dagger, Unarmed Strike
+Spells: Prestidigitation, Shield, Spare the Dying, Absorb Elements, Inflict Wounds, Faerie Fire, Mage Hand, Mending, Thunderwave, Toll the Dead, Healing Word, Fire Bolt, Cure Wounds, Bane
+Actions: Bardic Inspiration, Favored by the Gods, Lucky, Song of Rest
+
+*Reef raises a finger, a bolt of flames coalescing and firing out towards the goblin!*
+<|asep|>
