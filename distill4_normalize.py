@@ -45,9 +45,11 @@ from avrae.cogs5e.initiative.combat import deserialize_combatant_sync
 from gamedata import Monster  # this import is wonky because of namespace weirdness
 
 DATA_DIR = pathlib.Path("data/")
-IN_DIR = pathlib.Path("extract/experiment3/")
-OUT_DIR = pathlib.Path("extract/experiment4/")
-RUN_PARALLEL = True
+# IN_DIR = pathlib.Path("extract/experiment3/")
+# OUT_DIR = pathlib.Path("extract/experiment4/")
+IN_DIR = pathlib.Path("extract/regression/experiment3b/")
+OUT_DIR = pathlib.Path("extract/regression/experiment4/")
+RUN_PARALLEL = False
 log = logging.getLogger("distill4")
 loglevel = logging.INFO
 

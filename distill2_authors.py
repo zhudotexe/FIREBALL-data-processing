@@ -22,8 +22,10 @@ from dataset.utils import combat_dir_iterator, read_gzipped_file, write_jsonl
 from heuristics.utils import Instance
 
 DATA_DIR = pathlib.Path("data/")
-IN_DIR = pathlib.Path("extract/experiment1/")
-OUT_DIR = pathlib.Path("extract/experiment2/")
+# IN_DIR = pathlib.Path("extract/experiment1/")
+# OUT_DIR = pathlib.Path("extract/experiment2/")
+IN_DIR = pathlib.Path("extract/regression/experiment1/")
+OUT_DIR = pathlib.Path("extract/regression/experiment2/")
 RUN_PARALLEL = True
 log = logging.getLogger("distill2")
 loglevel = logging.INFO

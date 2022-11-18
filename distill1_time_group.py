@@ -11,9 +11,11 @@ from dev_constants import DEV_DIRS
 from heuristics.utils import Event, Instance, MessageGroup, is_bot_message
 
 DATA_DIR = pathlib.Path("data/")
-OUT_DIR = pathlib.Path("extract/experiment1/")
+OUT_DIR = pathlib.Path("extract/regression/experiment1/")
 RUN_PARALLEL = True
 USE_DEV_DIRS = False
+INSTANCE_LIST_PATH = pathlib.Path("regression/cmd_narr_ids.csv")
+
 log = logging.getLogger("distill1")
 
 
@@ -82,7 +84,13 @@ def group_utterances(combat_dir: pathlib.Path):
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
     OUT_DIR.mkdir(parents=True, exist_ok=True)
-    dirs_to_distill = get_combat_dirs(DATA_DIR) if not USE_DEV_DIRS else DEV_DIRS
+    if INSTANCE_LIST_PATH:
+        instance_list = set(INSTANCE_LIST_PATH.read_text().splitlines())
+        print(len(instance_list))
+        dirs_to_distill = [DATA_DIR / d for d in instance_list]
+    else:
+        dirs_to_distill = get_combat_dirs(DATA_DIR) if not USE_DEV_DIRS else DEV_DIRS
+    
     with tqdm.contrib.logging.logging_redirect_tqdm():
         if RUN_PARALLEL:
             results = tqdm.contrib.concurrent.process_map(group_utterances, dirs_to_distill, chunksize=10)
