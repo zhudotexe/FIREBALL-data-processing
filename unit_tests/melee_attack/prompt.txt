@@ -1,0 +1,20 @@
+Actors:
+- CE1 (Centaur) <32/45 HP; Injured>
+- Reef (Variant Human; Sorcerer 1/Bard 2) <13/25 HP; Injured>
+- AC1 (Acolyte) <3/9 HP; Bloodied>
+- Noxxis Blazehammer (Hill Dwarf; Cleric 7) <59/59 HP; Healthy>
+- Calti Xihooda (Lizardfolk; Druid 6) <32/45 HP; Injured>
+- Rahotur (Mountain Dwarf; Barbarian 6) <66/77 HP; Injured>
+- DH1 (Draft Horse) <19/19 HP; Healthy>
+- GFoY1 (Gnoll Fang of Yeenoghu) <53/65 HP; Injured>
+
+Current:
+Name: Calti Xihooda
+Class: Druid 6
+Race: Lizardfolk
+Attacks: Scimitar, Unarmed Strike, Bite
+Spells: Produce Flame, Daylight, Druidcraft, Moonbeam, Thorn Whip, Faerie Fire, Dispel Magic, Erupting Earth, Healing Word, Spike Growth, Enhance Ability
+Actions: Hungry Jaws, Combat Wild Shape, Wild Shape
+
+*With a hiss showing his forked tongue, Calti draws his curved blade, lunging forward to strike at the cultist of Yeenoghu.*
+<|asep|>

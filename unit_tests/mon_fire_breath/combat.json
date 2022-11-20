@@ -1,0 +1,973 @@
+{
+  "channel": "1042890065543712879",
+  "summary": 1042905790274613420,
+  "dm": 187421759484592128,
+  "options": {},
+  "combatants": [
+    {
+      "name": "Noxxis Blazehammer",
+      "attacks": [],
+      "resistances": {
+        "resist": [
+          {
+            "dtype": "poison"
+          }
+        ],
+        "immune": [
+          {
+            "dtype": "hits",
+            "only": [
+              "critical"
+            ]
+          }
+        ],
+        "vuln": [],
+        "neutral": []
+      },
+      "ac": null,
+      "max_hp": null,
+      "creature_type": null,
+      "controller_id": 137677824810156032,
+      "init": 20,
+      "private": null,
+      "index": 0,
+      "notes": null,
+      "effects": [],
+      "group_id": null,
+      "type": "player",
+      "id": "bacc6a96-8b00-4cdb-8063-649c062f59fd",
+      "character_id": "beyond-67062593",
+      "character_owner": "137677824810156032"
+    },
+    {
+      "name": "Calti Xihooda",
+      "attacks": [],
+      "resistances": {
+        "resist": [],
+        "immune": [],
+        "vuln": [],
+        "neutral": []
+      },
+      "ac": null,
+      "max_hp": null,
+      "creature_type": null,
+      "controller_id": 187421759484592128,
+      "init": 19,
+      "private": null,
+      "index": 1,
+      "notes": null,
+      "effects": [],
+      "group_id": null,
+      "type": "player",
+      "id": "262f106e-fa92-466b-8dc2-99b1789ba8b5",
+      "character_id": "beyond-13342511",
+      "character_owner": "187421759484592128"
+    },
+    {
+      "name": "YRD1",
+      "stats": {
+        "prof_bonus": 4,
+        "strength": 23,
+        "dexterity": 10,
+        "constitution": 21,
+        "intelligence": 14,
+        "wisdom": 11,
+        "charisma": 19
+      },
+      "levels": {
+        "total_level": 10.0,
+        "classes": {
+          "Monster": 10.0
+        }
+      },
+      "attacks": [
+        {
+          "name": "Bite",
+          "automation": [
+            {
+              "type": "target",
+              "target": "each",
+              "effects": [
+                {
+                  "type": "attack",
+                  "hit": [
+                    {
+                      "type": "damage",
+                      "damage": "2d10 + 6 [piercing] + 1d6 [fire]",
+                      "overheal": false
+                    }
+                  ],
+                  "miss": [],
+                  "attackBonus": "10"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "*Melee Weapon Attack:* +10 to hit, reach 10 ft., one target. *Hit:* 17 (2d10 + 6) piercing damage plus 3 (1d6) fire damage."
+            }
+          ],
+          "_v": 2
+        },
+        {
+          "name": "Claw",
+          "automation": [
+            {
+              "type": "target",
+              "target": "each",
+              "effects": [
+                {
+                  "type": "attack",
+                  "hit": [
+                    {
+                      "type": "damage",
+                      "damage": "2d6 + 6 [slashing]",
+                      "overheal": false
+                    }
+                  ],
+                  "miss": [],
+                  "attackBonus": "10"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "*Melee Weapon Attack:* +10 to hit, reach 5 ft., one target. *Hit:* 13 (2d6 + 6) slashing damage."
+            }
+          ],
+          "_v": 2
+        },
+        {
+          "name": "Fire Breath",
+          "automation": [
+            {
+              "type": "roll",
+              "dice": "16d6 [fire]",
+              "name": "damage",
+              "hidden": false
+            },
+            {
+              "type": "target",
+              "target": "each",
+              "effects": [
+                {
+                  "type": "save",
+                  "stat": "dex",
+                  "fail": [
+                    {
+                      "type": "damage",
+                      "damage": "{damage}",
+                      "overheal": false
+                    }
+                  ],
+                  "success": [
+                    {
+                      "type": "damage",
+                      "damage": "({damage}) / 2",
+                      "overheal": false
+                    }
+                  ],
+                  "dc": "17"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "The dragon exhales fire in a 30-foot cone. Each creature in that area must make a DC 17 Dexterity saving throw, taking 56 (16d6) fire damage on a failed save, or half as much damage on a successful one."
+            }
+          ],
+          "_v": 2,
+          "proper": true,
+          "verb": "unleashes their"
+        }
+      ],
+      "skills": {
+        "acrobatics": {
+          "value": 0
+        },
+        "animalHandling": {
+          "value": 0
+        },
+        "arcana": {
+          "value": 2
+        },
+        "athletics": {
+          "value": 6
+        },
+        "deception": {
+          "value": 4
+        },
+        "history": {
+          "value": 2
+        },
+        "initiative": {
+          "value": 0
+        },
+        "insight": {
+          "value": 0
+        },
+        "intimidation": {
+          "value": 4
+        },
+        "investigation": {
+          "value": 2
+        },
+        "medicine": {
+          "value": 0
+        },
+        "nature": {
+          "value": 2
+        },
+        "perception": {
+          "value": 8,
+          "prof": 1,
+          "bonus": 4
+        },
+        "performance": {
+          "value": 4
+        },
+        "persuasion": {
+          "value": 4
+        },
+        "religion": {
+          "value": 2
+        },
+        "sleightOfHand": {
+          "value": 0
+        },
+        "stealth": {
+          "value": 4,
+          "prof": 1
+        },
+        "survival": {
+          "value": 0
+        },
+        "strength": {
+          "value": 6
+        },
+        "dexterity": {
+          "value": 0
+        },
+        "constitution": {
+          "value": 5
+        },
+        "intelligence": {
+          "value": 2
+        },
+        "wisdom": {
+          "value": 0
+        },
+        "charisma": {
+          "value": 4
+        }
+      },
+      "resistances": {
+        "resist": [],
+        "immune": [
+          {
+            "dtype": "fire"
+          }
+        ],
+        "vuln": [],
+        "neutral": []
+      },
+      "saves": {
+        "strengthSave": {
+          "value": 6
+        },
+        "dexteritySave": {
+          "value": 4,
+          "prof": 1
+        },
+        "constitutionSave": {
+          "value": 9,
+          "prof": 1
+        },
+        "intelligenceSave": {
+          "value": 2
+        },
+        "wisdomSave": {
+          "value": 4,
+          "prof": 1
+        },
+        "charismaSave": {
+          "value": 8,
+          "prof": 1
+        }
+      },
+      "ac": 18,
+      "max_hp": 178,
+      "hp": 178,
+      "temp_hp": 0,
+      "spellbook": {
+        "slots": {},
+        "max_slots": {},
+        "spells": [],
+        "dc": null,
+        "sab": null,
+        "caster_level": 0,
+        "spell_mod": null,
+        "pact_slot_level": null,
+        "num_pact_slots": null,
+        "max_pact_slots": null,
+        "at_will": [],
+        "daily": {},
+        "daily_max": {}
+      },
+      "creature_type": "dragon",
+      "controller_id": 187421759484592128,
+      "init": 12,
+      "private": true,
+      "index": 2,
+      "notes": null,
+      "effects": [],
+      "group_id": null,
+      "type": "monster",
+      "id": "e58c97ff-694c-4d70-b352-1c77093cf482",
+      "monster_name": "Young Red Dragon",
+      "monster_id": 17074
+    },
+    {
+      "name": "BU1",
+      "stats": {
+        "prof_bonus": 3,
+        "strength": 19,
+        "dexterity": 11,
+        "constitution": 21,
+        "intelligence": 2,
+        "wisdom": 10,
+        "charisma": 5
+      },
+      "levels": {
+        "total_level": 5.0,
+        "classes": {
+          "Monster": 5.0
+        }
+      },
+      "attacks": [
+        {
+          "name": "Bite",
+          "automation": [
+            {
+              "type": "target",
+              "target": "each",
+              "effects": [
+                {
+                  "type": "attack",
+                  "hit": [
+                    {
+                      "type": "damage",
+                      "damage": "4d12 + 4 [piercing]",
+                      "overheal": false
+                    }
+                  ],
+                  "miss": [],
+                  "attackBonus": "7"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "*Melee Weapon Attack:* +7 to hit, reach 5 ft., one target. *Hit:* 30 (4d12 + 4) piercing damage."
+            }
+          ],
+          "_v": 2
+        },
+        {
+          "name": "Deadly Leap (Dexterity)",
+          "automation": [
+            {
+              "type": "roll",
+              "dice": "(3d6 + 4 [bludgeoning]) + (3d6 + 4 [slashing])",
+              "name": "damage",
+              "hidden": false
+            },
+            {
+              "type": "target",
+              "target": "each",
+              "effects": [
+                {
+                  "type": "save",
+                  "stat": "dex",
+                  "fail": [
+                    {
+                      "type": "damage",
+                      "damage": "{damage}",
+                      "overheal": false
+                    },
+                    {
+                      "type": "ieffect2",
+                      "name": "Prone",
+                      "duration": -1,
+                      "effects": {
+                        "attack_advantage": -1
+                      },
+                      "attacks": [],
+                      "buttons": [
+                        {
+                          "label": "Stand Up",
+                          "automation": [
+                            {
+                              "type": "remove_ieffect"
+                            }
+                          ],
+                          "verb": "stands up",
+                          "style": null,
+                          "defaultDC": null,
+                          "defaultAttackBonus": null,
+                          "defaultCastingMod": null
+                        }
+                      ],
+                      "end": false,
+                      "conc": false,
+                      "desc": "A prone creature's only movement option is to crawl, unless it stands up and thereby ends the condition",
+                      "stacking": false,
+                      "save_as": null,
+                      "parent": null
+                    }
+                  ],
+                  "success": [
+                    {
+                      "type": "damage",
+                      "damage": "({damage}) / 2",
+                      "overheal": false
+                    }
+                  ],
+                  "dc": "16"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "If the bulette jumps at least 15 ft. as part of its movement, it can then use this action to land on its feet in a space that contains one or more other creatures. Each of those creatures must succeed on a DC 16 Strength or Dexterity saving throw (target's choice) or be knocked prone and take 14 (3d6 + 4) bludgeoning damage plus 14 (3d6 + 4) slashing damage. On a successful save, the creature takes only half the damage, isn't knocked prone, and is pushed 5 ft. out of the bulette's space into an unoccupied space of the creature's choice. If no unoccupied space is within range, the creature instead falls prone in the bulette's space."
+            }
+          ],
+          "_v": 2,
+          "verb": "launches forward with"
+        },
+        {
+          "name": "Deadly Leap (Strength)",
+          "automation": [
+            {
+              "type": "roll",
+              "dice": "(3d6 + 4 [bludgeoning]) + (3d6 + 4 [slashing])",
+              "name": "damage",
+              "hidden": false
+            },
+            {
+              "type": "target",
+              "target": "each",
+              "effects": [
+                {
+                  "type": "save",
+                  "stat": "str",
+                  "fail": [
+                    {
+                      "type": "damage",
+                      "damage": "{damage}",
+                      "overheal": false
+                    },
+                    {
+                      "type": "ieffect2",
+                      "name": "Prone",
+                      "duration": -1,
+                      "effects": {
+                        "attack_advantage": -1
+                      },
+                      "attacks": [],
+                      "buttons": [
+                        {
+                          "label": "Stand Up",
+                          "automation": [
+                            {
+                              "type": "remove_ieffect"
+                            }
+                          ],
+                          "verb": "stands up",
+                          "style": null,
+                          "defaultDC": null,
+                          "defaultAttackBonus": null,
+                          "defaultCastingMod": null
+                        }
+                      ],
+                      "end": false,
+                      "conc": false,
+                      "desc": "A prone creature's only movement option is to crawl, unless it stands up and thereby ends the condition",
+                      "stacking": false,
+                      "save_as": null,
+                      "parent": null
+                    }
+                  ],
+                  "success": [
+                    {
+                      "type": "damage",
+                      "damage": "({damage}) / 2",
+                      "overheal": false
+                    }
+                  ],
+                  "dc": "16"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "If the bulette jumps at least 15 ft. as part of its movement, it can then use this action to land on its feet in a space that contains one or more other creatures. Each of those creatures must succeed on a DC 16 Strength or Dexterity saving throw (target's choice) or be knocked prone and take 14 (3d6 + 4) bludgeoning damage plus 14 (3d6 + 4) slashing damage. On a successful save, the creature takes only half the damage, isn't knocked prone, and is pushed 5 ft. out of the bulette's space into an unoccupied space of the creature's choice. If no unoccupied space is within range, the creature instead falls prone in the bulette's space."
+            }
+          ],
+          "_v": 2,
+          "verb": "launches forward with"
+        }
+      ],
+      "skills": {
+        "acrobatics": {
+          "value": 0
+        },
+        "animalHandling": {
+          "value": 0
+        },
+        "arcana": {
+          "value": -4
+        },
+        "athletics": {
+          "value": 4
+        },
+        "deception": {
+          "value": -3
+        },
+        "history": {
+          "value": -4
+        },
+        "initiative": {
+          "value": 0
+        },
+        "insight": {
+          "value": 0
+        },
+        "intimidation": {
+          "value": -3
+        },
+        "investigation": {
+          "value": -4
+        },
+        "medicine": {
+          "value": 0
+        },
+        "nature": {
+          "value": -4
+        },
+        "perception": {
+          "value": 6,
+          "prof": 1,
+          "bonus": 3
+        },
+        "performance": {
+          "value": -3
+        },
+        "persuasion": {
+          "value": -3
+        },
+        "religion": {
+          "value": -4
+        },
+        "sleightOfHand": {
+          "value": 0
+        },
+        "stealth": {
+          "value": 0
+        },
+        "survival": {
+          "value": 0
+        },
+        "strength": {
+          "value": 4
+        },
+        "dexterity": {
+          "value": 0
+        },
+        "constitution": {
+          "value": 5
+        },
+        "intelligence": {
+          "value": -4
+        },
+        "wisdom": {
+          "value": 0
+        },
+        "charisma": {
+          "value": -3
+        }
+      },
+      "resistances": {
+        "resist": [],
+        "immune": [],
+        "vuln": [],
+        "neutral": []
+      },
+      "saves": {
+        "strengthSave": {
+          "value": 4
+        },
+        "dexteritySave": {
+          "value": 0
+        },
+        "constitutionSave": {
+          "value": 5
+        },
+        "intelligenceSave": {
+          "value": -4
+        },
+        "wisdomSave": {
+          "value": 0
+        },
+        "charismaSave": {
+          "value": -3
+        }
+      },
+      "ac": 17,
+      "max_hp": 94,
+      "hp": 86,
+      "temp_hp": 0,
+      "spellbook": {
+        "slots": {},
+        "max_slots": {},
+        "spells": [],
+        "dc": null,
+        "sab": null,
+        "caster_level": 0,
+        "spell_mod": null,
+        "pact_slot_level": null,
+        "num_pact_slots": null,
+        "max_pact_slots": null,
+        "at_will": [],
+        "daily": {},
+        "daily_max": {}
+      },
+      "creature_type": "monstrosity",
+      "controller_id": 187421759484592128,
+      "init": 11,
+      "private": true,
+      "index": 3,
+      "notes": null,
+      "effects": [],
+      "group_id": null,
+      "type": "monster",
+      "id": "785e2c6a-ea0a-4201-8f87-ea00f6ac50a3",
+      "monster_name": "Bulette",
+      "monster_id": 16818
+    },
+    {
+      "name": "Reef",
+      "attacks": [],
+      "resistances": {
+        "resist": [],
+        "immune": [],
+        "vuln": [],
+        "neutral": []
+      },
+      "ac": null,
+      "max_hp": null,
+      "creature_type": null,
+      "controller_id": 1011869550557548625,
+      "init": 8,
+      "private": null,
+      "index": 4,
+      "notes": null,
+      "effects": [],
+      "group_id": null,
+      "type": "player",
+      "id": "d64f9c0b-5cc8-4a8b-b2e9-73c8e902e4d8",
+      "character_id": "beyond-87299060",
+      "character_owner": "1011869550557548625"
+    },
+    {
+      "name": "CH1",
+      "stats": {
+        "prof_bonus": 3,
+        "strength": 19,
+        "dexterity": 11,
+        "constitution": 19,
+        "intelligence": 3,
+        "wisdom": 14,
+        "charisma": 10
+      },
+      "levels": {
+        "total_level": 6.0,
+        "classes": {
+          "Monster": 6.0
+        }
+      },
+      "attacks": [
+        {
+          "name": "Bite",
+          "automation": [
+            {
+              "type": "target",
+              "target": "each",
+              "effects": [
+                {
+                  "type": "attack",
+                  "hit": [
+                    {
+                      "type": "damage",
+                      "damage": "2d6 + 4 [piercing]",
+                      "overheal": false
+                    }
+                  ],
+                  "miss": [],
+                  "attackBonus": "7"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "*Melee Weapon Attack:* +7 to hit, reach 5 ft., one target. *Hit:* 11 (2d6 + 4) piercing damage."
+            }
+          ],
+          "_v": 2
+        },
+        {
+          "name": "Horns",
+          "automation": [
+            {
+              "type": "target",
+              "target": "each",
+              "effects": [
+                {
+                  "type": "attack",
+                  "hit": [
+                    {
+                      "type": "damage",
+                      "damage": "1d12 + 4 [bludgeoning]",
+                      "overheal": false
+                    }
+                  ],
+                  "miss": [],
+                  "attackBonus": "7"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "*Melee Weapon Attack:* +7 to hit, reach 5 ft., one target. *Hit:* 10 (1d12 + 4) bludgeoning damage."
+            }
+          ],
+          "_v": 2,
+          "proper": true
+        },
+        {
+          "name": "Claws",
+          "automation": [
+            {
+              "type": "target",
+              "target": "each",
+              "effects": [
+                {
+                  "type": "attack",
+                  "hit": [
+                    {
+                      "type": "damage",
+                      "damage": "2d6 + 4 [slashing]",
+                      "overheal": false
+                    }
+                  ],
+                  "miss": [],
+                  "attackBonus": "7"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "*Melee Weapon Attack:* +7 to hit, reach 5 ft., one target. *Hit:* 11 (2d6 + 4) slashing damage."
+            }
+          ],
+          "_v": 2,
+          "proper": true
+        },
+        {
+          "name": "Fire Breath",
+          "automation": [
+            {
+              "type": "roll",
+              "dice": "7d8 [fire]",
+              "name": "damage",
+              "hidden": false
+            },
+            {
+              "type": "target",
+              "target": "each",
+              "effects": [
+                {
+                  "type": "save",
+                  "stat": "dex",
+                  "fail": [
+                    {
+                      "type": "damage",
+                      "damage": "{damage}",
+                      "overheal": false
+                    }
+                  ],
+                  "success": [
+                    {
+                      "type": "damage",
+                      "damage": "({damage}) / 2",
+                      "overheal": false
+                    }
+                  ],
+                  "dc": "15"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "The dragon head exhales fire in a 15-foot cone. Each creature in that area must make a DC 15 Dexterity saving throw, taking 31 (7d8) fire damage on a failed save, or half as much damage on a successful one."
+            }
+          ],
+          "_v": 2,
+          "proper": true,
+          "verb": "unleashes their"
+        }
+      ],
+      "skills": {
+        "acrobatics": {
+          "value": 0
+        },
+        "animalHandling": {
+          "value": 2
+        },
+        "arcana": {
+          "value": -4
+        },
+        "athletics": {
+          "value": 4
+        },
+        "deception": {
+          "value": 0
+        },
+        "history": {
+          "value": -4
+        },
+        "initiative": {
+          "value": 0
+        },
+        "insight": {
+          "value": 2
+        },
+        "intimidation": {
+          "value": 0
+        },
+        "investigation": {
+          "value": -4
+        },
+        "medicine": {
+          "value": 2
+        },
+        "nature": {
+          "value": -4
+        },
+        "perception": {
+          "value": 8,
+          "prof": 1,
+          "bonus": 3
+        },
+        "performance": {
+          "value": 0
+        },
+        "persuasion": {
+          "value": 0
+        },
+        "religion": {
+          "value": -4
+        },
+        "sleightOfHand": {
+          "value": 0
+        },
+        "stealth": {
+          "value": 0
+        },
+        "survival": {
+          "value": 2
+        },
+        "strength": {
+          "value": 4
+        },
+        "dexterity": {
+          "value": 0
+        },
+        "constitution": {
+          "value": 4
+        },
+        "intelligence": {
+          "value": -4
+        },
+        "wisdom": {
+          "value": 2
+        },
+        "charisma": {
+          "value": 0
+        }
+      },
+      "resistances": {
+        "resist": [],
+        "immune": [],
+        "vuln": [],
+        "neutral": []
+      },
+      "saves": {
+        "strengthSave": {
+          "value": 4
+        },
+        "dexteritySave": {
+          "value": 0
+        },
+        "constitutionSave": {
+          "value": 4
+        },
+        "intelligenceSave": {
+          "value": -4
+        },
+        "wisdomSave": {
+          "value": 2
+        },
+        "charismaSave": {
+          "value": 0
+        }
+      },
+      "ac": 14,
+      "max_hp": 114,
+      "hp": 102,
+      "temp_hp": 0,
+      "spellbook": {
+        "slots": {},
+        "max_slots": {},
+        "spells": [],
+        "dc": null,
+        "sab": null,
+        "caster_level": 0,
+        "spell_mod": null,
+        "pact_slot_level": null,
+        "num_pact_slots": null,
+        "max_pact_slots": null,
+        "at_will": [],
+        "daily": {},
+        "daily_max": {}
+      },
+      "creature_type": "monstrosity",
+      "controller_id": 187421759484592128,
+      "init": 2,
+      "private": true,
+      "index": 5,
+      "notes": null,
+      "effects": [],
+      "group_id": null,
+      "type": "monster",
+      "id": "66b84a8d-5d7e-4f66-86e0-e6a68b0fb932",
+      "monster_name": "Chimera",
+      "monster_id": 16823
+    }
+  ],
+  "turn": 12,
+  "round": 0,
+  "current": 2,
+  "metadata": {},
+  "nlp_record_session_id": null
+}

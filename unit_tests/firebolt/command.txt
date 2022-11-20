@@ -1,0 +1,1 @@
+!cast "Fire Bolt" -t GO1

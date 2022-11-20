@@ -49,9 +49,10 @@ def stringify_actor(actor: dict):
 
     return {"short": " ".join(short_parts), "long": "\n".join(long_parts), "description": description}
 
+
 # parts for ablation: actors, current actor, and their constituent parts
 # possible ablations = ["actors","current"]
-def utt_cmd_prompt(data, include_sep=True, ablations = []) -> str | None:
+def utt_cmd_prompt(data, include_sep=True, ablations=[]) -> str | None:
     before = data["before_utterances"]
     state_before = data["combat_state_before"]
     current = data["current_actor"]
@@ -62,7 +63,7 @@ def utt_cmd_prompt(data, include_sep=True, ablations = []) -> str | None:
 
     # prompt:
     # Actors:
-    # - Name (Race/creature type; class if available) <X/Y HP; Healthiness>> [Effects]
+    # - Name (Race/creature type; class if available) <X/Y HP; Healthiness> [Effects]
     # - ...
     #
     # Current:
@@ -94,8 +95,6 @@ def utt_cmd_prompt(data, include_sep=True, ablations = []) -> str | None:
     rp = "\n".join(before)
     prompt_parts.append(rp)
 
-    # TODO: run ablation by removing parts of the prompt
-
     return "\n\n".join(prompt_parts) + (SEP if include_sep else "")
 
 
@@ -103,8 +102,9 @@ def utt_cmd_completion(data, include_sep=True, command_sep=COMMAND_SEP) -> str |
     commands = data["commands_norm"]
     return command_sep.join(commands) + (STOP_SEQ if include_sep else "")
 
+
 # ablations: actors, targets, caster
-def sta_nar_prompt(data, include_sep=True, ablations = []) -> str | None:
+def sta_nar_prompt(data, include_sep=True, ablations=[]) -> str | None:
     state_after = data["combat_state_after"]
     caster = data["caster_after"]
     targets = data["targets_after"]
@@ -156,8 +156,6 @@ def sta_nar_prompt(data, include_sep=True, ablations = []) -> str | None:
 
     prompt_parts.append("\n".join(automation_results))
 
-    # TODO: run ablation by removing parts of the prompt
-
     return "\n\n".join(prompt_parts) + (SEP if include_sep else "")
 
 
@@ -172,4 +170,3 @@ def sta_nar_completion(data, include_sep=True) -> str | None:
     # after
     # <|aeot|>
     return "\n".join(after) + (STOP_SEQ if include_sep else "")
-

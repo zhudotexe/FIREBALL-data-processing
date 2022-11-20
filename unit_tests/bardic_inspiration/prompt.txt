@@ -1,0 +1,19 @@
+Actors:
+- CY1 (Cyclops) <121/138 HP; Injured>
+- GWS1 (Giant Wolf Spider) <-10/11 HP; Dead>
+- Ophizenya (Minotaur; Fighter 4) <44/44 HP; Healthy>
+- Noxxis Blazehammer (Hill Dwarf; Cleric 7) <38/59 HP; Injured>
+- Calti Xihooda (Lizardfolk; Druid 6) <14/45 HP; Bloodied>
+- Reef (Variant Human; Sorcerer 1/Bard 2) <4/25 HP; Bloodied>
+- WE1 (Werewolf) <58/58 HP; Healthy>
+
+Current:
+Name: Reef
+Class: Sorcerer 1/Bard 2
+Race: Variant Human
+Attacks: Crossbow, light, Dagger, Unarmed Strike
+Spells: Prestidigitation, Shield, Spare the Dying, Absorb Elements, Inflict Wounds, Faerie Fire, Mage Hand, Mending, Thunderwave, Toll the Dead, Healing Word, Fire Bolt, Cure Wounds, Bane
+Actions: Bardic Inspiration, Favored by the Gods, Lucky, Song of Rest
+
+"Hey! You can do this!" *Reef yells out inspiring words, to bardic inspire Noxxis*
+<|asep|>

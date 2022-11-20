@@ -1,0 +1,846 @@
+{
+  "channel": "1042890065543712879",
+  "summary": 1042903019630641203,
+  "dm": 187421759484592128,
+  "options": {},
+  "combatants": [
+    {
+      "name": "CY1",
+      "stats": {
+        "prof_bonus": 3,
+        "strength": 22,
+        "dexterity": 11,
+        "constitution": 20,
+        "intelligence": 8,
+        "wisdom": 6,
+        "charisma": 10
+      },
+      "levels": {
+        "total_level": 6.0,
+        "classes": {
+          "Monster": 6.0
+        }
+      },
+      "attacks": [
+        {
+          "name": "Greatclub",
+          "automation": [
+            {
+              "type": "target",
+              "target": "each",
+              "effects": [
+                {
+                  "type": "attack",
+                  "hit": [
+                    {
+                      "type": "damage",
+                      "damage": "3d8 + 6 [bludgeoning]",
+                      "overheal": false
+                    }
+                  ],
+                  "miss": [],
+                  "attackBonus": "9"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "*Melee Weapon Attack:* +9 to hit, reach 10 ft., one target. *Hit:* 19 (3d8 + 6) bludgeoning damage."
+            }
+          ],
+          "_v": 2
+        },
+        {
+          "name": "Rock",
+          "automation": [
+            {
+              "type": "target",
+              "target": "each",
+              "effects": [
+                {
+                  "type": "attack",
+                  "hit": [
+                    {
+                      "type": "damage",
+                      "damage": "4d10 + 6 [bludgeoning]",
+                      "overheal": false
+                    }
+                  ],
+                  "miss": [],
+                  "attackBonus": "9"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "*Ranged Weapon Attack:* +9 to hit, range 30/120 ft., one target. *Hit:* 28 (4d10 + 6) bludgeoning damage."
+            }
+          ],
+          "_v": 2
+        }
+      ],
+      "skills": {
+        "acrobatics": {
+          "value": 0
+        },
+        "animalHandling": {
+          "value": -2
+        },
+        "arcana": {
+          "value": -1
+        },
+        "athletics": {
+          "value": 6
+        },
+        "deception": {
+          "value": 0
+        },
+        "history": {
+          "value": -1
+        },
+        "initiative": {
+          "value": 0
+        },
+        "insight": {
+          "value": -2
+        },
+        "intimidation": {
+          "value": 0
+        },
+        "investigation": {
+          "value": -1
+        },
+        "medicine": {
+          "value": -2
+        },
+        "nature": {
+          "value": -1
+        },
+        "perception": {
+          "value": -2
+        },
+        "performance": {
+          "value": 0
+        },
+        "persuasion": {
+          "value": 0
+        },
+        "religion": {
+          "value": -1
+        },
+        "sleightOfHand": {
+          "value": 0
+        },
+        "stealth": {
+          "value": 0
+        },
+        "survival": {
+          "value": -2
+        },
+        "strength": {
+          "value": 6
+        },
+        "dexterity": {
+          "value": 0
+        },
+        "constitution": {
+          "value": 5
+        },
+        "intelligence": {
+          "value": -1
+        },
+        "wisdom": {
+          "value": -2
+        },
+        "charisma": {
+          "value": 0
+        }
+      },
+      "resistances": {
+        "resist": [],
+        "immune": [],
+        "vuln": [],
+        "neutral": []
+      },
+      "saves": {
+        "strengthSave": {
+          "value": 6
+        },
+        "dexteritySave": {
+          "value": 0
+        },
+        "constitutionSave": {
+          "value": 5
+        },
+        "intelligenceSave": {
+          "value": -1
+        },
+        "wisdomSave": {
+          "value": -2
+        },
+        "charismaSave": {
+          "value": 0
+        }
+      },
+      "ac": 14,
+      "max_hp": 138,
+      "hp": 121,
+      "temp_hp": 0,
+      "spellbook": {
+        "slots": {},
+        "max_slots": {},
+        "spells": [],
+        "dc": null,
+        "sab": null,
+        "caster_level": 0,
+        "spell_mod": null,
+        "pact_slot_level": null,
+        "num_pact_slots": null,
+        "max_pact_slots": null,
+        "at_will": [],
+        "daily": {},
+        "daily_max": {}
+      },
+      "creature_type": "giant",
+      "controller_id": 187421759484592128,
+      "init": 17,
+      "private": true,
+      "index": 0,
+      "notes": null,
+      "effects": [],
+      "group_id": null,
+      "type": "monster",
+      "id": "89a0be94-2933-4d8b-8ef4-2ccb50bba941",
+      "monster_name": "Cyclops",
+      "monster_id": 17090
+    },
+    {
+      "name": "GWS1",
+      "stats": {
+        "prof_bonus": 2,
+        "strength": 12,
+        "dexterity": 16,
+        "constitution": 13,
+        "intelligence": 3,
+        "wisdom": 12,
+        "charisma": 4
+      },
+      "levels": {
+        "total_level": 0.25,
+        "classes": {
+          "Monster": 0.25
+        }
+      },
+      "attacks": [
+        {
+          "name": "Bite",
+          "automation": [
+            {
+              "type": "target",
+              "target": "each",
+              "effects": [
+                {
+                  "type": "attack",
+                  "hit": [
+                    {
+                      "type": "damage",
+                      "damage": "1d6 + 1 [piercing]",
+                      "overheal": false
+                    },
+                    {
+                      "type": "save",
+                      "stat": "con",
+                      "fail": [
+                        {
+                          "type": "damage",
+                          "damage": "2d6 [poison]",
+                          "overheal": false
+                        }
+                      ],
+                      "success": [
+                        {
+                          "type": "damage",
+                          "damage": "(2d6 [poison]) / 2",
+                          "overheal": false
+                        }
+                      ],
+                      "dc": "11"
+                    }
+                  ],
+                  "miss": [],
+                  "attackBonus": "3"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "*Melee Weapon Attack:* +3 to hit, reach 5 ft., one creature. *Hit:* 4 (1d6 + 1) piercing damage, and the target must make a DC 11 Constitution saving throw, taking 7 (2d6) poison damage on a failed save, or half as much damage on a successful one. If the poison damage reduces the target to 0 hit points, the target is stable but poisoned for 1 hour, even after regaining hit points, and is paralyzed while poisoned in this way."
+            }
+          ],
+          "_v": 2
+        }
+      ],
+      "skills": {
+        "acrobatics": {
+          "value": 3
+        },
+        "animalHandling": {
+          "value": 1
+        },
+        "arcana": {
+          "value": -4
+        },
+        "athletics": {
+          "value": 1
+        },
+        "deception": {
+          "value": -3
+        },
+        "history": {
+          "value": -4
+        },
+        "initiative": {
+          "value": 3
+        },
+        "insight": {
+          "value": 1
+        },
+        "intimidation": {
+          "value": -3
+        },
+        "investigation": {
+          "value": -4
+        },
+        "medicine": {
+          "value": 1
+        },
+        "nature": {
+          "value": -4
+        },
+        "perception": {
+          "value": 3,
+          "prof": 1
+        },
+        "performance": {
+          "value": -3
+        },
+        "persuasion": {
+          "value": -3
+        },
+        "religion": {
+          "value": -4
+        },
+        "sleightOfHand": {
+          "value": 3
+        },
+        "stealth": {
+          "value": 7,
+          "prof": 1,
+          "bonus": 2
+        },
+        "survival": {
+          "value": 1
+        },
+        "strength": {
+          "value": 1
+        },
+        "dexterity": {
+          "value": 3
+        },
+        "constitution": {
+          "value": 1
+        },
+        "intelligence": {
+          "value": -4
+        },
+        "wisdom": {
+          "value": 1
+        },
+        "charisma": {
+          "value": -3
+        }
+      },
+      "resistances": {
+        "resist": [],
+        "immune": [],
+        "vuln": [],
+        "neutral": []
+      },
+      "saves": {
+        "strengthSave": {
+          "value": 1
+        },
+        "dexteritySave": {
+          "value": 3
+        },
+        "constitutionSave": {
+          "value": 1
+        },
+        "intelligenceSave": {
+          "value": -4
+        },
+        "wisdomSave": {
+          "value": 1
+        },
+        "charismaSave": {
+          "value": -3
+        }
+      },
+      "ac": 13,
+      "max_hp": 11,
+      "hp": -10,
+      "temp_hp": 0,
+      "spellbook": {
+        "slots": {},
+        "max_slots": {},
+        "spells": [],
+        "dc": null,
+        "sab": null,
+        "caster_level": 0,
+        "spell_mod": null,
+        "pact_slot_level": null,
+        "num_pact_slots": null,
+        "max_pact_slots": null,
+        "at_will": [],
+        "daily": {},
+        "daily_max": {}
+      },
+      "creature_type": "beast",
+      "controller_id": 187421759484592128,
+      "init": 16,
+      "private": true,
+      "index": 1,
+      "notes": null,
+      "effects": [],
+      "group_id": null,
+      "type": "monster",
+      "id": "1910916d-4790-4743-92fc-d3ccf86b3dfe",
+      "monster_name": "Giant Wolf Spider",
+      "monster_id": 16900
+    },
+    {
+      "name": "Ophizenya",
+      "attacks": [],
+      "resistances": {
+        "resist": [],
+        "immune": [],
+        "vuln": [],
+        "neutral": []
+      },
+      "ac": null,
+      "max_hp": null,
+      "creature_type": null,
+      "controller_id": 164249546073964544,
+      "init": 15,
+      "private": null,
+      "index": 2,
+      "notes": null,
+      "effects": [],
+      "group_id": null,
+      "type": "player",
+      "id": "4f14d7d3-272a-4b89-bb24-fd487499509b",
+      "character_id": "beyond-86758859",
+      "character_owner": "164249546073964544"
+    },
+    {
+      "name": "Noxxis Blazehammer",
+      "attacks": [],
+      "resistances": {
+        "resist": [
+          {
+            "dtype": "poison"
+          }
+        ],
+        "immune": [
+          {
+            "dtype": "hits",
+            "only": [
+              "critical"
+            ]
+          }
+        ],
+        "vuln": [],
+        "neutral": []
+      },
+      "ac": null,
+      "max_hp": null,
+      "creature_type": null,
+      "controller_id": 137677824810156032,
+      "init": 13,
+      "private": null,
+      "index": 3,
+      "notes": null,
+      "effects": [],
+      "group_id": null,
+      "type": "player",
+      "id": "5eb66f1f-8b6a-45d5-9806-ca2b2927a0bf",
+      "character_id": "beyond-67062593",
+      "character_owner": "137677824810156032"
+    },
+    {
+      "name": "Calti Xihooda",
+      "attacks": [],
+      "resistances": {
+        "resist": [],
+        "immune": [],
+        "vuln": [],
+        "neutral": []
+      },
+      "ac": null,
+      "max_hp": null,
+      "creature_type": null,
+      "controller_id": 187421759484592128,
+      "init": 11,
+      "private": null,
+      "index": 4,
+      "notes": null,
+      "effects": [],
+      "group_id": null,
+      "type": "player",
+      "id": "fc8b22e7-15ff-4198-8b92-598c656328ca",
+      "character_id": "beyond-13342511",
+      "character_owner": "187421759484592128"
+    },
+    {
+      "name": "Reef",
+      "attacks": [],
+      "resistances": {
+        "resist": [],
+        "immune": [],
+        "vuln": [],
+        "neutral": []
+      },
+      "ac": null,
+      "max_hp": null,
+      "creature_type": null,
+      "controller_id": 1011869550557548625,
+      "init": 5,
+      "private": null,
+      "index": 5,
+      "notes": null,
+      "effects": [],
+      "group_id": null,
+      "type": "player",
+      "id": "88c71ef4-7e8b-4026-859d-37aca6d7a6d7",
+      "character_id": "beyond-87299060",
+      "character_owner": "1011869550557548625"
+    },
+    {
+      "name": "WE1",
+      "stats": {
+        "prof_bonus": 2,
+        "strength": 15,
+        "dexterity": 13,
+        "constitution": 14,
+        "intelligence": 10,
+        "wisdom": 11,
+        "charisma": 10
+      },
+      "levels": {
+        "total_level": 3.0,
+        "classes": {
+          "Monster": 3.0
+        }
+      },
+      "attacks": [
+        {
+          "name": "Bite",
+          "automation": [
+            {
+              "type": "target",
+              "target": "each",
+              "effects": [
+                {
+                  "type": "attack",
+                  "hit": [
+                    {
+                      "type": "damage",
+                      "damage": "1d8 + 2 [piercing]",
+                      "overheal": false
+                    },
+                    {
+                      "type": "save",
+                      "stat": "con",
+                      "fail": [
+                        {
+                          "type": "ieffect",
+                          "name": "Curse",
+                          "duration": -1,
+                          "effects": "",
+                          "end": false,
+                          "conc": false,
+                          "desc": null,
+                          "stacking": false,
+                          "save_as": null,
+                          "parent": null
+                        }
+                      ],
+                      "success": [],
+                      "dc": "12"
+                    }
+                  ],
+                  "miss": [],
+                  "attackBonus": "4"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "*Melee Weapon Attack:* +4 to hit, reach 5 ft., one target. *Hit:* 6 (1d8 + 2) piercing damage. If the target is a humanoid, it must succeed on a DC 12 Constitution saving throw or be cursed with werewolf lycanthropy."
+            }
+          ],
+          "_v": 2
+        },
+        {
+          "name": "Claws",
+          "automation": [
+            {
+              "type": "target",
+              "target": "each",
+              "effects": [
+                {
+                  "type": "attack",
+                  "hit": [
+                    {
+                      "type": "damage",
+                      "damage": "2d4 + 2 [slashing]",
+                      "overheal": false
+                    }
+                  ],
+                  "miss": [],
+                  "attackBonus": "4"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "*Melee Weapon Attack:* +4 to hit, reach 5 ft., one creature. *Hit:* 7 (2d4 + 2) slashing damage."
+            }
+          ],
+          "_v": 2,
+          "proper": true
+        },
+        {
+          "name": "Spear (1H)",
+          "automation": [
+            {
+              "type": "target",
+              "target": "each",
+              "effects": [
+                {
+                  "type": "attack",
+                  "hit": [
+                    {
+                      "type": "damage",
+                      "damage": "1d6 + 2 [piercing]",
+                      "overheal": false
+                    }
+                  ],
+                  "miss": [],
+                  "attackBonus": "4"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "*Melee or Ranged Weapon Attack:* +4 to hit, reach 5 ft. or range 20/60 ft., one creature. *Hit:* 5 (1d6 + 2) piercing damage, or 6 (1d8 + 2) piercing damage if used with two hands to make a melee attack."
+            }
+          ],
+          "_v": 2
+        },
+        {
+          "name": "Spear (2H)",
+          "automation": [
+            {
+              "type": "target",
+              "target": "each",
+              "effects": [
+                {
+                  "type": "attack",
+                  "hit": [
+                    {
+                      "type": "damage",
+                      "damage": "1d8 + 2 [piercing]",
+                      "overheal": false
+                    }
+                  ],
+                  "miss": [],
+                  "attackBonus": "4"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "*Melee or Ranged Weapon Attack:* +4 to hit, reach 5 ft. or range 20/60 ft., one creature. *Hit:* 5 (1d6 + 2) piercing damage, or 6 (1d8 + 2) piercing damage if used with two hands to make a melee attack."
+            }
+          ],
+          "_v": 2
+        }
+      ],
+      "skills": {
+        "acrobatics": {
+          "value": 1
+        },
+        "animalHandling": {
+          "value": 0
+        },
+        "arcana": {
+          "value": 0
+        },
+        "athletics": {
+          "value": 2
+        },
+        "deception": {
+          "value": 0
+        },
+        "history": {
+          "value": 0
+        },
+        "initiative": {
+          "value": 1
+        },
+        "insight": {
+          "value": 0
+        },
+        "intimidation": {
+          "value": 0
+        },
+        "investigation": {
+          "value": 0
+        },
+        "medicine": {
+          "value": 0
+        },
+        "nature": {
+          "value": 0
+        },
+        "perception": {
+          "value": 4,
+          "prof": 1,
+          "bonus": 2
+        },
+        "performance": {
+          "value": 0
+        },
+        "persuasion": {
+          "value": 0
+        },
+        "religion": {
+          "value": 0
+        },
+        "sleightOfHand": {
+          "value": 1
+        },
+        "stealth": {
+          "value": 3,
+          "prof": 1
+        },
+        "survival": {
+          "value": 0
+        },
+        "strength": {
+          "value": 2
+        },
+        "dexterity": {
+          "value": 1
+        },
+        "constitution": {
+          "value": 2
+        },
+        "intelligence": {
+          "value": 0
+        },
+        "wisdom": {
+          "value": 0
+        },
+        "charisma": {
+          "value": 0
+        }
+      },
+      "resistances": {
+        "resist": [],
+        "immune": [
+          {
+            "dtype": "bludgeoning",
+            "unless": [
+              "magical",
+              "silvered"
+            ]
+          },
+          {
+            "dtype": "piercing",
+            "unless": [
+              "magical",
+              "silvered"
+            ]
+          },
+          {
+            "dtype": "slashing",
+            "unless": [
+              "magical",
+              "silvered"
+            ]
+          }
+        ],
+        "vuln": [],
+        "neutral": []
+      },
+      "saves": {
+        "strengthSave": {
+          "value": 2
+        },
+        "dexteritySave": {
+          "value": 1
+        },
+        "constitutionSave": {
+          "value": 2
+        },
+        "intelligenceSave": {
+          "value": 0
+        },
+        "wisdomSave": {
+          "value": 0
+        },
+        "charismaSave": {
+          "value": 0
+        }
+      },
+      "ac": 11,
+      "max_hp": 58,
+      "hp": 58,
+      "temp_hp": 0,
+      "spellbook": {
+        "slots": {},
+        "max_slots": {},
+        "spells": [],
+        "dc": null,
+        "sab": null,
+        "caster_level": 0,
+        "spell_mod": null,
+        "pact_slot_level": null,
+        "num_pact_slots": null,
+        "max_pact_slots": null,
+        "at_will": [],
+        "daily": {},
+        "daily_max": {}
+      },
+      "creature_type": "humanoid (human, shapechanger)",
+      "controller_id": 187421759484592128,
+      "init": 5,
+      "private": true,
+      "index": 6,
+      "notes": null,
+      "effects": [],
+      "group_id": null,
+      "type": "monster",
+      "id": "9bb02a48-1377-4882-b936-4f55f0e44ece",
+      "monster_name": "Werewolf",
+      "monster_id": 17057
+    }
+  ],
+  "turn": 5,
+  "round": 0,
+  "current": 5,
+  "metadata": {},
+  "nlp_record_session_id": null
+}

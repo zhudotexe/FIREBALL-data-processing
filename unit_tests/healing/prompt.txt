@@ -1,0 +1,19 @@
+Actors:
+- Rahotur (Mountain Dwarf; Barbarian 6) <77/77 HP; Healthy>
+- DW3 (Dire Wolf) <37/37 HP; Healthy>
+- DW2 (Dire Wolf) <7/37 HP; Bloodied>
+- Noxxis Blazehammer (Hill Dwarf; Cleric 7) <59/59 HP; Healthy>
+- Reef (Variant Human; Sorcerer 1/Bard 2) <20/25 HP; Injured>
+- Calti Xihooda (Lizardfolk; Druid 6) <15/45 HP; Bloodied>
+- DW1 (Dire Wolf) <27/37 HP; Injured>
+
+Current:
+Name: Noxxis Blazehammer
+Class: Cleric 7
+Race: Hill Dwarf
+Attacks: Warhammer, 2-Handed Warhammer, Unarmed Strike
+Spells: Death Ward, Word of Radiance, Fireball, Hold Person, Spiritual Weapon, Revivify, Augury, Scorching Ray, Light, Healing Word, Spirit Guardians, Guidance, Burning Hands, Faerie Fire, Guiding Bolt, Flaming Sphere, Thaumaturgy, Cure Wounds, Bless, Protection from Evil and Good, Daylight, Wall of Fire, Sacred Flame, Guardian of Faith
+Actions: Channel Divinity, Warding Flare, Channel Divinity: Radiance of the Dawn, War Caster, Channel Divinity: Turn Undead, Destroy Undead, Harness Divine Power
+
+*Noxxis approaches Reef carefully to knit their wounds with favor of his god*
+<|asep|>

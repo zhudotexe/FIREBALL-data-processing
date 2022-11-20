@@ -1,0 +1,15 @@
+Actors:
+- TR1 (Troll) <71/84 HP; Injured>
+- Ophizenya (Minotaur; Fighter 4) <25/44 HP; Injured>
+- GV1 (Giant Vulture) <22/22 HP; Healthy>
+- Noxxis Blazehammer (Hill Dwarf; Cleric 7) <59/59 HP; Healthy>
+- WI1 (Wight) <45/45 HP; Healthy>
+- Calti Xihooda (Lizardfolk; Druid 6) <40/45 HP; Injured>
+
+Current:
+Name: TR1
+Race: Troll
+Attacks: Bite, Claw, Regeneration
+
+*Recoiling from a hit, the troll grabs his severed arm and connects to the stump. His natural regeneration nigh instantly knits the flesh and the muscles allowing the troll to swing both arms again*
+<|asep|>

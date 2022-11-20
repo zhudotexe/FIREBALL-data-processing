@@ -1,0 +1,1 @@
+!cast "Fireball" -t OR1 -t OR2 -t OR3

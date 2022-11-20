@@ -1,0 +1,790 @@
+{
+  "channel": "1042890065543712879",
+  "summary": 1042892059624869909,
+  "dm": 187421759484592128,
+  "options": {},
+  "combatants": [
+    {
+      "name": "Rahotur",
+      "attacks": [],
+      "resistances": {
+        "resist": [
+          {
+            "dtype": "poison"
+          }
+        ],
+        "immune": [],
+        "vuln": [],
+        "neutral": []
+      },
+      "ac": null,
+      "max_hp": null,
+      "creature_type": null,
+      "controller_id": 164249546073964544,
+      "init": 23,
+      "private": null,
+      "index": 0,
+      "notes": null,
+      "effects": [],
+      "group_id": null,
+      "type": "player",
+      "id": "779f101e-6975-4caa-af97-4ec1346439b9",
+      "character_id": "beyond-87044825",
+      "character_owner": "164249546073964544"
+    },
+    {
+      "name": "DW3",
+      "stats": {
+        "prof_bonus": 2,
+        "strength": 17,
+        "dexterity": 15,
+        "constitution": 15,
+        "intelligence": 3,
+        "wisdom": 12,
+        "charisma": 7
+      },
+      "levels": {
+        "total_level": 1.0,
+        "classes": {
+          "Monster": 1.0
+        }
+      },
+      "attacks": [
+        {
+          "name": "Bite",
+          "automation": [
+            {
+              "type": "target",
+              "target": "each",
+              "effects": [
+                {
+                  "type": "attack",
+                  "hit": [
+                    {
+                      "type": "damage",
+                      "damage": "2d6 + 3 [piercing]",
+                      "overheal": false
+                    },
+                    {
+                      "type": "save",
+                      "stat": "str",
+                      "fail": [
+                        {
+                          "type": "ieffect2",
+                          "name": "Prone",
+                          "duration": -1,
+                          "effects": {
+                            "attack_advantage": -1
+                          },
+                          "attacks": [],
+                          "buttons": [
+                            {
+                              "label": "Stand Up",
+                              "automation": [
+                                {
+                                  "type": "remove_ieffect"
+                                }
+                              ],
+                              "verb": "stands up",
+                              "style": null,
+                              "defaultDC": null,
+                              "defaultAttackBonus": null,
+                              "defaultCastingMod": null
+                            }
+                          ],
+                          "end": false,
+                          "conc": false,
+                          "desc": "A prone creature's only movement option is to crawl, unless it stands up and thereby ends the condition",
+                          "stacking": false,
+                          "save_as": null,
+                          "parent": null
+                        }
+                      ],
+                      "success": [],
+                      "dc": "13"
+                    }
+                  ],
+                  "miss": [],
+                  "attackBonus": "5"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "*Melee Weapon Attack:* +5 to hit, reach 5 ft., one target. *Hit:* 10 (2d6 + 3) piercing damage. If the target is a creature, it must succeed on a DC 13 Strength saving throw or be knocked prone."
+            }
+          ],
+          "_v": 2
+        }
+      ],
+      "skills": {
+        "acrobatics": {
+          "value": 2
+        },
+        "animalHandling": {
+          "value": 1
+        },
+        "arcana": {
+          "value": -4
+        },
+        "athletics": {
+          "value": 3
+        },
+        "deception": {
+          "value": -2
+        },
+        "history": {
+          "value": -4
+        },
+        "initiative": {
+          "value": 2
+        },
+        "insight": {
+          "value": 1
+        },
+        "intimidation": {
+          "value": -2
+        },
+        "investigation": {
+          "value": -4
+        },
+        "medicine": {
+          "value": 1
+        },
+        "nature": {
+          "value": -4
+        },
+        "perception": {
+          "value": 3,
+          "prof": 1
+        },
+        "performance": {
+          "value": -2
+        },
+        "persuasion": {
+          "value": -2
+        },
+        "religion": {
+          "value": -4
+        },
+        "sleightOfHand": {
+          "value": 2
+        },
+        "stealth": {
+          "value": 4,
+          "prof": 1
+        },
+        "survival": {
+          "value": 1
+        },
+        "strength": {
+          "value": 3
+        },
+        "dexterity": {
+          "value": 2
+        },
+        "constitution": {
+          "value": 2
+        },
+        "intelligence": {
+          "value": -4
+        },
+        "wisdom": {
+          "value": 1
+        },
+        "charisma": {
+          "value": -2
+        }
+      },
+      "resistances": {
+        "resist": [],
+        "immune": [],
+        "vuln": [],
+        "neutral": []
+      },
+      "saves": {
+        "strengthSave": {
+          "value": 3
+        },
+        "dexteritySave": {
+          "value": 2
+        },
+        "constitutionSave": {
+          "value": 2
+        },
+        "intelligenceSave": {
+          "value": -4
+        },
+        "wisdomSave": {
+          "value": 1
+        },
+        "charismaSave": {
+          "value": -2
+        }
+      },
+      "ac": 14,
+      "max_hp": 37,
+      "hp": 37,
+      "temp_hp": 0,
+      "spellbook": {
+        "slots": {},
+        "max_slots": {},
+        "spells": [],
+        "dc": null,
+        "sab": null,
+        "caster_level": 0,
+        "spell_mod": null,
+        "pact_slot_level": null,
+        "num_pact_slots": null,
+        "max_pact_slots": null,
+        "at_will": [],
+        "daily": {},
+        "daily_max": {}
+      },
+      "creature_type": "beast",
+      "controller_id": 187421759484592128,
+      "init": 20,
+      "private": true,
+      "index": 1,
+      "notes": null,
+      "effects": [],
+      "group_id": null,
+      "type": "monster",
+      "id": "b2ab9254-57d1-4e2c-a913-e11ab899d3ab",
+      "monster_name": "Dire Wolf",
+      "monster_id": 16841
+    },
+    {
+      "name": "DW2",
+      "stats": {
+        "prof_bonus": 2,
+        "strength": 17,
+        "dexterity": 15,
+        "constitution": 15,
+        "intelligence": 3,
+        "wisdom": 12,
+        "charisma": 7
+      },
+      "levels": {
+        "total_level": 1.0,
+        "classes": {
+          "Monster": 1.0
+        }
+      },
+      "attacks": [
+        {
+          "name": "Bite",
+          "automation": [
+            {
+              "type": "target",
+              "target": "each",
+              "effects": [
+                {
+                  "type": "attack",
+                  "hit": [
+                    {
+                      "type": "damage",
+                      "damage": "2d6 + 3 [piercing]",
+                      "overheal": false
+                    },
+                    {
+                      "type": "save",
+                      "stat": "str",
+                      "fail": [
+                        {
+                          "type": "ieffect2",
+                          "name": "Prone",
+                          "duration": -1,
+                          "effects": {
+                            "attack_advantage": -1
+                          },
+                          "attacks": [],
+                          "buttons": [
+                            {
+                              "label": "Stand Up",
+                              "automation": [
+                                {
+                                  "type": "remove_ieffect"
+                                }
+                              ],
+                              "verb": "stands up",
+                              "style": null,
+                              "defaultDC": null,
+                              "defaultAttackBonus": null,
+                              "defaultCastingMod": null
+                            }
+                          ],
+                          "end": false,
+                          "conc": false,
+                          "desc": "A prone creature's only movement option is to crawl, unless it stands up and thereby ends the condition",
+                          "stacking": false,
+                          "save_as": null,
+                          "parent": null
+                        }
+                      ],
+                      "success": [],
+                      "dc": "13"
+                    }
+                  ],
+                  "miss": [],
+                  "attackBonus": "5"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "*Melee Weapon Attack:* +5 to hit, reach 5 ft., one target. *Hit:* 10 (2d6 + 3) piercing damage. If the target is a creature, it must succeed on a DC 13 Strength saving throw or be knocked prone."
+            }
+          ],
+          "_v": 2
+        }
+      ],
+      "skills": {
+        "acrobatics": {
+          "value": 2
+        },
+        "animalHandling": {
+          "value": 1
+        },
+        "arcana": {
+          "value": -4
+        },
+        "athletics": {
+          "value": 3
+        },
+        "deception": {
+          "value": -2
+        },
+        "history": {
+          "value": -4
+        },
+        "initiative": {
+          "value": 2
+        },
+        "insight": {
+          "value": 1
+        },
+        "intimidation": {
+          "value": -2
+        },
+        "investigation": {
+          "value": -4
+        },
+        "medicine": {
+          "value": 1
+        },
+        "nature": {
+          "value": -4
+        },
+        "perception": {
+          "value": 3,
+          "prof": 1
+        },
+        "performance": {
+          "value": -2
+        },
+        "persuasion": {
+          "value": -2
+        },
+        "religion": {
+          "value": -4
+        },
+        "sleightOfHand": {
+          "value": 2
+        },
+        "stealth": {
+          "value": 4,
+          "prof": 1
+        },
+        "survival": {
+          "value": 1
+        },
+        "strength": {
+          "value": 3
+        },
+        "dexterity": {
+          "value": 2
+        },
+        "constitution": {
+          "value": 2
+        },
+        "intelligence": {
+          "value": -4
+        },
+        "wisdom": {
+          "value": 1
+        },
+        "charisma": {
+          "value": -2
+        }
+      },
+      "resistances": {
+        "resist": [],
+        "immune": [],
+        "vuln": [],
+        "neutral": []
+      },
+      "saves": {
+        "strengthSave": {
+          "value": 3
+        },
+        "dexteritySave": {
+          "value": 2
+        },
+        "constitutionSave": {
+          "value": 2
+        },
+        "intelligenceSave": {
+          "value": -4
+        },
+        "wisdomSave": {
+          "value": 1
+        },
+        "charismaSave": {
+          "value": -2
+        }
+      },
+      "ac": 14,
+      "max_hp": 37,
+      "hp": 7,
+      "temp_hp": 0,
+      "spellbook": {
+        "slots": {},
+        "max_slots": {},
+        "spells": [],
+        "dc": null,
+        "sab": null,
+        "caster_level": 0,
+        "spell_mod": null,
+        "pact_slot_level": null,
+        "num_pact_slots": null,
+        "max_pact_slots": null,
+        "at_will": [],
+        "daily": {},
+        "daily_max": {}
+      },
+      "creature_type": "beast",
+      "controller_id": 187421759484592128,
+      "init": 16,
+      "private": true,
+      "index": 2,
+      "notes": null,
+      "effects": [],
+      "group_id": null,
+      "type": "monster",
+      "id": "a00932b5-8f57-49a2-853e-1784d98a6fa4",
+      "monster_name": "Dire Wolf",
+      "monster_id": 16841
+    },
+    {
+      "name": "Noxxis Blazehammer",
+      "attacks": [],
+      "resistances": {
+        "resist": [
+          {
+            "dtype": "poison"
+          }
+        ],
+        "immune": [
+          {
+            "dtype": "hits",
+            "only": [
+              "critical"
+            ]
+          }
+        ],
+        "vuln": [],
+        "neutral": []
+      },
+      "ac": null,
+      "max_hp": null,
+      "creature_type": null,
+      "controller_id": 137677824810156032,
+      "init": 13,
+      "private": null,
+      "index": 3,
+      "notes": null,
+      "effects": [],
+      "group_id": null,
+      "type": "player",
+      "id": "2b92787c-9edf-45f9-b5ea-9dfd6b6c226e",
+      "character_id": "beyond-67062593",
+      "character_owner": "137677824810156032"
+    },
+    {
+      "name": "Reef",
+      "attacks": [],
+      "resistances": {
+        "resist": [],
+        "immune": [],
+        "vuln": [],
+        "neutral": []
+      },
+      "ac": null,
+      "max_hp": null,
+      "creature_type": null,
+      "controller_id": 1011869550557548625,
+      "init": 11,
+      "private": null,
+      "index": 4,
+      "notes": null,
+      "effects": [],
+      "group_id": null,
+      "type": "player",
+      "id": "8f9ada1b-d68f-4080-876c-6a98bc42d40e",
+      "character_id": "beyond-87299060",
+      "character_owner": "1011869550557548625"
+    },
+    {
+      "name": "Calti Xihooda",
+      "attacks": [],
+      "resistances": {
+        "resist": [],
+        "immune": [],
+        "vuln": [],
+        "neutral": []
+      },
+      "ac": null,
+      "max_hp": null,
+      "creature_type": null,
+      "controller_id": 187421759484592128,
+      "init": 8,
+      "private": null,
+      "index": 5,
+      "notes": null,
+      "effects": [],
+      "group_id": null,
+      "type": "player",
+      "id": "445f794b-aa2b-4bc1-bc32-19787b6106d1",
+      "character_id": "beyond-13342511",
+      "character_owner": "187421759484592128"
+    },
+    {
+      "name": "DW1",
+      "stats": {
+        "prof_bonus": 2,
+        "strength": 17,
+        "dexterity": 15,
+        "constitution": 15,
+        "intelligence": 3,
+        "wisdom": 12,
+        "charisma": 7
+      },
+      "levels": {
+        "total_level": 1.0,
+        "classes": {
+          "Monster": 1.0
+        }
+      },
+      "attacks": [
+        {
+          "name": "Bite",
+          "automation": [
+            {
+              "type": "target",
+              "target": "each",
+              "effects": [
+                {
+                  "type": "attack",
+                  "hit": [
+                    {
+                      "type": "damage",
+                      "damage": "2d6 + 3 [piercing]",
+                      "overheal": false
+                    },
+                    {
+                      "type": "save",
+                      "stat": "str",
+                      "fail": [
+                        {
+                          "type": "ieffect2",
+                          "name": "Prone",
+                          "duration": -1,
+                          "effects": {
+                            "attack_advantage": -1
+                          },
+                          "attacks": [],
+                          "buttons": [
+                            {
+                              "label": "Stand Up",
+                              "automation": [
+                                {
+                                  "type": "remove_ieffect"
+                                }
+                              ],
+                              "verb": "stands up",
+                              "style": null,
+                              "defaultDC": null,
+                              "defaultAttackBonus": null,
+                              "defaultCastingMod": null
+                            }
+                          ],
+                          "end": false,
+                          "conc": false,
+                          "desc": "A prone creature's only movement option is to crawl, unless it stands up and thereby ends the condition",
+                          "stacking": false,
+                          "save_as": null,
+                          "parent": null
+                        }
+                      ],
+                      "success": [],
+                      "dc": "13"
+                    }
+                  ],
+                  "miss": [],
+                  "attackBonus": "5"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "*Melee Weapon Attack:* +5 to hit, reach 5 ft., one target. *Hit:* 10 (2d6 + 3) piercing damage. If the target is a creature, it must succeed on a DC 13 Strength saving throw or be knocked prone."
+            }
+          ],
+          "_v": 2
+        }
+      ],
+      "skills": {
+        "acrobatics": {
+          "value": 2
+        },
+        "animalHandling": {
+          "value": 1
+        },
+        "arcana": {
+          "value": -4
+        },
+        "athletics": {
+          "value": 3
+        },
+        "deception": {
+          "value": -2
+        },
+        "history": {
+          "value": -4
+        },
+        "initiative": {
+          "value": 2
+        },
+        "insight": {
+          "value": 1
+        },
+        "intimidation": {
+          "value": -2
+        },
+        "investigation": {
+          "value": -4
+        },
+        "medicine": {
+          "value": 1
+        },
+        "nature": {
+          "value": -4
+        },
+        "perception": {
+          "value": 3,
+          "prof": 1
+        },
+        "performance": {
+          "value": -2
+        },
+        "persuasion": {
+          "value": -2
+        },
+        "religion": {
+          "value": -4
+        },
+        "sleightOfHand": {
+          "value": 2
+        },
+        "stealth": {
+          "value": 4,
+          "prof": 1
+        },
+        "survival": {
+          "value": 1
+        },
+        "strength": {
+          "value": 3
+        },
+        "dexterity": {
+          "value": 2
+        },
+        "constitution": {
+          "value": 2
+        },
+        "intelligence": {
+          "value": -4
+        },
+        "wisdom": {
+          "value": 1
+        },
+        "charisma": {
+          "value": -2
+        }
+      },
+      "resistances": {
+        "resist": [],
+        "immune": [],
+        "vuln": [],
+        "neutral": []
+      },
+      "saves": {
+        "strengthSave": {
+          "value": 3
+        },
+        "dexteritySave": {
+          "value": 2
+        },
+        "constitutionSave": {
+          "value": 2
+        },
+        "intelligenceSave": {
+          "value": -4
+        },
+        "wisdomSave": {
+          "value": 1
+        },
+        "charismaSave": {
+          "value": -2
+        }
+      },
+      "ac": 14,
+      "max_hp": 37,
+      "hp": 27,
+      "temp_hp": 0,
+      "spellbook": {
+        "slots": {},
+        "max_slots": {},
+        "spells": [],
+        "dc": null,
+        "sab": null,
+        "caster_level": 0,
+        "spell_mod": null,
+        "pact_slot_level": null,
+        "num_pact_slots": null,
+        "max_pact_slots": null,
+        "at_will": [],
+        "daily": {},
+        "daily_max": {}
+      },
+      "creature_type": "beast",
+      "controller_id": 187421759484592128,
+      "init": 6,
+      "private": true,
+      "index": 6,
+      "notes": null,
+      "effects": [],
+      "group_id": null,
+      "type": "monster",
+      "id": "2938df19-9b18-4ba1-8688-cdf14df5b5fa",
+      "monster_name": "Dire Wolf",
+      "monster_id": 16841
+    }
+  ],
+  "turn": 13,
+  "round": 0,
+  "current": 3,
+  "metadata": {},
+  "nlp_record_session_id": null
+}
