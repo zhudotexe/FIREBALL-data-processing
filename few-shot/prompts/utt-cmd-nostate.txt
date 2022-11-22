@@ -1,0 +1,12 @@
+*With a hiss showing his forked tongue, Calti draws his curved blade, lunging forward to strike at the cultist of Yeenoghu.*
+<|asep|>
+!a scimitar -t GFoY1
+<|aeot|>
+*Pushing themselves off the ground, then Ophizenya spits out blood* "Is that all you've got?" *as they feel a second wind to finish the fight*
+<|asep|>
+!a second
+<|aeot|>
+*Noxxis invokes divine anger of his deity, coalescing it into a gout of flame that he launches towards the ~~test subjects~~ orcs*
+<|asep|>
+!cast "Fireball" -t OR1 -t OR2 -t OR3
+<|aeot|>
