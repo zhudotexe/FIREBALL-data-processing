@@ -1,0 +1,67 @@
+Actors:
+- CE1 (Centaur) <32/45 HP; Injured>
+- Reef (Variant Human; Sorcerer 1/Bard 2) <13/25 HP; Injured>
+- AC1 (Acolyte) <3/9 HP; Bloodied>
+- Noxxis Blazehammer (Hill Dwarf; Cleric 7) <59/59 HP; Healthy>
+- Calti Xihooda (Lizardfolk; Druid 6) <32/45 HP; Injured>
+- Rahotur (Mountain Dwarf; Barbarian 6) <66/77 HP; Injured>
+- DH1 (Draft Horse) <19/19 HP; Healthy>
+- GFoY1 (Gnoll Fang of Yeenoghu) <53/65 HP; Injured>
+
+Current:
+Name: Calti Xihooda
+Class: Druid 6
+Race: Lizardfolk
+Attacks: Scimitar, Unarmed Strike, Bite
+Spells: Produce Flame, Daylight, Druidcraft, Moonbeam, Thorn Whip, Faerie Fire, Dispel Magic, Erupting Earth, Healing Word, Spike Growth, Enhance Ability
+Actions: Hungry Jaws, Combat Wild Shape, Wild Shape
+
+*With a hiss showing his forked tongue, Calti draws his curved blade, lunging forward to strike at the cultist of Yeenoghu.*
+<|asep|>
+!a scimitar -t GFoY1
+<|aeot|>
+Actors:
+- Reef (Variant Human; Sorcerer 1/Bard 2) <14/25 HP; Injured>
+- AP1 (Ape) <19/19 HP; Healthy>
+- Ophizenya (Minotaur; Fighter 4) <18/44 HP; Bloodied>
+- Noxxis Blazehammer (Hill Dwarf; Cleric 7) <59/59 HP; Healthy>
+- Calti Xihooda (Lizardfolk; Druid 6) <41/45 HP; Injured>
+- GO1 (Gorgon) <114/114 HP; Healthy>
+- LI1 (Lizardfolk) <22/22 HP; Healthy>
+- SA1 (Satyr) <22/31 HP; Injured>
+
+Current:
+Name: Ophizenya
+Class: Fighter 4
+Race: Minotaur
+Attacks: Crossbow, heavy, Glaive, Handaxe, Unarmed Strike, Horns, Goring Rush, Polearm Master - Opportunity Attack
+Actions: Maneuvers: Disarming Attack, Maneuvers: Precision Attack, Hammering Horns, Maneuvers: Trip Attack, Action Surge, Second Wind, Superiority Dice, Polearm Master - Bonus Attack, Fighting Style: Interception, Polearm Master - Opportunity Attack
+
+*Pushing themselves off the ground, then Ophizenya spits out blood* "Is that all you've got?" *as they feel a second wind to finish the fight*
+<|asep|>
+!a second
+<|aeot|>
+Actors:
+- OR2 (Orc) <9/15 HP; Injured>
+- Reef (Variant Human; Sorcerer 1/Bard 2) <19/25 HP; Injured>
+- KO3 (Kobold) <5/5 HP; Healthy>
+- Rahotur (Mountain Dwarf; Barbarian 6) <77/77 HP; Healthy>
+- Calti Xihooda (Lizardfolk; Druid 6) <45/45 HP; Healthy>
+- Noxxis Blazehammer (Hill Dwarf; Cleric 7) <59/59 HP; Healthy>
+- OR1 (Orc) <13/15 HP; Injured>
+- KO1 (Kobold) <3/5 HP; Injured>
+- KO2 (Kobold) <5/5 HP; Healthy>
+- OR3 (Orc) <2/15 HP; Critical>
+
+Current:
+Name: Noxxis Blazehammer
+Class: Cleric 7
+Race: Hill Dwarf
+Attacks: Warhammer, 2-Handed Warhammer, Unarmed Strike
+Spells: Death Ward, Word of Radiance, Fireball, Hold Person, Spiritual Weapon, Revivify, Augury, Scorching Ray, Light, Healing Word, Spirit Guardians, Guidance, Burning Hands, Faerie Fire, Guiding Bolt, Flaming Sphere, Thaumaturgy, Cure Wounds, Bless, Protection from Evil and Good, Daylight, Wall of Fire, Sacred Flame, Guardian of Faith
+Actions: Channel Divinity, Warding Flare, Channel Divinity: Radiance of the Dawn, War Caster, Channel Divinity: Turn Undead, Destroy Undead, Harness Divine Power
+
+*Noxxis invokes divine anger of his deity, coalescing it into a gout of flame that he launches towards the ~~test subjects~~ orcs*
+<|asep|>
+!cast "Fireball" -t OR1 -t OR2 -t OR3
+<|aeot|>

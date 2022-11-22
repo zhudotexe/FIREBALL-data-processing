@@ -23,8 +23,10 @@ from transformers import AutoModelForSequenceClassification, AutoTokenizer, pipe
 from dataset.utils import read_gzipped_file, write_jsonl
 
 DATA_DIR = pathlib.Path("data/")
-IN_DIR = pathlib.Path("extract/experiment2/")
-OUT_DIR = pathlib.Path("extract/experiment3/")
+# IN_DIR = pathlib.Path("extract/experiment2/")
+# OUT_DIR = pathlib.Path("extract/experiment3/")
+IN_DIR = pathlib.Path("extract/regression/experiment3a/")
+OUT_DIR = pathlib.Path("extract/regression/experiment3b/")
 MODEL_DIR = pathlib.Path("models/ic_ooc_1-finetuned/checkpoint-9500")
 
 log = logging.getLogger("distill3")
