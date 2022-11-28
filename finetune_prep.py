@@ -9,8 +9,10 @@ import tqdm.contrib.logging
 import prompts
 from dataset.utils import read_jsonl_file
 
-NORMALIZED_IN_DIR = pathlib.Path("extract/experiment4/")
-OUT_DIR = pathlib.Path("extract/")
+# NORMALIZED_IN_DIR = pathlib.Path("extract/experiment4/")
+# OUT_DIR = pathlib.Path("extract/")
+NORMALIZED_IN_DIR = pathlib.Path("extract/regression/experiment4/")
+OUT_DIR = pathlib.Path("extract/regression")
 
 
 def _map_to_instance(fp: pathlib.Path, f):
