@@ -47,9 +47,9 @@ from gamedata import Monster  # this import is wonky because of namespace weirdn
 DATA_DIR = pathlib.Path("data/")
 # IN_DIR = pathlib.Path("extract/experiment3/")
 # OUT_DIR = pathlib.Path("extract/experiment4/")
-IN_DIR = pathlib.Path("extract/regression/experiment3b/")
-OUT_DIR = pathlib.Path("extract/regression/experiment4/")
-RUN_PARALLEL = False
+IN_DIR = pathlib.Path("extract/experiment3b/")
+OUT_DIR = pathlib.Path("extract/experiment4/")
+RUN_PARALLEL = True
 log = logging.getLogger("distill4")
 loglevel = logging.INFO
 

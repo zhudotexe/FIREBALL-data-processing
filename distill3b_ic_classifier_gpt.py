@@ -1,6 +1,6 @@
 """
 Distill3: Given triples, filter the events in the triples:
-- remove OOC utterances
+- remove OOC utterances (anything not classified as in-character with >80% confidence)
 
 Input: {"before": [Message...], "commands": [Event...], "after": [Message...]}
 
@@ -23,19 +23,22 @@ import tqdm.contrib.logging
 from dataset.utils import read_gzipped_file, write_jsonl
 
 DATA_DIR = pathlib.Path("data/")
-IN_DIR = pathlib.Path("extract/experiment2/")
-OUT_DIR = pathlib.Path("extract/experiment3-gpt/")
+# IN_DIR = pathlib.Path("extract/experiment2/")
+IN_DIR = pathlib.Path("extract/experiment3a/")
+OUT_DIR = pathlib.Path("extract/experiment3b/")
+
+CLASSIFIER_FINETUNE = "ada:ft-ccb-lab-members-2022-11-28-18-29-25"
 
 log = logging.getLogger("distill3")
 loglevel = logging.INFO
 logging.getLogger("openai").setLevel(logging.WARNING)
 
 
-def get_ooc_ic_label(text, finetuned_model="ada:ft-ccb-lab-members-2022-10-30-01-32-01", wait_time=0.05):
+def get_ooc_ic_label(text, finetuned_model=CLASSIFIER_FINETUNE):
     if not text:
-        return "out-of-character"
+        return "out-of-character", 1
     if "OOC" in text or "OOG" in text or text.startswith("("):
-        return "out-of-character"
+        return "out-of-character", 1
     #  if text.startswith('"'):
     #  	return "in-character"
     if len(text.split(" ")) > 200:
@@ -44,18 +47,20 @@ def get_ooc_ic_label(text, finetuned_model="ada:ft-ccb-lab-members-2022-10-30-01
         response = openai.Completion.create(
             model=finetuned_model,
             prompt=text + "\nlabel: ",
-            temperature=0.7,
+            temperature=0,
             max_tokens=7,
             top_p=1,
             frequency_penalty=0,
             presence_penalty=0,
             stop=["###", "\n"],
+            logprobs=1,
         )
-        time.sleep(wait_time)
+        time.sleep(0.05)
         label = response["choices"][0]["text"].strip()
         if label == "in-character" or label == "out-of-character" or label == "mixed":
-            return label
-    return None
+            prob = 2 ** (response["choices"][0]["logprobs"]["token_logprobs"][0])
+            return label, prob
+    return None, 1
 
 
 def process_triple(triple) -> dict | None:
@@ -63,9 +68,9 @@ def process_triple(triple) -> dict | None:
     filtered_utterances = []
     for event in after:
         content = event["content"].strip()
-        label = get_ooc_ic_label(content)
-        log.info(f"{content}\n---\n{label}\n=====\n")
-        if label != "in-character":
+        label, prob = get_ooc_ic_label(content)
+        log.debug(f"{content}\n---\n{label}\n=====\n")
+        if not (label == "in-character" and prob > 0.8):
             continue
         filtered_utterances.append(event)
     triple["after"] = filtered_utterances

@@ -19,38 +19,38 @@ import re
 import tqdm.contrib.concurrent
 import tqdm.contrib.logging
 
-from dataset.utils import combat_dir_iterator, read_gzipped_file, write_jsonl
-from heuristics.utils import Instance
+from dataset.utils import read_gzipped_file, write_jsonl
 
 DATA_DIR = pathlib.Path("data/")
-# IN_DIR = pathlib.Path("extract/experiment1/")
+IN_DIR = pathlib.Path("extract/experiment2/")
 # OUT_DIR = pathlib.Path("extract/experiment2/")
-IN_DIR = pathlib.Path("extract/regression/experiment2/")
-OUT_DIR = pathlib.Path("extract/regression/experiment3a/")
-RUN_PARALLEL = False
+# IN_DIR = pathlib.Path("extract/regression/experiment2/")
+OUT_DIR = pathlib.Path("extract/experiment3a/")
+RUN_PARALLEL = True
 log = logging.getLogger("distill3a")
 loglevel = logging.INFO
 
 
-def sub_content(self, filter, message):
-    content = message['content']
-    if re.search(filter, content):
-        # print(content)
-        content = re.sub(filter,"",content)
-        # print(content)
-        message['content'] = content
+def sub_content(re_filter, message):
+    message["content"] = re.sub(re_filter, "", message["content"])
     return message
 
-def process_triple(self, triple: dict) -> dict | None:
+
+def process_triple(triple: dict) -> dict | None:
     """Given a triple, return a processed triple - main entrypoint"""
     before = triple["before"]
     commands = triple["commands"]
     after = triple["after"]
 
-    filters = [r"\(.*\)"]
-    for filter in filters:
-        before = [self.sub_content(filter,message) for message in before]
-        after = [self.sub_content(filter,message) for message in after]
+    filters = [r"\(.*?\)"]
+    for re_filter in filters:
+        before = [sub_content(re_filter, message) for message in before]
+        after = [sub_content(re_filter, message) for message in after]
+
+    # discard any message that is empty or just whitespace
+    before = [m for m in before if m["content"].strip()]
+    after = [m for m in after if m["content"].strip()]
+
     # discard if we have no filtered utterances
     if not (before or after):
         return None
@@ -66,7 +66,6 @@ def process_file(fp: pathlib.Path):
     triple_stream = read_gzipped_file(fp)
     num_triples_in = 0
     combat_id, *_ = fp.stem.split(".")
-    event_stream = combat_dir_iterator(DATA_DIR / combat_id)
     out = []
 
     for triple in triple_stream:
