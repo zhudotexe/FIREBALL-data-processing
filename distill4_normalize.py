@@ -71,6 +71,7 @@ class Distill4Inst(Instance):
         super().__init__(events)
         self.monkey_patch()
         self.characters = {}
+        self.utterance_history = []  # sorted list of message events
 
     def monkey_patch(self):
         @classmethod
@@ -88,6 +89,17 @@ class Distill4Inst(Instance):
 
         PlayerCombatant.from_dict = PlayerCombatant.from_dict_sync = from_dict
 
+    def event_index(self, event):
+        # because of distill3a some message events are mutated, meaning .index doesn't work
+        if event["event_type"] == "message":
+            return next(
+                idx
+                for idx, e in enumerate(self.events)
+                if e["event_type"] == "message" and e["message_id"] == event["message_id"]
+            )
+        else:
+            return self.events.index(event)
+
     def _extract_character_from_event(self, event):
         if event["event_type"] not in ("command", "automation_run"):
             return
@@ -100,13 +112,13 @@ class Distill4Inst(Instance):
 
     def extract_characters_forward(self, until):
         """Extract all of the characters by (owner, upstream_id) in all events from the start until *until*"""
-        idx = self.events.index(until)
+        idx = self.event_index(until)
         for event in self.events[:idx]:
             self._extract_character_from_event(event)
 
     def extract_characters_backward(self, until):
         """Extract all of the characters by (owner, upstream_id) in all events from the end until *until*"""
-        idx = self.events.index(until)
+        idx = self.event_index(until)
         for event in self.events[:idx:-1]:
             self._extract_character_from_event(event)
 
@@ -298,9 +310,9 @@ class Distill4Inst(Instance):
         return embed_title + automation_str, embed_event
 
     # ==== normalizers =====
-    def normalize_message(self, msg: Event) -> str:
+    def normalize_message(self, msg: Event, include_author_name=False) -> str:
         content = msg["content"]
-        msg_idx = self.events.index(msg)
+        msg_idx = self.event_index(msg)
         # remove any Tupper markers
         similar_message = self.find(
             lambda e: e["event_type"] == "message"
@@ -329,6 +341,9 @@ class Distill4Inst(Instance):
 
         # replace custom emoji with just their name
         content = re.sub(r"<a?(:\w+?:)\d{17,20}>", r"\1", content)
+
+        if include_author_name:
+            return f"{msg['author_name']}: {content}"
         return content
 
     def normalize_command_group(self, group: MessageGroup) -> str | None:
@@ -365,10 +380,23 @@ class Distill4Inst(Instance):
         commands = triple["commands"]
         after = triple["after"]
 
+        # add before to utterance history
+        self.utterance_history.extend(triple["before"])
+        self.utterance_history.sort(key=lambda m: int(m["message_id"]))
+
+        # FILTER: if before or after are abnormally long (>5 messages), discard
+        if len(before) > 5:
+            before = []
+        if len(after) > 5:
+            after = []
+
         # normalize utterances
         speaker_id = str(commands[0]["author_id"])  # TODO make this not use discord ID
         before_utterances = [self.normalize_message(msg) for msg in before]
         after_utterances = [self.normalize_message(msg) for msg in after]
+        utterance_history_5 = [
+            self.normalize_message(msg, include_author_name=True) for msg in self.utterance_history[-5:]
+        ]
 
         # normalize commands
         commands_inst = Instance(commands)
@@ -383,7 +411,7 @@ class Distill4Inst(Instance):
         # state before
         self.extract_characters_forward(commands[0])
         combat_state_before = self.combat_state_at_event(commands[0])
-        before_state_index = self.events.index(combat_state_before)
+        before_state_index = self.event_index(combat_state_before)
         combat_before = Combat.from_dict_sync(copy.deepcopy(combat_state_before["data"]), ctx)
         actor_list_before = [
             self.normalize_actor(actor, combat_before) for actor in combat_before.get_combatants(groups=False)
@@ -417,7 +445,7 @@ class Distill4Inst(Instance):
         for e in commands_inst.find_all_of_type("automation_run"):
             run_result_str, embed_event = self.stringify_automation_run(e)
             automation_norm.append(run_result_str)
-            embed_idxs.append(self.events.index(embed_event) if embed_event is not None else None)
+            embed_idxs.append(self.event_index(embed_event) if embed_event is not None else None)
 
         # state after
         self.extract_characters_backward(commands[-1])
@@ -429,11 +457,15 @@ class Distill4Inst(Instance):
                 return
         else:
             last_combat_update = update_in_commands[-1]
-        after_state_idx = self.events.index(last_combat_update)
+        after_state_idx = self.event_index(last_combat_update)
         combat_after = Combat.from_dict_sync(copy.deepcopy(last_combat_update["data"]), ctx)
         actor_list_after = [
             self.normalize_actor(actor, combat_after) for actor in combat_after.get_combatants(groups=False)
         ]
+
+        # add after to utterance history
+        self.utterance_history.extend(triple["after"])
+        self.utterance_history.sort(key=lambda m: int(m["message_id"]))
 
         return {
             "speaker_id": speaker_id,
@@ -446,12 +478,13 @@ class Distill4Inst(Instance):
             "targets_after": targets,  # list of actors
             "combat_state_after": actor_list_after,  # list of actors
             "after_utterances": after_utterances,
+            "utterance_history": utterance_history_5,
             # triple
-            "before_idxs": [self.events.index(b) for b in before],
+            "before_idxs": [self.event_index(b) for b in before],
             "before_state_idx": before_state_index,
-            "command_idxs": [self.events.index(b) for b in commands],
+            "command_idxs": [self.event_index(b) for b in commands],
             "after_state_idx": after_state_idx,
-            "after_idxs": [self.events.index(b) for b in after],
+            "after_idxs": [self.event_index(b) for b in after],
             # other useful message idxs
             "embed_idxs": embed_idxs,  # list of int|none, zippable with automation_results
         }

@@ -122,6 +122,7 @@ def process_sta_nar_test(fp: pathlib.Path):
                 "after_state_idx",
                 "after_idxs",
                 "embed_idxs",
+                "utterance_history",
             ),
             instance_id=fp.stem,
         ),
@@ -238,7 +239,7 @@ def main(paths: list[pathlib.Path]):
     )
     do_prep(
         paths,
-        lambda fp: process_sta_nar_train(fp, ablations=["actors", "targets", "caster"]),
+        lambda fp: process_sta_nar_train(fp, ablations=["actors", "targets", "caster", "history"]),
         process_sta_nar_test,
         "ft-sta-nar-ablations",
         desired_train_pairs=20000,
