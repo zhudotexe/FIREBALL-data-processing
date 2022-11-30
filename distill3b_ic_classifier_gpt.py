@@ -69,7 +69,7 @@ def process_triple(triple) -> dict | None:
     for event in after:
         content = event["content"].strip()
         label, prob = get_ooc_ic_label(content)
-        log.debug(f"{content}\n---\n{label}\n=====\n")
+        log.info(f"{content}\n---\n{label} {prob:.2%}\n=====\n")
         if not (label == "in-character" and prob > 0.8):
             continue
         filtered_utterances.append(event)
