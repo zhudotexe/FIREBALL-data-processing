@@ -239,7 +239,7 @@ def main(paths: list[pathlib.Path]):
     )
     do_prep(
         paths,
-        lambda fp: process_sta_nar_train(fp, ablations=["actors", "targets", "caster", "history"]),
+        lambda fp: process_sta_nar_train(fp, ablations=["actors", "targets", "caster"]),
         process_sta_nar_test,
         "ft-sta-nar-ablations",
         desired_train_pairs=20000,
