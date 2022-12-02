@@ -169,6 +169,22 @@ def sta_nar_prompt(data, include_sep=True, ablations=[]) -> str | None:
     return "\n\n".join(prompt_parts) + (SEP if include_sep else "")
 
 
+def sta_nar_command_utterance_prompt(data, include_sep=True) -> str | None:
+    # prompt:
+    # COMMANDS_NORM
+    # <|asep|>
+    commands = data["commands_norm"]
+    return "\n".join(commands) + (SEP if include_sep else "")
+
+
+def sta_nar_dialog_continuation_prompt(data, include_sep=True) -> str | None:
+    # prompt:
+    # history
+    # <|asep|>
+    history = data["utterance_history"]
+    return "\n".join(history) + (SEP if include_sep else "")
+
+
 def sta_nar_completion(data, include_sep=True) -> str | None:
     after = data["after_utterances"]
 

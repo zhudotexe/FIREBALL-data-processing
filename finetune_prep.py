@@ -11,6 +11,8 @@ from dataset.utils import read_jsonl_file
 
 NORMALIZED_IN_DIR = pathlib.Path("extract/experiment4/")
 OUT_DIR = pathlib.Path("extract/")
+
+
 # NORMALIZED_IN_DIR = pathlib.Path("extract/regression/experiment4/")
 # OUT_DIR = pathlib.Path("extract/regression")
 
@@ -99,6 +101,28 @@ def process_sta_nar_train(fp: pathlib.Path, ablations=None):
     )
 
 
+def process_sta_nar_command_utterance_train(fp: pathlib.Path):
+    return _map_to_instance(
+        fp,
+        lambda data: _prompt_and_completion(
+            data,
+            prompter=prompts.sta_nar_command_utterance_prompt,
+            completer=prompts.sta_nar_completion,
+        ),
+    )
+
+
+def process_sta_nar_dialog_continuation_train(fp: pathlib.Path):
+    return _map_to_instance(
+        fp,
+        lambda data: _prompt_and_completion(
+            data,
+            prompter=prompts.sta_nar_dialog_continuation_prompt,
+            completer=prompts.sta_nar_completion,
+        ),
+    )
+
+
 def process_sta_nar_test(fp: pathlib.Path):
     """
     Extracts the available keys for this task from the normalized datum.
@@ -112,6 +136,7 @@ def process_sta_nar_test(fp: pathlib.Path):
             data,
             required_keys=("after_utterances", "automation_results"),
             keys=(
+                "commands_norm",
                 "combat_state_after",
                 "caster_after",
                 "targets_after",
@@ -242,6 +267,26 @@ def main(paths: list[pathlib.Path]):
         lambda fp: process_sta_nar_train(fp, ablations=["actors", "targets", "caster"]),
         process_sta_nar_test,
         "ft-sta-nar-ablations",
+        desired_train_pairs=20000,
+        desired_test_pairs=1000,
+        train_epochs=1,
+        write_test_file=False,
+    )
+    do_prep(
+        paths,
+        process_sta_nar_command_utterance_train,
+        process_sta_nar_test,
+        "ft-sta-nar-command-utterance",
+        desired_train_pairs=20000,
+        desired_test_pairs=1000,
+        train_epochs=1,
+        write_test_file=False,
+    )
+    do_prep(
+        paths,
+        process_sta_nar_dialog_continuation_train,
+        process_sta_nar_test,
+        "ft-sta-nar-dialog-continuation",
         desired_train_pairs=20000,
         desired_test_pairs=1000,
         train_epochs=1,

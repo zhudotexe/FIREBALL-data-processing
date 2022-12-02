@@ -157,6 +157,7 @@ heuristic_results/
 extract/
 models/
 wandb/
-results/
+results/*.jsonl
 icooc/*.csv
+icooc/*/*.csv
 icooc/*.jsonl
