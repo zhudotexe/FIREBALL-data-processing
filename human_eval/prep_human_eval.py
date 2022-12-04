@@ -5,6 +5,7 @@ import pathlib
 import sys
 
 import tqdm
+from profanityfilter import ProfanityFilter
 
 from discord_render import MessageRenderer
 
@@ -136,7 +137,13 @@ def prep_human_eval():
         qualtrics_out.append("")
 
     # save human eval qualtrics
-    HUMAN_EVAL_QUALTRICS.write_text("\n".join(qualtrics_out))
+    out = "\n".join(qualtrics_out)
+    pf = ProfanityFilter()
+    pf.set_censor("-")
+    with open("profanity.txt") as f:
+        pf.define_words([line.strip() for line in f.readlines()])
+    out = pf.censor(out)
+    HUMAN_EVAL_QUALTRICS.write_text(out)
 
 
 if __name__ == "__main__":

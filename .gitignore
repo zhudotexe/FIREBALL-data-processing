@@ -163,3 +163,4 @@ icooc/*/*.csv
 icooc/*.jsonl
 human_eval/human-eval-qualtrics.txt
 human_eval/human-eval-sta-nar.jsonl
+human_eval/profanity.txt
