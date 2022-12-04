@@ -1,6 +1,7 @@
 """
 These functions inspired by https://github.com/Danktuary/discord-message-components
 """
+import re
 import textwrap
 
 import humanize
@@ -9,6 +10,35 @@ import markdown2
 
 def fix(text):
     return textwrap.dedent(text).strip()
+
+
+class CustomMarkdowner(markdown2.Markdown):
+    """I feel like every project I have has one of these :("""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs, extras=("break-on-newline", "fenced-code-blocks", "strike", "underline"))
+
+    # things discord doesn't implement and we can ignore
+    _hr_re = re.compile(r"^\b$")  # this regex never matches, so we never process <hr>s
+
+    def _do_headers(self, text):
+        return text
+
+    # fixes to use discord-flavored markdown
+    _underline_re = re.compile(r"__(?=\S)(.+?_*)(?<=\S)__", re.S)
+    _strong_re = re.compile(r"(\*\*)(?=\S)(.+?[*]*)(?<=\S)\1", re.S)
+    _em_re = re.compile(r"([*_])(?=\S)(.+?)(?<=\S)\1", re.S)
+
+    # dumb hacks
+    def convert(self, text):
+        out = super().convert(text)
+        return (
+            out.replace("<Dead>", "&lt;Dead&gt;")
+            .replace("<Critical>", "&lt;Critical&gt;")
+            .replace("<Bloodied>", "&lt;Bloodied&gt;")
+            .replace("<Injured>", "&lt;Injured&gt;")
+            .replace("<Healthy>", "&lt;Healthy&gt;")
+        )
 
 
 class MessageRenderer:
@@ -20,7 +50,8 @@ class MessageRenderer:
     def render_markdown(md_text):
         if not md_text:
             return "<span></span>"
-        inner_md = markdown2.markdown(md_text, extras=("break-on-newline", "fenced-code-blocks", "strike"))
+        markdowner = CustomMarkdowner()
+        inner_md = markdowner.convert(md_text)
         return f'<span class="discord-markdown">{inner_md}</span>'
 
     def render_embed_field(self, field_data):

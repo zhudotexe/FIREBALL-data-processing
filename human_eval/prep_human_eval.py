@@ -2,6 +2,7 @@
 Depends on results/merge_results.py
 """
 import pathlib
+import re
 import sys
 
 import tqdm
@@ -14,6 +15,7 @@ sys.path.append("..")
 import prompts
 from dataset.utils import combat_dir_iterator, read_jsonl_file
 from distill4_normalize import Distill4Inst
+from heuristics.utils import AVRAE_ID
 
 DATA_DIR = pathlib.Path("../data/")
 
@@ -59,6 +61,52 @@ response is monotonous and predictable, or if you’re unsure, then rank it lowe
 """.strip()
 
 
+class HumanEvalInst(Distill4Inst):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.author_id_map = {}
+
+    def normalize_messages(self):
+        """Removes mentions, tupper, emoji, etc; anonymize author names"""
+        for idx, msg in enumerate(self.events.copy()):
+            if msg["event_type"] != "message":
+                continue
+            content = msg["content"]
+            # remove any Tupper markers
+            similar_message = self.find(
+                lambda e: e["event_type"] == "message"
+                and e["author_id"] != msg["author_id"]
+                and e["content"] in content
+                and e["content"]
+                and e.get("author_bot", True),
+                after=idx,
+                before=idx + 16,
+            )
+            if similar_message is not None:
+                similar_content = similar_message["content"]
+                # the new content must be at least 80% of the old
+                len_ratio = len(similar_content) / len(content)
+                if 0.7 < len_ratio < 1:
+                    self.events.remove(similar_message)
+
+            # remove user, role, channel mentions
+            msg["content"] = re.sub(r"<(@[!&]?|#)\d{17,20}>", "", content)
+
+            # replace custom emoji with just their name
+            msg["content"] = re.sub(r"<a?(:\w+?:)\d{17,20}>", r"\1", content)
+
+            # anonymize author nick, unless it's Avrae
+            author_id = msg["author_id"]
+            if author_id == AVRAE_ID:
+                author_name = "Avrae"
+            elif author_id in self.author_id_map:
+                author_name = f"Player {self.author_id_map[author_id]}"
+            else:
+                self.author_id_map[author_id] = len(self.author_id_map)
+                author_name = f"Player {self.author_id_map[author_id]}"
+            msg["author_name"] = author_name
+
+
 def prep_human_eval():
     data = list(read_jsonl_file(HUMAN_EVAL_DATA))
 
@@ -81,7 +129,8 @@ def prep_human_eval():
         # the combat state after the command
         # the caster desc
         event_stream = combat_dir_iterator(DATA_DIR / d["instance_id"])
-        inst = Distill4Inst(event_stream)
+        inst = HumanEvalInst(event_stream)
+        inst.normalize_messages()
 
         # messages
         message_history = list(inst.find_all(lambda e: e["event_type"] == "message", before=d["command_idxs"][-1]))
