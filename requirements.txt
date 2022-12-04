@@ -13,3 +13,7 @@ scikit-learn~=1.1.2
 # distill3
 torch
 transformers
+
+# human eval
+humanize~=4.4.0
+markdown2~=2.4.6

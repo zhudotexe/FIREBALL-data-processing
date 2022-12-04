@@ -1,3 +1,6 @@
+"""
+Depends on *_test_predictions.py
+"""
 import json
 import pathlib
 import sys
@@ -51,12 +54,11 @@ STA_NAR_KEYS = (
     "embed_idxs",
     "utterance_history",
 )
+# human eval
+HUMAN_EVAL_DATA = pathlib.Path("../human_eval/human-eval-sta-nar.jsonl")
 
 
-class UttCmdInst(Distill4Inst):
-    pass
-
-
+# ===== COMMAND PREDICTION =====
 def merge_utt_cmd():
     test_data = list(read_jsonl_file(UTT_CMD_CANONICAL))
 
@@ -89,7 +91,7 @@ def merge_utt_cmd():
             print("missing some predictions, skipping")
             continue
         event_stream = combat_dir_iterator(DATA_DIR / d["instance_id"])
-        inst = UttCmdInst(event_stream)
+        inst = Distill4Inst(event_stream)
         combat_state = inst.events[d["before_state_idx"]]["data"]
         inst.extract_characters_backward(inst.events[d["before_state_idx"]])
         inst.extract_characters_forward(inst.events[d["before_state_idx"]])
@@ -108,6 +110,7 @@ def merge_utt_cmd():
             f.write("\n")
 
 
+# ===== STATE -> NARRATION =====
 def merge_sta_nar():
     test_data = list(read_jsonl_file(STA_NAR_CANONICAL))
 
@@ -136,6 +139,7 @@ def merge_sta_nar():
 
     # generate the gold label, skipping any instances that don't have all the expected keys
     final_merged = []
+    human_eval = []
     keys = (
         "prediction_full",
         "prediction_nostate",
@@ -146,18 +150,26 @@ def merge_sta_nar():
         if not all(k in d for k in keys):
             print("missing some predictions, skipping")
             continue
+        gold_completion = prompts.sta_nar_completion(d, include_sep=False)
         out = {
-            "gold": prompts.sta_nar_completion(d, include_sep=False),
+            "gold": gold_completion,
             **{k: d[k] for k in keys},
         }
         final_merged.append(out)
+        d["gold"] = gold_completion
+        human_eval.append(d)
 
     with open(STA_NAR_MERGED, mode="w") as f:
         for d in final_merged:
             f.write(json.dumps(d))
             f.write("\n")
 
+    with open(HUMAN_EVAL_DATA, mode="w") as f:
+        for d in human_eval:
+            f.write(json.dumps(d))
+            f.write("\n")
+
 
 if __name__ == "__main__":
-    #merge_utt_cmd()
+    # merge_utt_cmd()
     merge_sta_nar()
