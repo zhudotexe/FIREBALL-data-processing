@@ -57,7 +57,8 @@ INTERESTING_INSTRUCTIONS = """
 <strong>How interesting is the response? (1 is best)</strong><br>
 <span style="font-size:16px;">Rank a response as more "Interesting" if the response would likely catch someone's
 attention or arouse curiosity in the game; or it is insightful, creative, or witty with respect to the game. If the
-response is monotonous and predictable, or if you’re unsure, then rank it lower.</span>
+response is monotonous and predictable, then rank it lower. If anything seems off—not fluent, confusing, illogical, out
+of context, or wrong according to the rules of D&D —then rank it lower.</span>
 """.strip()
 
 
@@ -65,10 +66,11 @@ class HumanEvalInst(Distill4Inst):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.author_id_map = {}
+        self.ignored_message_ids = set()
 
     def normalize_messages(self):
         """Removes mentions, tupper, emoji, etc; anonymize author names"""
-        for idx, msg in enumerate(self.events.copy()):
+        for idx, msg in enumerate(self.events):
             if msg["event_type"] != "message":
                 continue
             content = msg["content"]
@@ -87,13 +89,17 @@ class HumanEvalInst(Distill4Inst):
                 # the new content must be at least 80% of the old
                 len_ratio = len(similar_content) / len(content)
                 if 0.7 < len_ratio < 1:
-                    self.events.remove(similar_message)
+                    print(f"TUPPER: Found similar message content, ignoring:\n{content!r}\n---\n{similar_content!r}\n")
+                    self.ignored_message_ids.add(similar_message["message_id"])
+                    content = similar_content
 
             # remove user, role, channel mentions
-            msg["content"] = re.sub(r"<(@[!&]?|#)\d{17,20}>", "", content)
+            content = re.sub(r"<(@[!&]?|#)\d{17,20}>", "", content)
 
             # replace custom emoji with just their name
-            msg["content"] = re.sub(r"<a?(:\w+?:)\d{17,20}>", r"\1", content)
+            content = re.sub(r"<a?(:\w+?:)\d{17,20}>", r"\1", content)
+
+            msg["content"] = content
 
             # anonymize author nick, unless it's Avrae
             author_id = msg["author_id"]
@@ -133,7 +139,12 @@ def prep_human_eval():
         inst.normalize_messages()
 
         # messages
-        message_history = list(inst.find_all(lambda e: e["event_type"] == "message", before=d["command_idxs"][-1]))
+        message_history = list(
+            inst.find_all(
+                lambda e: e["event_type"] == "message" and e["message_id"] not in inst.ignored_message_ids,
+                before=d["command_idxs"][-1],
+            )
+        )
         last_15_messages = message_history[-15:]
         renderer = MessageRenderer(last_15_messages)
 
