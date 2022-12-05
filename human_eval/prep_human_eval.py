@@ -32,8 +32,8 @@ given represents only a part of the players’ past conversations/interactions w
 """.strip()
 
 SENSE_INSTRUCTIONS = """
-<strong>Does the response make sense? (1 is best)</strong><br>
-<span style="font-size:16px;">Rank each response by whether or not you think it makes sense. Use your common sense here.
+<strong>Does the response make sense?</strong><br>
+<span style="font-size:16px;">Use your common sense here.
 Is the response completely reasonable in terms of the rules of D&amp;D?<br>
 The response "makes sense" if it is cohesive as a standalone statement, consistent with the rules of the game, and the
 elements/entities mentioned are plausible, given the prior context.<br>
@@ -42,8 +42,8 @@ If anything seems off—not fluent, confusing, illogical, out of context, or wro
 """.strip()
 
 SPECIFIC_INSTRUCTIONS = """
-<strong>Is the response specific? (1 is best)</strong><br>
-<span style="font-size:16px;">Rank each response by how specific it is to the given context. In other words, how well 
+<strong>Is the response specific?</strong><br>
+<span style="font-size:16px;">In other words,
 do you think that the response represents the action the character actually took and its results?<br>
 The response is "specific" if it flows logically from the narrative established by the prior context.<br>
 Note: It is possible for a response to "make sense" (due to being cohesive, consistent and plausible in and of itself),
@@ -54,7 +54,7 @@ game progression.</span>
 """.strip()
 
 INTERESTING_INSTRUCTIONS = """
-<strong>How interesting is the response? (1 is best)</strong><br>
+<strong>How interesting is the response? (10 is best)</strong><br>
 <span style="font-size:16px;">Rank a response as more "Interesting" if the response would likely catch someone's
 attention or arouse curiosity in the game; or it is insightful, creative, or witty with respect to the game. If the
 response is monotonous and predictable, then rank it lower. If anything seems off—not fluent, confusing, illogical, out
@@ -168,29 +168,38 @@ def prep_human_eval():
 
         # then, all the choices to rank
         # ---- SenseN ----
-        qualtrics_out.append("[[Question:RO]]")
+        qualtrics_out.append("[[Question:Matrix]]")
         qualtrics_out.append(f"[[ID:Sense{idx}]]")
         qualtrics_out.append(SENSE_INSTRUCTIONS)
         qualtrics_out.append("[[AdvancedChoices]]")
         for choice_idx, choice_key in enumerate(keys):
             qualtrics_out.append(f"[[Choice:{choice_idx + 1}]]")
             qualtrics_out.append(MessageRenderer.render_markdown(d[choice_key]))
+
+        qualtrics_out.append("[[AdvancedAnswers]]")
+        qualtrics_out.append("[[Answer:0]]\nNo")
+        qualtrics_out.append("[[Answer:1]]\nYes")
         # ---- SpecificN ----
-        qualtrics_out.append("[[Question:RO]]")
+        qualtrics_out.append("[[Question:Matrix]]")
         qualtrics_out.append(f"[[ID:Specific{idx}]]")
         qualtrics_out.append(SPECIFIC_INSTRUCTIONS)
         qualtrics_out.append("[[AdvancedChoices]]")
         for choice_idx, choice_key in enumerate(keys):
             qualtrics_out.append(f"[[Choice:{choice_idx + 1}]]")
             qualtrics_out.append(MessageRenderer.render_markdown(d[choice_key]))
+
+        qualtrics_out.append("[[AdvancedAnswers]]")
+        qualtrics_out.append("[[Answer:0]]\nNo")
+        qualtrics_out.append("[[Answer:1]]\nYes")
         # ---- InterestingN ----
-        qualtrics_out.append("[[Question:RO]]")
+        qualtrics_out.append("[[Question:Slider]]")
         qualtrics_out.append(f"[[ID:Interesting{idx}]]")
         qualtrics_out.append(INTERESTING_INSTRUCTIONS)
         qualtrics_out.append("[[AdvancedChoices]]")
         for choice_idx, choice_key in enumerate(keys):
             qualtrics_out.append(f"[[Choice:{choice_idx + 1}]]")
             qualtrics_out.append(MessageRenderer.render_markdown(d[choice_key]))
+
         # ---- TimerN ----
         qualtrics_out.append("[[Question:Timing]]")
         qualtrics_out.append(f"[[ID:Timer{idx}]]")
