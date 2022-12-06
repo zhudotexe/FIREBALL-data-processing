@@ -33,21 +33,22 @@ given represents only a part of the players’ past conversations/interactions w
 
 SENSE_INSTRUCTIONS = """
 <strong>Does the response make sense?</strong><br>
-<span style="font-size:16px;">Use your common sense here.
-Is the response completely reasonable in terms of the rules of D&amp;D?<br>
-The response "makes sense" if it is cohesive as a standalone statement, consistent with the rules of the game, and the
-elements/entities mentioned are plausible, given the prior context.<br>
-If anything seems off—not fluent, confusing, illogical, out of context, or wrong according to the rules of D&amp;D
-—then rank it lower. If in doubt about a response, rank it lower.</span>
+<span style="font-size:16px;">Use your common sense here. The response "makes sense" if:<br>
+1. it is cohesive as a standalone statement,<br>
+2. consistent with the rules of the game,<br>
+3. and it is a plausible narration given the prior context (initiative list and last actions taken).<br>
+If anything seems off—not fluent, confusing, illogical, out of context, or wrong according to the rules of D&amp;D —then
+choose No. If in doubt about a response, choose No.</span>
 """.strip()
 
 SPECIFIC_INSTRUCTIONS = """
 <strong>Is the response specific?</strong><br>
-<span style="font-size:16px;">In other words,
-do you think that the response represents the action the character actually took and its results?<br>
-The response is "specific" if it flows logically from the narrative established by the prior context.<br>
-Note: It is possible for a response to "make sense" (due to being cohesive, consistent and plausible in and of itself),
-but be ranked less "specific" when it is not a logical next step in the overall game progression.<br>
+<span style="font-size:16px;">In other words, do you think that the response accurately narrates the last action the 
+character actually took and its results?<br><br>
+The response is "specific" if it flows logically from the specific action and result taken by the character, in the 
+greater context provided.<br>
+Note: It is possible for a response to "make sense" (due to being cohesive, consistent and plausible in and of 
+itself), but be marked "not specific" when it is not a logical next step in the overall game progression.<br>
 Note: "Specific" for the purposes of this task does not have to do with how detailed the response is per se; a response
 can be fairly general in its language, but still qualify as "specific" when it is a logical next step in the overall
 game progression.</span>
