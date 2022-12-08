@@ -18,3 +18,8 @@ transformers
 humanize~=4.4.0
 markdown2~=2.4.6
 profanityfilter
+
+# automated eval
+evaluate
+git+https://github.com/google-research/bleurt.git
+bert_score
