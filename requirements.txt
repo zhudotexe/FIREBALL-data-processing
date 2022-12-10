@@ -14,7 +14,13 @@ scikit-learn~=1.1.2
 torch
 transformers
 
+# distill4
+-r avrae/requirements.txt
+
 # human eval
 humanize~=4.4.0
 markdown2~=2.4.6
 profanityfilter
+pydantic
+statsmodels
+nltk
