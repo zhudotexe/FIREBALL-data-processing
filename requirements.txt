@@ -24,3 +24,8 @@ profanityfilter
 pydantic
 statsmodels
 nltk
+
+# automated eval
+evaluate
+git+https://github.com/google-research/bleurt.git
+bert_score
