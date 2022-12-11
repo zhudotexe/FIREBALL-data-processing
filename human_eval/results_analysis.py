@@ -13,7 +13,7 @@ from pydantic import BaseModel
 from scipy.stats import kendalltau
 from sklearn.metrics import cohen_kappa_score
 
-RESULTS_PATH = pathlib.Path("results_prelim.csv")
+RESULTS_PATH = pathlib.Path("results_final.csv")
 
 
 class ModelEnum(enum.IntEnum):
@@ -94,19 +94,7 @@ def load_results():
             yield User.from_qualtrics_row(row)
 
 
-def main():
-    users = list(load_results())
-    # averages
-    all_responses = [r for user in users for r in user.responses]
-    for model in ModelEnum:
-        print(f"==== {model.name} ====")
-        avg_sense = np.average([r.sense[model] for r in all_responses])
-        avg_specific = np.average([r.specific[model] for r in all_responses])
-        avg_interesting = np.average([r.interesting[model] for r in all_responses])
-        print(f"avg sense: {avg_sense:.2%}")
-        print(f"avg specific: {avg_specific:.2%}")
-        print(f"avg interesting: {avg_interesting:.2f}")
-
+def agreement(users, print=print):
     print("\n===== AGREEMENT =====")
     binary_agreements = []
     interesting_agreements = []
@@ -151,7 +139,8 @@ def main():
                 for model in ModelEnum:
                     data.append((user.discord_id, f"{metric}{r.question_idx}_{model.value}", getattr(r, metric)[model]))
     t = AnnotationTask(data)
-    print(f"Krippendorf alpha (binary): {t.alpha():.4f}")
+    alpha = t.alpha()
+    print(f"Krippendorf alpha (binary): {alpha:.4f}")
 
     # statsmodels impl
     # subjects in rows, raters in columns
@@ -162,9 +151,68 @@ def main():
     # print(f"multirater Fleiss-Kappa: {fk:.4f}")
 
     # krippendorff impl
-    df = pandas.read_csv(RESULTS_PATH, skiprows=(1, 2))
-    data = df.filter(regex=r"(Sense|Specific)\d+_\d+").to_numpy()
-    print(krippendorff.alpha(data, level_of_measurement="nominal"))
+    # df = pandas.read_csv(RESULTS_PATH, skiprows=(1, 2))
+    # data = df.filter(regex=r"(Sense|Specific)\d+_\d+").to_numpy()
+    # print(krippendorff.alpha(data, level_of_measurement="nominal"))
+
+    return bin_agreement, interest_agreement, alpha
+
+
+def print_completed(users):
+    """Prints all the users who completed 3/7, and their min/max/avg question duration"""
+    for user in users:
+        min_time = min(r.timer.page_submit for r in user.responses)
+        max_time = max(r.timer.page_submit for r in user.responses)
+        avg_time = np.average([r.timer.page_submit for r in user.responses])
+        print(f"{user.discord_username},{user.discord_id},{len(user.responses)},{min_time},{avg_time},{max_time}")
+
+
+def main():
+    users = list(load_results())
+    # averages
+    all_responses = [r for user in users for r in user.responses]
+    for model in ModelEnum:
+        print(f"==== {model.name} ====")
+        avg_sense = np.average([r.sense[model] for r in all_responses])
+        avg_specific = np.average([r.specific[model] for r in all_responses])
+        avg_interesting = np.average([r.interesting[model] for r in all_responses])
+        print(f"avg sense: {avg_sense:.2%}")
+        print(f"avg specific: {avg_specific:.2%}")
+        print(f"avg interesting: {avg_interesting:.2f}")
+
+    bin_agreement, interest_agreement, alpha = agreement(users)
+
+    # hacky stuff
+    # !!! THIS SHOULD NOT BE USED IN PRODUCTION !!!
+    # !!! AND IS ONLY FOR EXPLORING AGREEMENT TRENDS !!!
+    alpha_map = {}  # user idx to delta
+    for idx, user in enumerate(users):
+        u_bin, u_int, u_alpha = agreement(users[:idx] + users[idx + 1 :])
+        delta = u_alpha - alpha
+        alpha_map[idx] = delta
+        print(f"removing {user.discord_username} ({user.discord_id}) changes alpha by {delta:.4f}")
+
+    for idx, delta in alpha_map.items():
+        print(f"{idx},{users[idx].discord_username},{users[idx].discord_id},{delta}")
+
+    # this takes 15 iterations
+    # !!! ALSO DO NOT USE THIS IN PRODUCTION !!!
+    hack_users = users.copy()
+    x = 0
+    while alpha < 0.4:
+        x += 1
+        worst_user_idx, delta = sorted(list(alpha_map.items()), key=lambda pair: pair[1], reverse=True)[0]
+        print(f"removing {worst_user_idx} improves alpha by {delta}")
+        hack_users.pop(worst_user_idx)
+        bin_agreement, interest_agreement, alpha = agreement(hack_users)
+        print(x)
+
+        alpha_map.clear()
+        for idx, user in enumerate(hack_users):
+            u_bin, u_int, u_alpha = agreement(hack_users[:idx] + hack_users[idx + 1:])
+            delta = u_alpha - alpha
+            alpha_map[idx] = delta
+            print(f"removing {user.discord_username} ({user.discord_id}) changes alpha by {delta:.4f}")
 
 
 if __name__ == "__main__":

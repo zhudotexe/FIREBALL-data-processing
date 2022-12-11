@@ -1,4 +1,5 @@
 import asyncio
+import csv
 import os
 
 import disnake
@@ -68,6 +69,58 @@ async def in_server(inter: disnake.ApplicationCommandInteraction):
     guild = bot.get_guild(EVAL_GUILD_ID)
     print(f"guild members:\n" + "\n".join(str(m.id) for m in guild.members))
     await inter.send("ok")
+
+
+@bot.slash_command()
+async def send_keys(inter: disnake.ApplicationCommandInteraction):
+    if inter.author.id != ADMIN_USER_ID:
+        return
+    await inter.response.defer()
+
+    dice_keys = {}  # user id (int) -> key
+    book_keys = {}
+    with open("dice_keys.tsv") as f:
+        reader = csv.reader(f, delimiter="\t", quotechar='"')
+        for key, _, _, _, _, _, _, user_id in reader:
+            dice_keys[int(user_id)] = key
+    with open("motm_keys.tsv") as f:
+        reader = csv.reader(f, delimiter="\t", quotechar='"')
+        for key, _, _, _, _, _, _, user_id in reader:
+            book_keys[int(user_id)] = key
+
+    print(dice_keys)
+    print(book_keys)
+
+    valid = []
+    invalid = []
+    for user_id in dice_keys:
+        user = bot.get_user(user_id)
+        if user is None:
+            print(f"{user_id} FAIL: not found")
+            continue
+        try:
+            message = (
+                f"Thanks for participating in the evaluation! Here are your codes:\n"
+                f"**Researcher's Dice (Digital Dice)**: `{dice_keys[user_id]}`\n"
+            )
+            if user_id in book_keys:
+                message += (
+                    f"**Mordenkainen Presents: Monsters of the Multiverse (Digital Sourcebook)**: "
+                    f"`{book_keys[user_id]}`\n"
+                )
+            message += "You can redeem your code at <https://www.dndbeyond.com/marketplace/redeem-key>!"
+            await user.send(message)
+        except disnake.DiscordException as e:
+            print(f"{user_id} FAIL")
+            print(e)
+            invalid.append(user_id)
+        else:
+            print(f"{user_id} OK")
+            valid.append(user_id)
+        await asyncio.sleep(5)
+    print(f"invalid:\n" + "\n".join(map(str, invalid)))
+    print(f"valid:\n" + "\n".join(map(str, valid)))
+    await inter.send(f"{len(valid)} ok, {len(invalid)} not ok")
 
 
 if __name__ == "__main__":

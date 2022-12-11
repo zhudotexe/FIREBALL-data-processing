@@ -165,3 +165,4 @@ human_eval/human-eval-sta-nar.jsonl
 human_eval/*.txt
 human_eval/*.qsf
 human_eval/*.csv
+human_eval/*.tsv
