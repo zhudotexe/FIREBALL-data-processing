@@ -101,6 +101,7 @@ def merge_utt_cmd():
             **{k: d[k] for k in keys},
             "combat_state": combat_state,
             "characters": characters,
+            "speaker_id": d["speaker_id"],
         }
         final_merged.append(out)
 
@@ -171,5 +172,5 @@ def merge_sta_nar():
 
 
 if __name__ == "__main__":
-    # merge_utt_cmd()
-    merge_sta_nar()
+    merge_utt_cmd()
+    # merge_sta_nar()
