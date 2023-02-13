@@ -25,13 +25,14 @@ MODEL_COSTS = (
     ("FT Ada", 0.0016),
 )
 
-Count = namedtuple("Count", "n_chars n_events events commands authors")
+Count = namedtuple("Count", "n_chars n_events events commands authors n_actors")
 
 
 def count(dname):
     events = Counter()  # event type -> occurrences
     commands = Counter()  # command name -> occurrences
     authors = Counter()  # author id -> number of characters
+    actors = Counter()  # combatant id -> number of characters
     n_chars = 0
     n_events = 0
 
@@ -44,8 +45,21 @@ def count(dname):
             authors[event["author_id"]] += msg_len
         elif event["event_type"] == "command":
             commands[event["command_name"]] += 1
+        elif event["event_type"] == "combat_state_update":
+            for actor in event["data"]["combatants"]:
+                actors[actor["id"]] += 1
+                if actor["type"] == "group":
+                    for g_actor in actor["combatants"]:
+                        actors[g_actor["id"]] += 1
 
-    return Count(n_chars=n_chars, n_events=n_events, events=events, commands=commands, authors=authors)
+    return Count(
+        n_chars=n_chars,
+        n_events=n_events,
+        events=events,
+        commands=commands,
+        authors=authors,
+        n_actors=len(actors),
+    )
 
 
 def main():
@@ -60,6 +74,7 @@ def main():
         total_authors.update(c.authors)
     total_chars = sum(c.n_chars for c in counts)
     total_n_events = sum(c.n_events for c in counts)
+    total_actors = sum(c.n_actors for c in counts)
 
     print(
         f"total number of characters: {total_chars}\n"
@@ -67,7 +82,8 @@ def main():
         f"total events: {total_events}\n"
         f"total commands: {total_commands}\n"
         f"total authors: {total_authors}\n"
-        f"unique authors: {len(total_authors)}"
+        f"unique authors: {len(total_authors)}\n"
+        f"unique actors: {total_actors}"
     )
 
     token_count = total_chars / 4

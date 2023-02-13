@@ -5,13 +5,12 @@ import itertools
 import pathlib
 import re
 
-import krippendorff
 import numpy as np
-import pandas
 from nltk import AnnotationTask
 from pydantic import BaseModel
 from scipy.stats import kendalltau
 from sklearn.metrics import cohen_kappa_score
+from sklearn.preprocessing import StandardScaler
 
 RESULTS_PATH = pathlib.Path("results_final.csv")
 
@@ -37,6 +36,7 @@ class ScenarioResponse(BaseModel):
     specific: dict[ModelEnum, int]
     interesting: dict[ModelEnum, int]
     timer: Timer
+    interesting_normalized: dict[ModelEnum, int] = None  # populated after init
 
 
 class User(BaseModel):
@@ -74,6 +74,16 @@ class User(BaseModel):
             )
             responses.append(response)
 
+        # normalize interest
+        all_interest_scores = [[r.interesting[k]] for r in responses for k in ModelEnum]
+        assert len(all_interest_scores) == 5 * len(responses)
+        scaler = StandardScaler()
+        scaler.fit(all_interest_scores)
+        # print(f"evaluator {d['QID']} has interest mean {scaler.mean_}")
+        for response in responses:
+            normalized_interesting = {k: scaler.transform([[response.interesting[k]]])[0, 0] for k in ModelEnum}
+            response.interesting_normalized = normalized_interesting
+
         return cls(
             start_date=d["StartDate"],
             end_date=d["EndDate"],
@@ -98,6 +108,7 @@ def agreement(users, print=print):
     print("\n===== AGREEMENT =====")
     binary_agreements = []
     interesting_agreements = []
+    interesting_norm_agreements = []
     for user1, user2 in itertools.combinations(users, 2):
         u1_idxs = {r.question_idx for r in user1.responses}
         u2_idxs = {r.question_idx for r in user2.responses}
@@ -110,6 +121,8 @@ def agreement(users, print=print):
         bin_y2 = []
         interest_y1 = []
         interest_y2 = []
+        interest_norm_y1 = []
+        interest_norm_y2 = []
         for r1, r2 in zip(u1_responses, u2_responses):
             for model in ModelEnum:
                 bin_y1.append(r1.sense[model])
@@ -118,6 +131,8 @@ def agreement(users, print=print):
                 bin_y2.append(r2.specific[model])
                 interest_y1.append(r1.interesting[model])
                 interest_y2.append(r2.interesting[model])
+                interest_norm_y1.append(r1.interesting_normalized[model])
+                interest_norm_y2.append(r2.interesting_normalized[model])
 
         if bin_y1 == bin_y2:  # sklearn fails on perfect agreement
             binary_agreements.append(1)
@@ -126,10 +141,15 @@ def agreement(users, print=print):
         kt = kendalltau(interest_y1, interest_y2)[0]
         if not np.isnan(kt):
             interesting_agreements.append(kt)
+        kt_norm = kendalltau(interest_norm_y1, interest_norm_y2)[0]
+        if not np.isnan(kt):
+            interesting_norm_agreements.append(kt_norm)
     bin_agreement = np.average(binary_agreements)
     print(f"pairwise Cohen kappa (binary): {bin_agreement:.4f}")
     interest_agreement = np.average(interesting_agreements)
     print(f"Kendall tau (interesting): {interest_agreement:.4f}")
+    interest_norm_agreement = np.average(interesting_norm_agreements)
+    print(f"Kendall tau (interesting, normalized): {interest_norm_agreement:.4f}")
 
     # nltk agreement impl
     data = []
@@ -167,52 +187,40 @@ def print_completed(users):
         print(f"{user.discord_username},{user.discord_id},{len(user.responses)},{min_time},{avg_time},{max_time}")
 
 
+def print_raw(all_responses):
+    for model in ModelEnum:
+        print(f"{model.name}_sense,{model.name}_specific,{model.name}_interesting,", end="", flush=True)
+    print()
+
+    for r in all_responses:
+        for model in ModelEnum:
+            sense = r.sense[model]
+            specific = r.specific[model]
+            interesting = r.interesting[model]
+            print(f"{sense},{specific},{interesting},", end="", flush=True)
+        print()
+
+
 def main():
     users = list(load_results())
     # averages
     all_responses = [r for user in users for r in user.responses]
     for model in ModelEnum:
         print(f"==== {model.name} ====")
+        n_total = len(all_responses)
         avg_sense = np.average([r.sense[model] for r in all_responses])
+        n_sense = sum(r.sense[model] for r in all_responses)
         avg_specific = np.average([r.specific[model] for r in all_responses])
+        n_specific = sum(r.specific[model] for r in all_responses)
         avg_interesting = np.average([r.interesting[model] for r in all_responses])
-        print(f"avg sense: {avg_sense:.2%}")
-        print(f"avg specific: {avg_specific:.2%}")
+        avg_interesting_norm = np.average([r.interesting_normalized[model] for r in all_responses])
+        print(f"avg sense: {avg_sense:.2%} ({n_sense}/{n_total})")
+        print(f"avg specific: {avg_specific:.2%} ({n_specific}/{n_total})")
         print(f"avg interesting: {avg_interesting:.2f}")
+        print(f"avg interesting_norm: {avg_interesting_norm:.2f}")
 
     bin_agreement, interest_agreement, alpha = agreement(users)
-
-    # hacky stuff
-    # !!! THIS SHOULD NOT BE USED IN PRODUCTION !!!
-    # !!! AND IS ONLY FOR EXPLORING AGREEMENT TRENDS !!!
-    alpha_map = {}  # user idx to delta
-    for idx, user in enumerate(users):
-        u_bin, u_int, u_alpha = agreement(users[:idx] + users[idx + 1 :])
-        delta = u_alpha - alpha
-        alpha_map[idx] = delta
-        print(f"removing {user.discord_username} ({user.discord_id}) changes alpha by {delta:.4f}")
-
-    for idx, delta in alpha_map.items():
-        print(f"{idx},{users[idx].discord_username},{users[idx].discord_id},{delta}")
-
-    # this takes 15 iterations
-    # !!! ALSO DO NOT USE THIS IN PRODUCTION !!!
-    hack_users = users.copy()
-    x = 0
-    while alpha < 0.4:
-        x += 1
-        worst_user_idx, delta = sorted(list(alpha_map.items()), key=lambda pair: pair[1], reverse=True)[0]
-        print(f"removing {worst_user_idx} improves alpha by {delta}")
-        hack_users.pop(worst_user_idx)
-        bin_agreement, interest_agreement, alpha = agreement(hack_users)
-        print(x)
-
-        alpha_map.clear()
-        for idx, user in enumerate(hack_users):
-            u_bin, u_int, u_alpha = agreement(hack_users[:idx] + hack_users[idx + 1:])
-            delta = u_alpha - alpha
-            alpha_map[idx] = delta
-            print(f"removing {user.discord_username} ({user.discord_id}) changes alpha by {delta:.4f}")
+    # print_raw(all_responses)
 
 
 if __name__ == "__main__":
