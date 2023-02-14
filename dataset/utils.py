@@ -67,7 +67,7 @@ def dataset_checksum(datapath: AnyPath) -> str:
     return dirhash.dirhash(datapath, "md5", match=("*.gz",), jobs=num_cores)
 
 
-def write_jsonl(fpath: AnyPath, data: list):
+def write_jsonl(fpath: AnyPath, data: Iterable):
     """
     Write a list of data to the file at *fpath*. If the supplied path ends with `.gz`, zips the output file.
     """

@@ -167,3 +167,5 @@ human_eval/*.qsf
 human_eval/*.csv
 human_eval/*.tsv
 data*/
+anonymized/
+temp/
