@@ -1,33 +1,15 @@
-# AWS Kinesis Dataset Exploration Tool
-
-This repo contains a set of tools in order to explore datasets collected via AWS Kinesis Firehose quickly and
-intuitively, while providing the framework to quickly iterate on heuristics and visualize raw data.
-
-- Operates directly on gzipped JSONL files output by AWS Kinesis Firehose, no extraction needed
-- Memory efficient (streaming heuristic applicator)
-- High-throughput and horizontally scalable (multiprocessing out of the box)
-- Low-latency (streaming API & client)
-
-I built this tool for the Avrae NLP project (https://www.cis.upenn.edu/~ccb/language-to-avrae.html) and this is the
-dataset this repo is implemented for, but the tool is designed with some degree of dataset-agnosticism in mind.
-
-For help using this tool in your own data science project, contact me at andrz@seas.upenn.edu or view "Customizing the
-Explorer" below.
+# FIREBALL Data Processing
 
 ## Downloading raw data
 
 I recommend downloading the raw dataset into a directory at `data/` (relative to this repo's root). Usually this is done
 with `aws s3 sync`.
 
-For the Avrae NLP project, see the avrae/penn-nlp-resources repo for instructions on downloading the dataset.
+For the FIREBALL project, you can extract the dataset release here.
 
-## Step 1: Heuristics
+## Requirements
 
-The first step of exploring the dataset is to define and apply heuristics to the dataset.
-
-### Requirements
-
-The heuristic worker requires Python 3.10+.
+The pipeline requires Python 3.10+.
 
 I recommend creating a virtual environment to install the Python requirements:
 
@@ -40,6 +22,43 @@ $ source venv/bin/activate
 # If the venv is already set up, you can skip to this step
 (venv) $ pip install -r requirements.txt
 ```
+
+# FIREBALL Processing Pipeline
+
+To reproduce the FIREBALL data processing, run these python scripts in this order:
+
+- `distill1_time_group.py`
+- `distill2_authors.py`
+- `distill3a_ic_regex.py`
+- `distill3b_ic_classifier_gpt.py`
+- `distill4_normalize.py` (the results of this step are included in the FIREBALL release for all instances)
+- `finetune_prep.py`
+
+The resulting data will be in the `extract/` directory.
+
+# Data Explorer
+*originally AWS Kinesis Dataset Exploration Tool*
+
+> **NOTE**: This code is not part of the FIREBALL preprocessing pipeline; it was used to explore the dataset and iterate
+> on heuristics early in the project. You can use this code to explore the dataset as well.
+
+This repo contains a set of tools in order to explore datasets collected via AWS Kinesis Firehose quickly and
+intuitively, while providing the framework to quickly iterate on heuristics and visualize raw data.
+
+- Operates directly on gzipped JSONL files output by AWS Kinesis Firehose, no extraction needed
+- Memory efficient (streaming heuristic applicator)
+- High-throughput and horizontally scalable (multiprocessing out of the box)
+- Low-latency (streaming API & client)
+
+I built this tool for the FIREBALL project (https://www.cis.upenn.edu/~ccb/language-to-avrae.html) and this is the
+dataset this repo is implemented for, but the tool is designed with some degree of dataset-agnosticism in mind.
+
+For help using this tool in your own data science project, contact me at andrz@seas.upenn.edu or view "Customizing the
+Explorer" below.
+
+## Step 1: Heuristics
+
+The first step of exploring the dataset is to define and apply heuristics to the dataset.
 
 ### Defining Heuristics
 
